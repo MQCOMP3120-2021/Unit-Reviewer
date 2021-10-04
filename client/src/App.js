@@ -7,7 +7,7 @@ function App() {
       G'day Folks
       <Button size='small' color='green'>
         <Icon name='download' />
-        Download
+        Download-test
       </Button>
     </div>
   );
