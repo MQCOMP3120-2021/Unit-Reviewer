@@ -16,7 +16,6 @@ export interface IUnit {
   reviews: IReview[];
 }
 
-
 export interface IUser {
   username: string;
   dateCreated: Date;
