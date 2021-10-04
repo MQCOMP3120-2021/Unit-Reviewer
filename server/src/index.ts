@@ -1,8 +1,11 @@
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
-import { initDB } from './db';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import morgan from 'morgan';
-import cors from 'cors';
+
+import { initDB } from './db';
+import authRouter from './routes/auth';
 import unitsRouter from './routes/units';
 
 const options = {
@@ -20,13 +23,16 @@ const app = express();
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 initDB();
 
 expressJSDocSwagger(app)(options);
 
 app.use('/api/units', unitsRouter);
+app.use('/api/auth', authRouter);
 
 app.listen(PORT, '0.0.0.0', () => {
+  // eslint-disable-next-line no-console
   console.log(`Listening on http://0.0.0.0:${PORT}`);
 });

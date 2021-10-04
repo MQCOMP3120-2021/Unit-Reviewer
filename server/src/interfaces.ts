@@ -15,3 +15,9 @@ export interface IUnit {
   rating: number;
   reviews: IReview[];
 }
+
+export interface IUser {
+  username: string;
+  dateCreated: Date;
+  passwordHash: string;
+}
