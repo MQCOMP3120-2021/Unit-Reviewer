@@ -3,6 +3,7 @@
   "description": "Unit Reviewer app",
   "repository": "https://github.com/MQCOMP3120-2021/group-web-project-group-ae",
   "success_url": "/",
+  "stack": "container",
   "environments": {
     "review": {
       "formation": {
