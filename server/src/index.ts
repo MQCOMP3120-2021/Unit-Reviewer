@@ -32,6 +32,8 @@ expressJSDocSwagger(app)(options);
 app.use('/api/units', unitsRouter);
 app.use('/api/auth', authRouter);
 
+app.use(express.static('public'));
+
 app.listen(PORT, '0.0.0.0', () => {
   // eslint-disable-next-line no-console
   console.log(`Listening on http://0.0.0.0:${PORT}`);
