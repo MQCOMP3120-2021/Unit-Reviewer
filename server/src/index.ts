@@ -4,7 +4,7 @@ import express from 'express';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import morgan from 'morgan';
 
-import { initDB } from './db';
+import initDB from './db';
 import authRouter from './routes/auth';
 import unitsRouter from './routes/units';
 
@@ -31,6 +31,8 @@ expressJSDocSwagger(app)(options);
 
 app.use('/api/units', unitsRouter);
 app.use('/api/auth', authRouter);
+
+app.use(express.static('public'));
 
 app.listen(PORT, '0.0.0.0', () => {
   // eslint-disable-next-line no-console
