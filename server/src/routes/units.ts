@@ -1,6 +1,9 @@
 import express from 'express';
+import jwt from 'express-jwt';
 import { Unit } from '../models/Unit';
 import { IReview } from '../interfaces';
+import { JWT_SECRET } from '../config';
+import { getToken } from './auth';
 const unitsRouter = express.Router();
 
 const UNIT_NOT_FOUND_ERROR = 'Unit not found';
@@ -20,7 +23,7 @@ const UNIT_NOT_FOUND_ERROR = 'Unit not found';
  * @property {string} code.required - The unit code
  * @property {string} title.required - The unit title
  * @property {string} description.required - The unit description
- * @property {string[]} offerings.required - List of offerings for the unit - e.g. ["S1", "S2", "S3"]
+ * @property {array<string>} offerings.required - List of offerings for the unit - e.g. ["S1", "S2", "S3"]
  * @property {number} rating - The units rating out of 10
  * @property {array<Review>} reviews - List of reviews for the unit
  */
@@ -114,26 +117,34 @@ unitsRouter.get('/:id', async (req, res) => {
  * @param {Unit} request.body.required - Unit info
  * @return {Unit} 200 - The saved unit
  */
-unitsRouter.post('/', async (req, res) => {
-  const code = req.body.code;
-  const name = req.body.name;
-  const description = req.body.description;
-  const offerings = req.body.offerings;
-  const rating = 0;
-  const reviews: IReview[] = [];
+unitsRouter.post(
+  '/',
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken: getToken }),
+  async (req, res) => {
+    if (!req.user) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
 
-  const unit = new Unit({
-    code,
-    name,
-    description,
-    offerings,
-    rating,
-    reviews,
-  });
+    const code = req.body.code;
+    const name = req.body.name;
+    const description = req.body.description;
+    const offerings = req.body.offerings;
+    const rating = 0;
+    const reviews: IReview[] = [];
 
-  const savedUnit = await unit.save();
-  res.send(savedUnit.toJSON());
-});
+    const unit = new Unit({
+      code,
+      name,
+      description,
+      offerings,
+      rating,
+      reviews,
+    });
+
+    const savedUnit = await unit.save();
+    res.send(savedUnit.toJSON());
+  },
+);
 
 // TODO - Add a review
 

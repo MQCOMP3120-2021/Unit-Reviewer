@@ -3,7 +3,9 @@ import { initDB } from './db';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import morgan from 'morgan';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import unitsRouter from './routes/units';
+import authRouter from './routes/auth';
 
 const options = {
   info: {
@@ -20,12 +22,14 @@ const app = express();
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 initDB();
 
 expressJSDocSwagger(app)(options);
 
 app.use('/api/units', unitsRouter);
+app.use('/api/auth', authRouter);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Listening on http://0.0.0.0:${PORT}`);
