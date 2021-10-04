@@ -1,9 +1,11 @@
 import express from 'express';
 import jwt from 'express-jwt';
-import { sign, verify, decode } from 'jsonwebtoken';
-import { JWT_COOKIE_NAME, JWT_SECRET, SALT_ROUNDS } from '../config';
+import { sign } from 'jsonwebtoken';
+
+import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
 import { IUser } from '../interfaces';
 import { addUser, passwordValid, userExists } from '../models/User';
+
 const authRouter = express.Router();
 
 const CANNOT_ADD_USER_ERROR = 'Unable to add user';
@@ -12,13 +14,12 @@ const USER_DOES_NOT_EXIST_ERROR = 'User does not exist';
 const INVALID_PASSWORD_ERROR = 'Password is invalid';
 
 export const getToken = (req: express.Request) => {
-  console.log(req);
   if (req.headers.authorization) {
     const parts = req.headers.authorization.split(' ');
 
-    if (parts.length == 2) {
-      var scheme = parts[0];
-      var credentials = parts[1];
+    if (parts.length === 2) {
+      const scheme = parts[0];
+      const credentials = parts[1];
 
       if (/^Bearer$/i.test(scheme)) {
         return credentials;
@@ -52,7 +53,7 @@ export const getToken = (req: express.Request) => {
  */
 authRouter.get(
   '/me',
-  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken: getToken }),
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
   async (req, res) => {
     if (!req.user) {
       return res.status(401).send({ error: 'Unauthorized' });
@@ -70,8 +71,8 @@ authRouter.get(
  * @return {User} 200 - The saved user
  */
 authRouter.post('/register', async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username } = req.body;
+  const { password } = req.body;
 
   if (await userExists(username)) {
     return res.status(400).json({ error: USER_EXISTS_ERROR });
@@ -85,9 +86,9 @@ authRouter.post('/register', async (req, res) => {
       algorithm: 'HS512',
     });
 
-    res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
+    return res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
   } catch (error) {
-    res.status(400).send({ error: CANNOT_ADD_USER_ERROR });
+    return res.status(400).send({ error: CANNOT_ADD_USER_ERROR });
   }
 });
 
@@ -98,8 +99,8 @@ authRouter.post('/register', async (req, res) => {
  * @return {User} 200 - The user
  */
 authRouter.post('/login', async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username } = req.body;
+  const { password } = req.body;
 
   const exists = await userExists(username);
   if (!exists) {
@@ -111,10 +112,10 @@ authRouter.post('/login', async (req, res) => {
       algorithm: 'HS512',
     });
 
-    res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
-  } else {
-    res.status(400).json({ error: INVALID_PASSWORD_ERROR });
+    return res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
   }
+
+  return res.status(400).json({ error: INVALID_PASSWORD_ERROR });
 });
 
 export default authRouter;

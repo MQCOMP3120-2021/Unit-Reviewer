@@ -1,11 +1,12 @@
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
-import { initDB } from './db';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import morgan from 'morgan';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import unitsRouter from './routes/units';
+
+import { initDB } from './db';
 import authRouter from './routes/auth';
+import unitsRouter from './routes/units';
 
 const options = {
   info: {
@@ -32,5 +33,6 @@ app.use('/api/units', unitsRouter);
 app.use('/api/auth', authRouter);
 
 app.listen(PORT, '0.0.0.0', () => {
+  // eslint-disable-next-line no-console
   console.log(`Listening on http://0.0.0.0:${PORT}`);
 });

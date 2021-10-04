@@ -1,13 +1,16 @@
-import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { IUser } from '../interfaces';
+import mongoose, { Schema } from 'mongoose';
+
 import { SALT_ROUNDS } from '../config';
+import { IUser } from '../interfaces';
 
 const UserSchema = new Schema<IUser>({
-  username: String,     // User's username
+  username: String, // User's username
   passwordHash: String, // Hash of the users password
-  dateCreated: Date,    // Date the user was created
+  dateCreated: Date, // Date the user was created
 });
+
+export const User = mongoose.model('User', UserSchema);
 
 export const addUser = async (username: string, password: string) => {
   const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
@@ -32,5 +35,3 @@ export const userExists = async (username: string) => {
   const user: mongoose.Document | null = await User.findOne({ username });
   return user !== null;
 };
-
-export const User = mongoose.model('User', UserSchema);

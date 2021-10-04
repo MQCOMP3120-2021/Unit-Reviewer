@@ -1,9 +1,11 @@
 import express from 'express';
 import jwt from 'express-jwt';
-import { Unit } from '../models/Unit';
-import { IReview } from '../interfaces';
+
 import { JWT_SECRET } from '../config';
+import { IReview } from '../interfaces';
+import Unit from '../models/Unit';
 import { getToken } from './auth';
+
 const unitsRouter = express.Router();
 
 const UNIT_NOT_FOUND_ERROR = 'Unit not found';
@@ -23,7 +25,8 @@ const UNIT_NOT_FOUND_ERROR = 'Unit not found';
  * @property {string} code.required - The unit code
  * @property {string} title.required - The unit title
  * @property {string} description.required - The unit description
- * @property {array<string>} offerings.required - List of offerings for the unit - e.g. ["S1", "S2", "S3"]
+ * @property {array<string>} offerings.required - List of offerings for the unit - e.g. ["S1", "S2",
+ *  "S3"]
  * @property {number} rating - The units rating out of 10
  * @property {array<Review>} reviews - List of reviews for the unit
  */
@@ -41,13 +44,12 @@ unitsRouter.get('/', async (req, res) => {
   // Invalid start
   if (start < 0) {
     return res.status(400).send({ error: 'Invalid start' });
-  } else {
-    const units = await Unit.find({}, null, {
-      skip: start,
-      limit: 10,
-    });
-    return res.send(units);
   }
+  const units = await Unit.find({}, null, {
+    skip: start,
+    limit: 10,
+  });
+  return res.json(units);
 });
 
 /**
@@ -68,14 +70,14 @@ unitsRouter.get('/search', async (req, res) => {
   const units = await Unit.aggregate().search({
     index: 'default',
     text: {
-      query: query,
+      query,
       path: {
         wildcard: '*',
       },
     },
   });
 
-  res.send(units);
+  res.json(units);
 });
 
 /**
@@ -86,7 +88,7 @@ unitsRouter.get('/search', async (req, res) => {
 unitsRouter.get('/numUnits', async (req, res) => {
   const numUnits = await Unit.collection.countDocuments({});
 
-  res.send({ numUnits });
+  res.json({ numUnits });
 });
 
 /**
@@ -97,15 +99,14 @@ unitsRouter.get('/numUnits', async (req, res) => {
  * @return {object} 404 - Unit not found
  */
 unitsRouter.get('/:id', async (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   try {
     const unit = await Unit.findById(id);
     if (unit) {
-      res.send(unit);
-    } else {
-      res.status(404).send({ error: UNIT_NOT_FOUND_ERROR });
+      return res.json(unit);
     }
+    return res.status(404).send({ error: UNIT_NOT_FOUND_ERROR });
   } catch (error) {
     return res.status(404).send({ error: UNIT_NOT_FOUND_ERROR });
   }
@@ -119,16 +120,16 @@ unitsRouter.get('/:id', async (req, res) => {
  */
 unitsRouter.post(
   '/',
-  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken: getToken }),
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
   async (req, res) => {
     if (!req.user) {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
-    const code = req.body.code;
-    const name = req.body.name;
-    const description = req.body.description;
-    const offerings = req.body.offerings;
+    const { code } = req.body;
+    const { name } = req.body;
+    const { description } = req.body;
+    const { offerings } = req.body;
     const rating = 0;
     const reviews: IReview[] = [];
 
@@ -142,7 +143,7 @@ unitsRouter.post(
     });
 
     const savedUnit = await unit.save();
-    res.send(savedUnit.toJSON());
+    return res.json(savedUnit.toJSON());
   },
 );
 
