@@ -4,7 +4,7 @@ import express from 'express';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import morgan from 'morgan';
 
-import { initDB } from './db';
+import initDB from './db';
 import authRouter from './routes/auth';
 import unitsRouter from './routes/units';
 
