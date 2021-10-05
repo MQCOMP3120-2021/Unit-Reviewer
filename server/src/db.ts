@@ -4,10 +4,7 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 const initDB = async () => {
-  await mongoose.connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@comp3120-cluster.ykznh.`
-      + 'mongodb.net/unit-reviewer?retryWrites=true&w=majority',
-  );
+  await mongoose.connect(process.env.MONGO_URI);
 };
 
 export default initDB;
