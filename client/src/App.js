@@ -1,5 +1,6 @@
 import React from "react"
 import 'semantic-ui-css/semantic.min.css'
+import { Container, Grid } from "semantic-ui-react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 import HomePage from './HomePage'
 import AddUnit from './AddUnit'
@@ -12,44 +13,43 @@ import './styles/custom.css'
 
 class App extends React.Component {
   render() {
-  return (
-    <div>
+    return (
       <Router>
-        <NavBar />
-        <Route
-          exact path="/about"
-          
-          render={() => 
-          <About />}
-        />
-
-        <Route
-          exact path="/addunit"
-          render={() => 
-          <AddUnit />}
-        />
-
-        <Route
-          exact path="/login"
-          render={() => 
-          <LoginForm />}
-        />
-        <Route
-          exact path="/register"
-          render={() => 
-          <RegisterForm />}
-        />
-        <Route
-          exact path="/"
-          render={() => 
-          <HomePage />}
-        />
-
         
+        <Container>
+        <NavBar/>
+              <Route
+                exact path="/about"
+
+                render={() =>
+                  <About />}
+              />
+
+              <Route
+                exact path="/addunit"
+                render={() =>
+                  <AddUnit />}
+              />
+
+              <Route
+                exact path="/login"
+                render={() =>
+                  <LoginForm />}
+              />
+              <Route
+                exact path="/register"
+                render={() =>
+                  <RegisterForm />}
+              />
+              <Route
+                exact path="/"
+                render={() =>
+                  <HomePage />}
+              />
+        </Container>
       </Router>
-    </div>
-  );
-}
+    );
+  }
 }
 
 export default App;

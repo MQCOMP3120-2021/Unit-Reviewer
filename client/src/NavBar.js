@@ -10,7 +10,7 @@ export default class NavBar extends Component {
 
     return (
       <div>
-        <Menu pointing secondary>
+        <Menu className="menCol" pointing secondary>
         <Menu.Item
             as={NavLink} exact to="/"
             name="home"
