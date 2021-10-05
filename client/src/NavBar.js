@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Menu, Segment, Input } from 'semantic-ui-react'
 import { NavLink, withRouter } from 'react-router-dom'
 
-const NavBar = () => {
+const NavBar = ({user, setUser}) => {
 
   return (
     <div>
@@ -22,10 +22,13 @@ const NavBar = () => {
           name="about"
         />
         <Menu.Menu position='right'>
-          <Menu.Item
+          {user ? (<Menu.Item
+            name="logout"
+            onClick={(e) => {setUser(null)}}
+          />) : (<Menu.Item
             as={NavLink} to="/login"
             name="login"
-          />
+          />)}
           <Menu.Item>
             <Input icon='search' placeholder='Search for unit...' />
           </Menu.Item>

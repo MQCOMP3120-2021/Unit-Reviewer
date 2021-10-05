@@ -10,7 +10,7 @@ const AddUnit = () => {
             <Segment stacked>
               <Form.Input fluid icon='code' iconPosition='left' placeholder='Code' />
               <Form.Input fluid icon='bookmark outline' iconPosition='left' placeholder='Name' />
-              <Form.TextArea rows={8} fluid icon='user' iconPosition='left' placeholder='Description' />
+              <Form.TextArea rows={8} placeholder='Description' />
               <Form.Input fluid icon='coffee' iconPosition='left' placeholder='Offerings (separated by commas such as S1, S2, S3)' />
     
               <Button color='teal' size='large'>
