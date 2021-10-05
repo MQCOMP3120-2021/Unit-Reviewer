@@ -4,11 +4,9 @@ import logo from '../img/logo.png'
 import { Link } from 'react-router-dom'
 
 const RegisterForm = () => (
-  <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+  <><div className="mt-md">&nbsp;</div>
+  <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='top'>
     <Grid.Column style={{ maxWidth: 450 }}>
-      <Header as='h2' color='teal' textAlign='center'>
-        <Image src={logo} /> Create your account
-      </Header>
       <Form size='large'>
         <Segment stacked>
           <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' />
@@ -37,6 +35,7 @@ const RegisterForm = () => (
       </Message>
     </Grid.Column>
   </Grid>
+  </>
 )
 
 export default RegisterForm
