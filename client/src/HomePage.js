@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Image, Card, Icon } from 'semantic-ui-react'
-
+//a comment
 const HomePage = () =>
 <>
 <div className="mt-md">&nbsp;</div>
