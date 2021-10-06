@@ -14,14 +14,12 @@ import './styles/custom.css'
 const App = () => {
   return (
     <Router>
-      <Container>
         <NavBar />
         <Route exact path="/about" render={() => <About />}/>
         <Route exact path="/addunit" render={() => <AddUnit />}/>
         <Route exact path="/login" render={() => <LoginForm />}/>
         <Route exact path="/register" render={() => <RegisterForm />}/>
         <Route exact path="/" render={() => <HomePage />}/>
-      </Container>
     </Router>
   );
 }

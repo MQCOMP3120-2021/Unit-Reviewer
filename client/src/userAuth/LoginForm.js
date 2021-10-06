@@ -4,8 +4,8 @@ import logo from '../img/logo.png'
 import { Link } from 'react-router-dom'
 
 const LoginForm = () => (
-  <><div className="mt-md">&nbsp;</div>
-    <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='top'>
+  <>
+    <Grid padded centered>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Form size='large'>
           <Segment stacked>
