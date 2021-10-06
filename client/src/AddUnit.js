@@ -74,7 +74,7 @@ const AddUnit = () => {
     hurdle: "",
     title: "",
     type: "",
-    weighting: -1
+    weighting: ""
   })
   const assessmentOptions = {
     hurdle: [
@@ -93,7 +93,7 @@ const AddUnit = () => {
   const addAssessment = () => {
     let assess = newUnit.assessments
     if (assessment.description !== "" && assessment.hurdle !== "", assessment.title !== "" && assessment.type !== ""
-      && assessment.type !== "" && assessment.weighting !== -1) {
+      && assessment.type !== "" && assessment.weighting !== "") {
         assess["a" + Object.keys(assess).length] = assessment
       setNewUnit({ ...newUnit, assessments: assess })
       setAssessment({
@@ -101,7 +101,7 @@ const AddUnit = () => {
         hurdle: "",
         title: "",
         type: "",
-        weighting: -1
+        weighting: ""
       })
       console.log(assess)
     }
@@ -238,12 +238,12 @@ const AddUnit = () => {
     code: "",
     activities: {scheduled:{}, non_scheduled:{}},
     assessments: {},
-    credits: -1,
+    credits: "",
     department: "",
     description: "",
     faculty: "",
     group: "",
-    level: -1,
+    level: "",
     nccw: "",
     offerings: {},
     outcomes: {},
