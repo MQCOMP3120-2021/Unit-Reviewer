@@ -3,8 +3,8 @@ import logo from './img/logo.png'
 
 const AddUnit = () => {
     return (
-      <><div className="mt-md">&nbsp;</div>
-        <Grid style={{ height: '100vh' }}>
+      <>
+        <Grid padded centered>
         <Grid.Column>
           <Form size='large'>
             <Segment stacked>
