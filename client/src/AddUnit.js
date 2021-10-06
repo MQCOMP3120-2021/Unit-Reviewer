@@ -363,10 +363,10 @@ const AddUnit = () => {
                     search
                   />
                 </Form.Field>
-                <Button onClick={addOffering} color='green' size='small'>
+              </Form.Group>
+              <Button onClick={addOffering} color='green' size='small'>
                   Add Offering
                 </Button>
-              </Form.Group>
 
 
 
@@ -404,6 +404,8 @@ const AddUnit = () => {
                   onChange={(e) => setActivity({ ...activity, sched: "Non-Scheduled" })}
                 />
                 </Form.Group>
+              </Form.Group>
+              <Form.Group widths="equal">
                 <Form.Field>
                   <label>Activity Name</label>
                   <Form.Select
@@ -439,10 +441,10 @@ const AddUnit = () => {
                     onChange={(e) => setActivity({ ...activity, description: e.target.value })}
                   />
                 </Form.Field>
-                <Button onClick={addActivity} color='green' size='small'>
+              </Form.Group>
+              <Button onClick={addActivity} color='green' size='small'>
                   Add Activity
                 </Button>
-              </Form.Group>
 
 
 
@@ -500,6 +502,8 @@ const AddUnit = () => {
                     onChange={(e) => setAssessment({ ...assessment, weighting: e.target.value })}
                   />
                 </Form.Field>
+                </Form.Group>
+                <Form.Group widths="equal">
                 <Form.Field>
                   <label>Assessment Description</label>
                   <Form.TextArea
@@ -509,10 +513,10 @@ const AddUnit = () => {
                     onChange={(e) => setAssessment({ ...assessment, description: e.target.value })}
                   />
                 </Form.Field>
-                <Button onClick={addAssessment} color='green' size='small'>
+              </Form.Group>
+              <Button onClick={addAssessment} color='green' size='small'>
                   Add Assessment
                 </Button>
-              </Form.Group>
 
 
 
@@ -532,15 +536,16 @@ const AddUnit = () => {
                     onChange={(e) => setOutcome({ ...outcome, description: e.target.value })}
                   />
                 </Form.Field>
-                <Button onClick={addOutcome} color='green' size='small'>
+              </Form.Group>
+              <Button onClick={addOutcome} color='green' size='small'>
                   Add ULO
                 </Button>
-              </Form.Group>
 
-              <Button onClick={addUnit} color='teal' size='large'>
+              
+            </Segment>
+            <Button onClick={addUnit} color='teal' size='large'>
                 Submit New Unit
               </Button>
-            </Segment>
           </Form>
         </Grid.Column>
       </Grid></>

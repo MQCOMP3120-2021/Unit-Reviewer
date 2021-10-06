@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Image, Card, Icon } from 'semantic-ui-react'
 
 const HomePage = ({units}) => {
-<>
+return(<>
 <Grid padded centered>
   {units.map(item => (
                 <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
@@ -50,6 +50,7 @@ const HomePage = ({units}) => {
                 </Card.Content>
             </Card>
     </Grid>
-    </>
+    </>)
+}
 
 export default HomePage
