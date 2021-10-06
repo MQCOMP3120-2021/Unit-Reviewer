@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, Header, Image, Form, Segment, Button, Message } from "semantic-ui-react";
+import { Grid, Header, Image, Form, Segment, Button, Message, Dropdown } from "semantic-ui-react";
 import logo from './img/logo.png'
 
 const AddUnit = () => {
@@ -7,6 +7,17 @@ const AddUnit = () => {
   const groupOptions = [
     { key: "u", text: "Undergraduate", value: "Undergraduate" },
     { key: "p", text: "Postgraduate", value: "Postgraduate" },
+  ]
+
+  const levelOptions = [
+    { key: "one", text: "1000", value: "1000" },
+    { key: "two", text: "2000", value: "2000" },
+    { key: "three", text: "3000", value: "3000" },
+    { key: "four", text: "4000", value: "4000" },
+    { key: "five", text: "5000", value: "5000" },
+    { key: "six", text: "6000", value: "6000" },
+    { key: "seven", text: "7000", value: "7000" },
+    { key: "eight", text: "8000", value: "8000" },
   ]
 
   const [offering, setOffering] = useState({
@@ -63,7 +74,8 @@ const AddUnit = () => {
       { key: "t", text: "Quiz/Test", value: "Quiz/Test" },
       { key: "x", text: "Examination", value: "Examination" },
       { key: "p", text: "Problem set", value: "Problem set" },
-      { key: "q", text: "Quantitative analysis task", value: "Quantitative analysis task" }
+      { key: "q", text: "Quantitative analysis task", value: "Quantitative analysis task" },
+      { key: "pt", text: "Participatory task", value: "Participatory task" }
     ]
   }
   const addAssessment = () => {
@@ -106,13 +118,68 @@ const AddUnit = () => {
   const [activity, setActivity] = useState({
     description: "",
     name: "",
-    offerings: "",
-    scheduled: ""
+    offerings: [],
+    sched:""
   })
+  const activityOptions = {
+    scheduled: [
+      { key: "to", text: "Tutorial (online)", value: "Tutorial (online)" },
+      { key: "tc", text: "Tutorial (on campus)", value: "Tutorial (on campus)" },
+      { key: "lo", text: "Lecture (online)", value: "Lecture (online)" },
+      { key: "lc", text: "Lecture (on campus)", value: "Lecture (on campus)" },
+      { key: "fw", text: "Fieldwork", value: "Fieldwork" },
+    ],
+    non_scheduled: [
+      { key: "rd", text: "Readings", value: "Readings" },
+      { key: "rh", text: "Research", value: "Research" },
+      { key: "or", text: "Online resources", value: "Online resources" },
+      { key: "cp", text: "Class preparation", value: "Class preparation" },
+    ],
+    offerings: [
+      { key: "s1n", text: "Session 1-Weekday-North Ryde", value: "Session 1-Weekday-North Ryde" },
+      { key: "s2n", text: "Session 2-Weekday-North Ryde", value: "Session 2-Weekday-North Ryde" },
+      { key: "s1o", text: "Session 1-Online", value: "Session 1-Online" },
+      { key: "s2o", text: "Session 2-Online", value: "Session 2-Online" },
+      { key: "s1p", text: "Session 1-Special", value: "Session 1-Special" },
+      { key: "s2p", text: "Session 2-Special", value: "Session 2-Special" },
+      { key: "s1in", text: "Session 1-Infrequent-North Ryde", value: "Session 1-Infrequent-North Ryde" },
+      { key: "s2in", text: "Session 2-Infrequent-North Ryde", value: "Session 2-Infrequent-North Ryde" },
+      { key: "s1c", text: "Session 1-Weekday-City", value: "Session 1-Weekday-City" },
+      { key: "s2c", text: "Session 2-Weekday-City", value: "Session 2-Weekday-City" },
+    ]
+  }
+  const addActivity = () => {
+    let act = newUnit.activities
+    if (activity.description !== "" && activity.name !== "" && activity.sched !== "" && activity.offerings.length !== 0) {
+      if(activity.sched === "Scheduled") {
+        act['scheduled']["s" + Object.keys(act['scheduled']).length] = {
+          description: activity.description, 
+          name: activity.name, 
+          offerings: activity.offerings.toString()
+        }
+      } else {
+        act['non_scheduled']["ns" + Object.keys(act['non_scheduled']).length] = {
+          description: activity.description, 
+          name: activity.name, 
+          offerings: activity.offerings.toString()
+        }
+      }
+      setActivity({
+        description: "",
+        name: "",
+        offerings: [],
+        sched:""
+      })
+      console.log(act)
+    }
+  }
+
+
+
 
   const [newUnit, setNewUnit] = useState({
     code: "",
-    activities: {},
+    activities: {scheduled:{}, non_scheduled:{}},
     assessments: {},
     credits: -1,
     department: "",
@@ -128,7 +195,8 @@ const AddUnit = () => {
   })
 
   const addUnit = () => {
-    console.log(newUnit)
+    const formatUnitted = {[newUnit.code]: newUnit}
+    console.log(formatUnitted)
   }
 
   return (
@@ -139,63 +207,63 @@ const AddUnit = () => {
             <Segment stacked>
               <Form.Field>
                 <label>Code</label>
-                <Form.Input fluid icon='code' iconPosition='left' placeholder='Code' 
-                value={newUnit.code} onChange={e => setNewUnit({...newUnit, code: e.target.value})} />
+                <Form.Input fluid icon='code' iconPosition='left' placeholder='Code'
+                  value={newUnit.code} onChange={e => setNewUnit({ ...newUnit, code: e.target.value })} />
               </Form.Field>
               <Form.Field>
-                  <label>Level</label>
-                  <Form.Input
-                    type="number"
-                    fluid 
-                    placeholder='Level'
-                    value={newUnit.level} 
-                    onChange={e => setNewUnit({...newUnit, level: e.target.value})}
-                    />
-                </Form.Field>
+                <label>Level</label>
+                <Form.Select
+                  options={levelOptions}
+                  placeholder='Level'
+                  value={newUnit.level}
+                  onChange={(e, { value }) => setNewUnit({ ...newUnit, level: value })}
+                  search
+                />
+              </Form.Field>
               <Form.Field>
                 <label>Title</label>
-                <Form.Input fluid icon='bookmark outline' iconPosition='left' placeholder='Title' 
-                value={newUnit.title} onChange={e => setNewUnit({...newUnit, title: e.target.value})}/>
+                <Form.Input fluid icon='bookmark outline' iconPosition='left' placeholder='Title'
+                  value={newUnit.title} onChange={e => setNewUnit({ ...newUnit, title: e.target.value })} />
               </Form.Field>
               <Form.Field>
                 <label>Credits</label>
                 <Form.Input type="number" fluid icon='money bill alternate' iconPosition='left' placeholder='Credits'
-                value={newUnit.credits} onChange={e => setNewUnit({...newUnit, credits: e.target.value})}/>
+                  value={newUnit.credits} onChange={e => setNewUnit({ ...newUnit, credits: e.target.value })} />
               </Form.Field>
               <Form.Field>
                 <label>Department</label>
                 <Form.Input fluid icon='warehouse' iconPosition='left' placeholder='Department'
-                value={newUnit.department} onChange={e => setNewUnit({...newUnit, department: e.target.value})}/>
+                  value={newUnit.department} onChange={e => setNewUnit({ ...newUnit, department: e.target.value })} />
               </Form.Field>
               <Form.Field>
                 <label>Faculty</label>
                 <Form.Input fluid icon='warehouse' iconPosition='left' placeholder='Faculty'
-                value={newUnit.faculty} onChange={e => setNewUnit({...newUnit, faculty: e.target.value})}/>
+                  value={newUnit.faculty} onChange={e => setNewUnit({ ...newUnit, faculty: e.target.value })} />
               </Form.Field>
-              
+
               <Form.Field>
                 <label>Description</label>
                 <Form.TextArea rows={8} fluid icon='user' iconPosition='left' placeholder='Description' />
               </Form.Field>
               <Form.Field>
-                  <label>Group</label>
-                  <Form.Select
-                    options={groupOptions}
-                    placeholder='Group'
-                    value={newUnit.group}
-                    onChange={(e, { value }) => setNewUnit({...newUnit, group: value})}
-                    search
-                  />
-                </Form.Field>
+                <label>Group</label>
+                <Form.Select
+                  options={groupOptions}
+                  placeholder='Group'
+                  value={newUnit.group}
+                  onChange={(e, { value }) => setNewUnit({ ...newUnit, group: value })}
+                  search
+                />
+              </Form.Field>
               <Form.Field>
                 <label>NCCW</label>
-                <Form.Input fluid icon='code' iconPosition='left' placeholder='NCCW Codes' 
-                value={newUnit.nccw} onChange={e => setNewUnit({...newUnit, nccw: e.target.value})} />
+                <Form.Input fluid icon='code' iconPosition='left' placeholder='NCCW Codes'
+                  value={newUnit.nccw} onChange={e => setNewUnit({ ...newUnit, nccw: e.target.value })} />
               </Form.Field>
               <Form.Field>
                 <label>Pre-requisites</label>
-                <Form.Input fluid icon='edit' iconPosition='left' placeholder='Pre-reqs' 
-                value={newUnit.prerequisite} onChange={e => setNewUnit({...newUnit, prerequisite: e.target.value})} />
+                <Form.Input fluid icon='edit' iconPosition='left' placeholder='Pre-reqs'
+                  value={newUnit.prerequisite} onChange={e => setNewUnit({ ...newUnit, prerequisite: e.target.value })} />
               </Form.Field>
 
               <Header as="h2">Offerings</Header>
@@ -244,6 +312,83 @@ const AddUnit = () => {
               </Form.Group>
 
 
+
+
+
+              <Header as="h2">Activities</Header>
+              {Object.keys(newUnit.activities.scheduled).map(function (key) {
+                return <Message key={key} size='small'>
+                  Name - {newUnit.activities.scheduled[key].name},
+                  Description - {newUnit.activities.scheduled[key].description},
+                  Offerings - {newUnit.activities.scheduled[key].offerings}
+                </Message>
+
+              })}
+              {Object.keys(newUnit.activities.non_scheduled).map(function (key) {
+                return <Message key={key} size='small'>
+                  Name - {newUnit.activities.non_scheduled[key].name},
+                  Description - {newUnit.activities.non_scheduled[key].description},
+                  Offerings - {newUnit.activities.non_scheduled[key].offerings}
+                </Message>
+
+              })}
+              <Form.Group widths="equal">
+                <Form.Group inline>
+                <label>Scheduling Type</label>
+                <Form.Radio
+                  label='Scheduled'
+                  checked={activity.sched === "Scheduled" ? true : false}
+                  onChange={(e) => setActivity({ ...activity, sched: "Scheduled" })}
+                />
+                <Form.Radio
+                  label='Non-Scheduled'
+                  checked={activity.sched === "Non-Scheduled" ? true : false}
+                  onChange={(e) => setActivity({ ...activity, sched: "Non-Scheduled" })}
+                />
+                </Form.Group>
+                <Form.Field>
+                  <label>Activity Name</label>
+                  <Form.Select
+                    options={activity.sched === "" ? [] : activity.sched === "Scheduled" ? activityOptions.scheduled : activityOptions.non_scheduled}
+                    disabled={activity.sched === "" ? true : false}
+                    placeholder='Activity Name'
+                    value={activity.name}
+                    onChange={(e, { value }) => setActivity({ ...activity, name: value })}
+                    search
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>Offerings</label>
+                  <Dropdown
+                    placeholder='Offerings'
+                    fluid
+                    multiple
+                    search
+                    selection
+                    value={activity.offerings}
+                    options={activityOptions.offerings}
+                    onChange={(e, { value }) => setActivity({ ...activity, offerings: value })}
+                  />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>Activity Description</label>
+                  <Form.TextArea
+                    rows={5}
+                    placeholder='Activity Description'
+                    value={activity.description}
+                    onChange={(e) => setActivity({ ...activity, description: e.target.value })}
+                  />
+                </Form.Field>
+                <Button onClick={addActivity} color='green' size='small'>
+                  Add Activity
+                </Button>
+              </Form.Group>
+
+
+
+
               <Header as="h2">Assessments</Header>
               {Object.keys(newUnit.assessments).map(function (key) {
                 return <Message key={key} size='small'>
@@ -258,12 +403,12 @@ const AddUnit = () => {
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>Title</label>
-                  <Form.Input 
-                    fluid 
+                  <Form.Input
+                    fluid
                     placeholder='Title'
-                    value={assessment.title} 
-                    onChange={(e) => setAssessment({...assessment, title: e.target.value})}
-                    />
+                    value={assessment.title}
+                    onChange={(e) => setAssessment({ ...assessment, title: e.target.value })}
+                  />
                 </Form.Field>
                 <Form.Field>
                   <label>Type</label>
@@ -275,8 +420,8 @@ const AddUnit = () => {
                     search
                   />
                 </Form.Field>
-                </Form.Group>
-                <Form.Group widths="equal">
+              </Form.Group>
+              <Form.Group widths="equal">
                 <Form.Field>
                   <label>Hurdle</label>
                   <Form.Select
@@ -291,22 +436,22 @@ const AddUnit = () => {
                   <label>Weighting</label>
                   <Form.Input
                     type="number"
-                    fluid 
+                    fluid
                     placeholder='Weighting'
-                    value={assessment.weighting} 
-                    onChange={(e) => setAssessment({...assessment, weighting: e.target.value})}
-                    />
+                    value={assessment.weighting}
+                    onChange={(e) => setAssessment({ ...assessment, weighting: e.target.value })}
+                  />
                 </Form.Field>
-              <Form.Field>
-                <label>Assessment Description</label>
-                <Form.TextArea 
-                rows={8} 
-                placeholder='Assessment Description' 
-                value={assessment.description}
-                onChange={(e) => setAssessment({...assessment, description: e.target.value})}
-                />
-              </Form.Field>
-              <Button onClick={addAssessment} color='green' size='small'>
+                <Form.Field>
+                  <label>Assessment Description</label>
+                  <Form.TextArea
+                    rows={8}
+                    placeholder='Assessment Description'
+                    value={assessment.description}
+                    onChange={(e) => setAssessment({ ...assessment, description: e.target.value })}
+                  />
+                </Form.Field>
+                <Button onClick={addAssessment} color='green' size='small'>
                   Add Assessment
                 </Button>
               </Form.Group>
@@ -322,12 +467,12 @@ const AddUnit = () => {
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>Description</label>
-                  <Form.Input 
-                    fluid 
+                  <Form.Input
+                    fluid
                     placeholder='Unit Learning Outcome Description'
                     value={outcome.description}
-                    onChange={(e) => setOutcome({...outcome, description: e.target.value})}
-                    />
+                    onChange={(e) => setOutcome({ ...outcome, description: e.target.value })}
+                  />
                 </Form.Field>
                 <Button onClick={addOutcome} color='green' size='small'>
                   Add ULO
@@ -335,7 +480,7 @@ const AddUnit = () => {
               </Form.Group>
 
               <Button onClick={addUnit} color='teal' size='large'>
-                Add new unit
+                Submit New Unit
               </Button>
             </Segment>
           </Form>
