@@ -5,7 +5,7 @@ const HomePage = ({units}) => {
 return(<>
 <Grid padded centered>
   {units.map(item => (
-                <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
+                <Card key={item._id} style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
                     <Card.Content header={item.code} />
                     <Card.Content description={item.name} />
                     <Card.Content extra>
