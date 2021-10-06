@@ -256,9 +256,9 @@ const AddUnit = () => {
     console.log(formatUnitted)
   }
 
-  return (
-    <><div className="mt-md">&nbsp;</div>
-      <Grid style={{ height: '100vh' }}>
+    return (
+      <>
+        <Grid padded centered>
         <Grid.Column>
           <Form size='large'>
             <Segment stacked>

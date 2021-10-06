@@ -27,9 +27,8 @@ const RegisterForm = ({setUser}) => {
           })
     }
   }
-
-  return (<><div className="mt-md">&nbsp;</div>
-  <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='top'>
+  return (<>
+  <Grid padded centered>
     <Grid.Column style={{ maxWidth: 450 }}>
       <Form size='large'>
         <Segment stacked>

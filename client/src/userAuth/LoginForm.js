@@ -3,7 +3,7 @@ import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui
 import authService from '../services/auth'
 import { Link, useHistory } from 'react-router-dom'
 
-const LoginForm = ({ setUser }) => {
+  const LoginForm = ({ setUser }) => {
 
   const history = useHistory()
 
@@ -23,8 +23,8 @@ const LoginForm = ({ setUser }) => {
     })
   }
 
-  return (<><div className="mt-md">&nbsp;</div>
-    <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='top'>
+  return (<>
+    <Grid padded centered>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Form size='large'>
           <Segment stacked>

@@ -7,8 +7,11 @@ import { NavLink, withRouter } from 'react-router-dom'
 const NavBar = ({user, setUser}) => {
 
   return (
-    <div>
-      <Menu className="menCol" pointing secondary>
+    <>
+      <Menu stackable size="massive">
+        <Menu.Item width="100">
+          <img src='https://via.placeholder.com/150' />
+        </Menu.Item>
         <Menu.Item
           as={NavLink} exact to="/"
           name="home"
@@ -41,7 +44,7 @@ const NavBar = ({user, setUser}) => {
           </Menu.Item>
         </Menu.Menu>
       </Menu>
-    </div>
+    </>
   )
 }
 
