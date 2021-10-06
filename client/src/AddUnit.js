@@ -55,6 +55,25 @@ const AddUnit = () => {
     }
   }
 
+  const deleteOffering = (key) => {
+    let exOffs = newUnit.offerings
+    const keys = Object.keys(newUnit.offerings)
+    delete exOffs[key]
+    let idx = keys.indexOf(key)+1
+    let shiftList = keys.splice(idx)
+    console.log(idx)
+    console.log(shiftList)
+    for(let i = idx; i < idx+shiftList.length; i++) {
+      exOffs["o" + i] = exOffs["o"+(i+1)]
+      if(i+1 === idx + shiftList.length) {
+        delete exOffs["o"+(i+1)]
+      }
+    }
+    console.log(exOffs)
+    //setNewUnit({...newUnit, offerings: exOffs})
+     
+  }
+
 
 
   const [assessment, setAssessment] = useState({
@@ -164,6 +183,7 @@ const AddUnit = () => {
           offerings: activity.offerings.toString()
         }
       }
+      setNewUnit({...newUnit, activities: act})
       setActivity({
         description: "",
         name: "",
@@ -268,7 +288,7 @@ const AddUnit = () => {
 
               <Header as="h2">Offerings</Header>
               {Object.keys(newUnit.offerings).map(function (key) {
-                return <Message key={key} size='small'>
+                return <Message onDismiss={(e) => deleteOffering(key)} key={key} size='small'>
                   Attendance - {newUnit.offerings[key].attendance},
                   Location - {newUnit.offerings[key].location},
                   Period - {newUnit.offerings[key].period}
@@ -316,14 +336,15 @@ const AddUnit = () => {
 
 
               <Header as="h2">Activities</Header>
+              {Object.keys(newUnit.activities.scheduled).length > 0 && <Header as="h3">Scheduled Activities</Header>}
               {Object.keys(newUnit.activities.scheduled).map(function (key) {
                 return <Message key={key} size='small'>
                   Name - {newUnit.activities.scheduled[key].name},
                   Description - {newUnit.activities.scheduled[key].description},
                   Offerings - {newUnit.activities.scheduled[key].offerings}
                 </Message>
-
               })}
+              {Object.keys(newUnit.activities.non_scheduled).length > 0 && <Header as="h3">Non-Scheduled Activities</Header>}
               {Object.keys(newUnit.activities.non_scheduled).map(function (key) {
                 return <Message key={key} size='small'>
                   Name - {newUnit.activities.non_scheduled[key].name},
