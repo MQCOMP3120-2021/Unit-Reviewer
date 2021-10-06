@@ -22,10 +22,17 @@ const NavBar = ({user, setUser}) => {
           name="about"
         />
         <Menu.Menu position='right'>
-          {user ? (<Menu.Item
+          {user ? (
+          <>
+          <Menu.Item
+            name={`Hello ${user.data.username}`}
+          />
+          <Menu.Item
             name="logout"
             onClick={(e) => {setUser(null)}}
-          />) : (<Menu.Item
+          />
+          </>) : (
+          <Menu.Item
             as={NavLink} to="/login"
             name="login"
           />)}
