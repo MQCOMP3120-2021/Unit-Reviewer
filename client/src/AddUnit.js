@@ -57,21 +57,14 @@ const AddUnit = () => {
 
   const deleteOffering = (key) => {
     let exOffs = newUnit.offerings
-    const keys = Object.keys(newUnit.offerings)
     delete exOffs[key]
-    let idx = keys.indexOf(key)+1
-    let shiftList = keys.splice(idx)
-    console.log(idx)
-    console.log(shiftList)
-    for(let i = idx; i < idx+shiftList.length; i++) {
-      exOffs["o" + i] = exOffs["o"+(i+1)]
-      if(i+1 === idx + shiftList.length) {
-        delete exOffs["o"+(i+1)]
-      }
+    const keys = Object.keys(exOffs)
+    let upOffs = {}
+    for(let i = 0; i < keys.length; i++) {
+      upOffs["o"+(i+1)] = exOffs[keys[i]]
     }
-    console.log(exOffs)
-    //setNewUnit({...newUnit, offerings: exOffs})
-     
+    console.log(upOffs)
+    setNewUnit({...newUnit, offerings: upOffs})
   }
 
 
@@ -98,11 +91,11 @@ const AddUnit = () => {
     ]
   }
   const addAssessment = () => {
-    let asses = newUnit.assessments
+    let assess = newUnit.assessments
     if (assessment.description !== "" && assessment.hurdle !== "", assessment.title !== "" && assessment.type !== ""
       && assessment.type !== "" && assessment.weighting !== -1) {
-      asses["a" + (Object.keys(asses).length + 1)] = assessment
-      setNewUnit({ ...newUnit, assessments: asses })
+        assess["a" + Object.keys(assess).length] = assessment
+      setNewUnit({ ...newUnit, assessments: assess })
       setAssessment({
         description: "",
         hurdle: "",
@@ -110,8 +103,19 @@ const AddUnit = () => {
         type: "",
         weighting: -1
       })
-      console.log(asses)
+      console.log(assess)
     }
+  }
+  const deleteAssessment = (key) => {
+    let exOffs = newUnit.assessments
+    delete exOffs[key]
+    const keys = Object.keys(exOffs)
+    let upOffs = {}
+    for(let i = 0; i < keys.length; i++) {
+      upOffs["a"+i] = exOffs[keys[i]]
+    }
+    console.log(upOffs)
+    setNewUnit({...newUnit, assessments: upOffs})
   }
 
 
@@ -129,6 +133,17 @@ const AddUnit = () => {
       })
       console.log(otcomes)
     }
+  }
+  const deleteOutcome = (key) => {
+    let exOffs = newUnit.outcomes
+    delete exOffs[key]
+    const keys = Object.keys(exOffs)
+    let upOffs = {}
+    for(let i = 0; i < keys.length; i++) {
+      upOffs["ULO"+(i+1)] = exOffs[keys[i]]
+    }
+    console.log(upOffs)
+    setNewUnit({...newUnit, outcomes: upOffs})
   }
 
 
@@ -192,6 +207,28 @@ const AddUnit = () => {
       })
       console.log(act)
     }
+  }
+  const deleteSchedActivity = (key) => {
+    let exOffs = newUnit.activities.scheduled
+    delete exOffs[key]
+    const keys = Object.keys(exOffs)
+    let upOffs = {scheduled: {}, non_scheduled: newUnit.activities.non_scheduled}
+    for(let i = 0; i < keys.length; i++) {
+      upOffs['scheduled']["s"+i] = exOffs[keys[i]]
+    }
+    console.log(upOffs)
+    setNewUnit({...newUnit, activities: upOffs})
+  }
+  const deleteNonSchedActivity = (key) => {
+    let exOffs = newUnit.activities.non_scheduled
+    delete exOffs[key]
+    const keys = Object.keys(exOffs)
+    let upOffs = {scheduled: newUnit.activities.scheduled, non_scheduled: {}}
+    for(let i = 0; i < keys.length; i++) {
+      upOffs['non_scheduled']["ns"+i] = exOffs[keys[i]]
+    }
+    console.log(upOffs)
+    setNewUnit({...newUnit, activities: upOffs})
   }
 
 
@@ -338,7 +375,7 @@ const AddUnit = () => {
               <Header as="h2">Activities</Header>
               {Object.keys(newUnit.activities.scheduled).length > 0 && <Header as="h3">Scheduled Activities</Header>}
               {Object.keys(newUnit.activities.scheduled).map(function (key) {
-                return <Message key={key} size='small'>
+                return <Message key={key} onDismiss={(e) => deleteSchedActivity(key)} size='small'>
                   Name - {newUnit.activities.scheduled[key].name},
                   Description - {newUnit.activities.scheduled[key].description},
                   Offerings - {newUnit.activities.scheduled[key].offerings}
@@ -346,7 +383,7 @@ const AddUnit = () => {
               })}
               {Object.keys(newUnit.activities.non_scheduled).length > 0 && <Header as="h3">Non-Scheduled Activities</Header>}
               {Object.keys(newUnit.activities.non_scheduled).map(function (key) {
-                return <Message key={key} size='small'>
+                return <Message key={key} onDismiss={(e) => deleteNonSchedActivity(key)} size='small'>
                   Name - {newUnit.activities.non_scheduled[key].name},
                   Description - {newUnit.activities.non_scheduled[key].description},
                   Offerings - {newUnit.activities.non_scheduled[key].offerings}
@@ -412,7 +449,7 @@ const AddUnit = () => {
 
               <Header as="h2">Assessments</Header>
               {Object.keys(newUnit.assessments).map(function (key) {
-                return <Message key={key} size='small'>
+                return <Message onDismiss={(e) => deleteAssessment(key)} key={key} size='small'>
                   Title - {newUnit.assessments[key].title},
                   Type - {newUnit.assessments[key].type},
                   Hurdle - {newUnit.assessments[key].hurdle},
@@ -481,7 +518,7 @@ const AddUnit = () => {
 
               <Header as="h2">Unit Learning Outcomes</Header>
               {Object.keys(newUnit.outcomes).map(function (key) {
-                return <Message key={key} size='small'>
+                return <Message onDismiss={(e) => deleteOutcome(key)} key={key} size='small'>
                   {key} - {newUnit.outcomes[key]}
                 </Message>
               })}
