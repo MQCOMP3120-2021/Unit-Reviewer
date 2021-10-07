@@ -9,6 +9,7 @@ import { getToken } from './auth';
 const unitsRouter = express.Router();
 
 const UNIT_NOT_FOUND_ERROR = 'Unit not found';
+const UNABLE_TO_ADD_UNIT_ERROR = 'Unable to add unit';
 const UNABLE_TO_ADD_REVIEW_ERROR = 'Unable to add review';
 
 /**
@@ -208,8 +209,12 @@ unitsRouter.post(
       reviews,
     });
 
-    const savedUnit = await unit.save();
-    return res.json(savedUnit.toJSON());
+    try {
+      const savedUnit = await unit.save();
+      return res.json(savedUnit.toJSON());
+    } catch (error) {
+      return res.status(400).send({ error: UNABLE_TO_ADD_UNIT_ERROR });
+    }
   },
 );
 
