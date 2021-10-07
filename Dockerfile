@@ -1,20 +1,38 @@
+FROM node AS client-builder
+
+WORKDIR /build
+
+COPY ./client/package.json ./client/yarn.lock ./
+
+RUN yarn install
+
+COPY ./client/public/index.html ./public/index.html
+
+FROM node AS server-builder
+
+WORKDIR /build
+
+COPY ./server/package.json ./server/yarn.lock ./
+
+RUN yarn install
+
 FROM node
-
-WORKDIR /app
-
-COPY . .
 
 WORKDIR /app/client
 
-RUN yarn install
+COPY ./client/ ./
+
+COPY --from=client-builder /build/ ./
 
 RUN yarn run build
 
-RUN cp -r ./build ../server/public
-
 WORKDIR /app/server
 
-RUN yarn install
+COPY ./server/ ./
+
+COPY --from=server-builder /build/ ./
+
+RUN cp -r /app/client/build ./public
 
 RUN yarn run lint && yarn run build
 
