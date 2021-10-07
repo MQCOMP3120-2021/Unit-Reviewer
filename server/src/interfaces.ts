@@ -1,5 +1,3 @@
-export type Offering = 'S1' | 'S2' | 'S3';
-
 export type UnitCode = string;
 
 export interface IActivity {
@@ -36,20 +34,20 @@ export interface IReview {
 export interface IUnit {
   code: string;
   title: string;
-  description: string;
-  offerings: Offering[];
-  activities: IActivities;
-  assessments: IAssessment[];
-  credits: number;
-  department: string;
-  faculty: string;
-  group: string;
-  level: string;
-  prerequisites: UnitCode[];
-  nccw: UnitCode[];
-  outcomes: string[];
-  rating: number;
-  reviews: IReview[];
+  description?: string;
+  offerings?: IOffering[];
+  activities?: IActivities;
+  assessments?: IAssessment[];
+  credits?: number;
+  department?: string;
+  faculty?: string;
+  group?: string;
+  level?: string;
+  prerequisites?: UnitCode[];
+  nccw?: UnitCode[];
+  outcomes?: string[];
+  rating?: number;
+  reviews?: IReview[];
 }
 
 export interface IUser {
