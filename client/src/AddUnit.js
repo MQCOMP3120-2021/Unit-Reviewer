@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Grid, Header, Image, Form, Segment, Button, Message, Dropdown } from "semantic-ui-react";
 import logo from './img/logo.png'
+import unitsService from '../src/services/units'
 
-const AddUnit = () => {
+const AddUnit = ({getUnits, user}) => {
 
   const groupOptions = [
     { key: "u", text: "Undergraduate", value: "Undergraduate" },
@@ -252,8 +253,19 @@ const AddUnit = () => {
   })
 
   const addUnit = () => {
-    const formatUnitted = {[newUnit.code]: newUnit}
-    console.log(formatUnitted)
+    if(user) {
+      console.log(newUnit)
+      let send = {...newUnit, user: user}
+      unitsService.createUnit(send)
+      .then(data => {
+        getUnits()
+        console.log(data)
+      })
+      .catch(() => {
+          alert("There was an error!")
+        }
+      )
+    }
   }
 
     return (
@@ -300,7 +312,8 @@ const AddUnit = () => {
 
               <Form.Field>
                 <label>Description</label>
-                <Form.TextArea rows={8} fluid icon='user' iconPosition='left' placeholder='Description' />
+                <Form.TextArea rows={8} fluid icon='user' iconPosition='left' placeholder='Description'
+                value={newUnit.description} onChange={e => setNewUnit({ ...newUnit, description: e.target.value })} />
               </Form.Field>
               <Form.Field>
                 <label>Group</label>
