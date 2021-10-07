@@ -1,7 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 
 import { IReview, IUnit } from '../interfaces';
+import ActivitiesSchema from './Activities';
 import AssessmentSchema from './Assessment';
+import OfferingSchema from './Offering';
 import ReviewSchema from './Review';
 
 const UnitSchema = new Schema<IUnit>({
@@ -9,9 +11,9 @@ const UnitSchema = new Schema<IUnit>({
   title: String, // Unit name - eg Introduction to Computer Programming
   // Unit description - eg This unit is an introductory computer science unit...
   description: String,
-  offerings: [String], // List of offerings - eg ["S1", "S2", "S3"]
-  scheduledActivities: [String], // List of scheduled activities - eg ["Lecture", "Tutorial"]
-  nonScheduledActivities: [String], // List of non-scheduled activities - eg ["Lab"]
+  // List of offerings - eg [{attendance: String, location: String, period: String}]
+  offerings: [OfferingSchema],
+  activities: ActivitiesSchema, // Schedule and nonScheduled acitivities
   assessments: [AssessmentSchema], // List of assessments - eg [{ name: String, weight: Number }]
   credits: Number, // Number of credit points - eg 10
   department: String, // Department name - eg Computing

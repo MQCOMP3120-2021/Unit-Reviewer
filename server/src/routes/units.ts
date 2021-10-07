@@ -12,6 +12,39 @@ const UNIT_NOT_FOUND_ERROR = 'Unit not found';
 const UNABLE_TO_ADD_REVIEW_ERROR = 'Unable to add review';
 
 /**
+ * The Actitivies type
+ * @typedef {object} Activities
+ * @property {Activity} scheduled - Scheduled activities
+ * @property {Activity} nonScheduled - Non-scheduled activities
+ */
+
+/**
+ * An Activity type
+ * @typedef {object} Activity
+ * @property {string} name.required - The name of the activity
+ * @property {string} description.required - The description of the activity
+ * @property {array<string>} offerings.required - The offerings of the activity
+ */
+
+/**
+ * An Assessment type
+ * @typedef {object} Assessment
+ * @property {string} title.required - The title of the assessment
+ * @property {string} description.required - The description of the assessment
+ * @property {boolean} hurdle.required - Whether the assessment is a hurdle or not
+ * @property {string} type.required - The type of assessment
+ * @property {number} weighting.required - The weight of the assessment out of 100
+ */
+
+/**
+ * An Offering type
+ * @typedef {object} Offering
+ * @property {string} attendance.required - Online or In Person
+ * @property {string} location.required - The location of the offering
+ * @property {string} period.required - The period of the offering
+ */
+
+/**
  * A Review type
  * @typedef {object} Review
  * @property {string} unitId.required - The id of the unit being reviewed
@@ -22,37 +55,21 @@ const UNABLE_TO_ADD_REVIEW_ERROR = 'Unable to add review';
  */
 
 /**
- * An Activities type
- * @typedef {object} Activities
- * @property {string} name.required - The name of the activity
- * @property {number} weight.required - The weight of the activity out of 100
- */
-
-/**
- * An Assessment type
- * @typedef {object} Assessment
- * @property {string} name.required - The name of the assessment
- * @property {number} weight.required - The weight of the assessment out of 100
- */
-
-/**
  * A Unit type
  * @typedef {object} Unit
  * @property {string} code.required - The unit code
  * @property {string} title.required - The unit title
  * @property {string} description.required - The unit description
+ * @property {array<Offering>} offerings.required - List of offerings for the unit
+ * @property {Activities} activities - The unit's activities
  * @property {array<Assessment>} assessments.required - The units assessments
  * @property {number} credits.required - The number of credit points that the unit is worth
  * @property {string} department.required - The department to which the unit belongs
  * @property {string} faculty.required - The faculty to which the unit belongs
- * @property {array<string>} offerings.required - List of offerings for the unit - e.g. ["S1", "S2",
- *  "S3"]
- * @property {array<string>} scheduledActivities - The unit's scheduled activities
- * @property {array<string>} nonScheduledActivities - The unit's non-scheduled activities
  * @property {string} group - The group to which the unit belonds
  * @property {string} level - The units level
  * @property {array<string>} prerequisites - The units prerequisites
- * @property {string} level - The units NCCW's
+ * @property {array<string>} nccw - The units NCCW's
  * @property {array<string>} outcomes - The units outcomes
  * @property {number} rating - The units rating out of 10
  * @property {array<Review>} reviews - List of reviews for the unit
@@ -158,8 +175,7 @@ unitsRouter.post(
       title,
       description,
       offerings,
-      scheduledActivities,
-      nonScheduledActivities,
+      activities,
       assessments,
       credits,
       department,
@@ -178,8 +194,7 @@ unitsRouter.post(
       title,
       description,
       offerings,
-      scheduledActivities,
-      nonScheduledActivities,
+      activities,
       assessments,
       credits,
       department,

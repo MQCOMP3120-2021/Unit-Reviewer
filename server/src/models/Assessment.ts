@@ -3,6 +3,9 @@ import { Schema } from 'mongoose';
 import { IAssessment } from '../interfaces';
 
 export default new Schema<IAssessment>({
-  name: String,
-  weight: Number,
+  title: String,
+  description: String,
+  hurdle: Boolean,
+  type: String,
+  weighting: Number,
 });
