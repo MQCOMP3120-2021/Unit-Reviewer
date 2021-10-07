@@ -14,8 +14,8 @@ const UNABLE_TO_ADD_REVIEW_ERROR = 'Unable to add review';
 /**
  * The Actitivies type
  * @typedef {object} Activities
- * @property {Activity} scheduled - Scheduled activities
- * @property {Activity} nonScheduled - Non-scheduled activities
+ * @property {array<Activity>} scheduled - Scheduled activities
+ * @property {array<Activity>} nonScheduled - Non-scheduled activities
  */
 
 /**
