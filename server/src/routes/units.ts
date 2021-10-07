@@ -2,7 +2,7 @@ import express from 'express';
 import jwt from 'express-jwt';
 
 import { JWT_SECRET } from '../config';
-import { IReview } from '../interfaces';
+import { IReview, IUnit } from '../interfaces';
 import Unit from '../models/Unit';
 import { getToken } from './auth';
 
@@ -20,13 +20,38 @@ const UNIT_NOT_FOUND_ERROR = 'Unit not found';
  */
 
 /**
+ * An Activities type
+ * @typedef {object} Activities
+ * @property {string} name.required - The name of the activity
+ * @property {number} weight.required - The weight of the activity out of 100
+ */
+
+/**
+ * An Assessment type
+ * @typedef {object} Assessment
+ * @property {string} name.required - The name of the assessment
+ * @property {number} weight.required - The weight of the assessment out of 100
+ */
+
+/**
  * A Unit type
  * @typedef {object} Unit
  * @property {string} code.required - The unit code
  * @property {string} title.required - The unit title
  * @property {string} description.required - The unit description
+ * @property {array<Assessment>} assessments.required - The units assessments
+ * @property {number} credits.required - The number of credit points that the unit is worth
+ * @property {string} department.required - The department to which the unit belongs
+ * @property {string} faculty.required - The faculty to which the unit belongs
  * @property {array<string>} offerings.required - List of offerings for the unit - e.g. ["S1", "S2",
  *  "S3"]
+ * @property {array<string>} scheduledActivities - The unit's scheduled activities
+ * @property {array<string>} nonScheduledActivities - The unit's non-scheduled activities
+ * @property {string} group - The group to which the unit belonds
+ * @property {string} level - The units level
+ * @property {array<string>} prerequisites - The units prerequisites
+ * @property {array<string>} level - The units NCCW's
+ * @property {array<string>} outcomes - The units outcomes
  * @property {number} rating - The units rating out of 10
  * @property {array<Review>} reviews - List of reviews for the unit
  */
@@ -126,18 +151,42 @@ unitsRouter.post(
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
-    const { code } = req.body;
-    const { name } = req.body;
-    const { description } = req.body;
-    const { offerings } = req.body;
+    const {
+      code,
+      title,
+      description,
+      offerings,
+      scheduledActivities,
+      nonScheduledActivities,
+      assessments,
+      credits,
+      department,
+      faculty,
+      group,
+      level,
+      prerequisites,
+      nccw,
+      outcomes,
+    } = req.body as IUnit;
     const rating = 0;
     const reviews: IReview[] = [];
 
     const unit = new Unit({
       code,
-      name,
+      title,
       description,
       offerings,
+      scheduledActivities,
+      nonScheduledActivities,
+      assessments,
+      credits,
+      department,
+      faculty,
+      group,
+      level,
+      prerequisites,
+      nccw,
+      outcomes,
       rating,
       reviews,
     });
