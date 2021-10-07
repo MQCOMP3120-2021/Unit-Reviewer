@@ -6,4 +6,9 @@ const getAllUnits = () => {
                 .then(response => response.data)
 }
 
-export default {getAllUnits} 
+const createUnit = (unit) => {
+    return axios.post(baseURL, unit)
+                .then(response => response.data)
+}
+
+export default {getAllUnits, createUnit} 
