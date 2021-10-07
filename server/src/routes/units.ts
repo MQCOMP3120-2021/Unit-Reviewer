@@ -50,7 +50,7 @@ const UNIT_NOT_FOUND_ERROR = 'Unit not found';
  * @property {string} group - The group to which the unit belonds
  * @property {string} level - The units level
  * @property {array<string>} prerequisites - The units prerequisites
- * @property {array<string>} level - The units NCCW's
+ * @property {string} level - The units NCCW's
  * @property {array<string>} outcomes - The units outcomes
  * @property {number} rating - The units rating out of 10
  * @property {array<Review>} reviews - List of reviews for the unit
