@@ -1,12 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 
 import { IAssessment } from '../interfaces';
 
-export const AssessmentSchema = new Schema<IAssessment>({
-  name: String,
-  weight: Number,
+export default new Schema<IAssessment>({
+  title: String,
+  description: String,
+  hurdle: Boolean,
+  type: String,
+  weighting: Number,
 });
-
-const Assessment = mongoose.model('Assessment', AssessmentSchema);
-
-export default Assessment;

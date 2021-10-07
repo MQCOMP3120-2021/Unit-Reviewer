@@ -1,37 +1,53 @@
-export type Offering = 'S1' | 'S2' | 'S3';
-
 export type UnitCode = string;
 
-export interface IAssessment {
+export interface IActivity {
+  description: string;
   name: string;
-  weight: number;
+  offerings: string[];
+}
+
+export interface IActivities {
+  scheduled: IActivity[];
+  nonScheduled: IActivity[];
+}
+export interface IAssessment {
+  title: string;
+  description: string;
+  hurdle: boolean;
+  type: string;
+  weighting: number;
+}
+
+export interface IOffering {
+  attendance: string;
+  location: string;
+  period: string;
 }
 
 export interface IReview {
   content: string;
   rating: number;
   author: string;
-  dateCreated: Date;
+  dateCreated: number;
 }
 
 export interface IUnit {
   code: string;
   title: string;
-  description: string;
-  offerings: Offering[];
-  scheduledActivities: string[];
-  nonScheduledActivities: string[];
-  assessments: IAssessment[];
-  credits: number;
-  department: string;
-  faculty: string;
-  group: string;
-  level: string;
-  prerequisites: UnitCode[];
-  nccw: UnitCode[];
-  outcomes: string[];
-  rating: number;
-  reviews: IReview[];
+  description?: string;
+  offerings?: IOffering[];
+  activities?: IActivities;
+  assessments?: IAssessment[];
+  credits?: number;
+  department?: string;
+  faculty?: string;
+  group?: string;
+  level?: string;
+  prerequisites?: UnitCode[];
+  nccw?: UnitCode[];
+  outcomes?: string[];
+  rating?: number;
+  reviews?: IReview[];
 }
 
 export interface IUser {
