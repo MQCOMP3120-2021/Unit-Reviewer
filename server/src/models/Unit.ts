@@ -12,7 +12,7 @@ const UnitSchema = new Schema<IUnit>({
   offerings: [String], // List of offerings - eg ["S1", "S2", "S3"]
   scheduledActivities: [String], // List of scheduled activities - eg ["Lecture", "Tutorial"]
   nonScheduledActivities: [String], // List of non-scheduled activities - eg ["Lab"]
-  assessments: [AssessmentSchema], // List of assessments - eg [ObjectId]
+  assessments: [AssessmentSchema], // List of assessments - eg [{ name: String, weight: Number }]
   credits: Number, // Number of credit points - eg 10
   department: String, // Department name - eg Computing
   faculty: String, // Faculty name - eg Faculty of Science and Engineering
@@ -24,9 +24,6 @@ const UnitSchema = new Schema<IUnit>({
   rating: Number, // Unit rating out of 10 - eg 4.5
   reviews: [ReviewSchema], // List of unit reviews
 });
-
-// assessments: [{ type: Schema.Types.ObjectId, ref: 'Assessment' }], // List of assessments - eg
-// [ObjectId];
 
 const Unit = mongoose.model('Unit', UnitSchema);
 
