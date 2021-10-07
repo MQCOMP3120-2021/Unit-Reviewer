@@ -3,16 +3,18 @@ import jwt from 'express-jwt';
 
 import { JWT_SECRET } from '../config';
 import { IReview, IUnit } from '../interfaces';
-import Unit from '../models/Unit';
+import Unit, { addReview } from '../models/Unit';
 import { getToken } from './auth';
 
 const unitsRouter = express.Router();
 
 const UNIT_NOT_FOUND_ERROR = 'Unit not found';
+const UNABLE_TO_ADD_REVIEW_ERROR = 'Unable to add review';
 
 /**
  * A Review type
  * @typedef {object} Review
+ * @property {string} unitId.required - The id of the unit being reviewed
  * @property {string} content.required - The text content of the review
  * @property {number} rating - The units rating out of 10 for this review
  * @property {string} author - The username of the reviews author
@@ -196,7 +198,37 @@ unitsRouter.post(
   },
 );
 
-// TODO - Add a review
+/**
+ * POST /api/units/review
+ * @summary Adds a review to the given unit
+ * @param {Review} request.body.required - Review info
+ * @return {Unit} 200 - The saved unit
+ */
+unitsRouter.post(
+  '/review',
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
+  async (req, res) => {
+    if (!req.user) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+
+    const { unitId } = req.body;
+    const { content, rating, author } = req.body as IReview;
+    const dateCreated = Date.now();
+
+    try {
+      await addReview(unitId, {
+        content,
+        rating,
+        author,
+        dateCreated,
+      });
+      return res.sendStatus(200);
+    } catch (error) {
+      return res.status(400).send({ error: UNABLE_TO_ADD_REVIEW_ERROR });
+    }
+  },
+);
 
 // TODO - Edit a unit
 

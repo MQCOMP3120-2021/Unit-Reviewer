@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { IUnit } from '../interfaces';
+import { IReview, IUnit } from '../interfaces';
 import { AssessmentSchema } from './Assessment';
 import { ReviewSchema } from './Review';
 
@@ -26,5 +26,9 @@ const UnitSchema = new Schema<IUnit>({
 });
 
 const Unit = mongoose.model('Unit', UnitSchema);
+
+export const addReview = async (unitId: string, review: IReview) => {
+  await Unit.findByIdAndUpdate(unitId, { $push: { reviews: review } });
+};
 
 export default Unit;

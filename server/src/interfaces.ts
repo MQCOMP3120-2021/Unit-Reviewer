@@ -11,7 +11,7 @@ export interface IReview {
   content: string;
   rating: number;
   author: string;
-  dateCreated: Date;
+  dateCreated: number;
 }
 
 export interface IUnit {
