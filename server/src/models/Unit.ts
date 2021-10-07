@@ -1,8 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 
 import { IReview, IUnit } from '../interfaces';
-import { AssessmentSchema } from './Assessment';
-import { ReviewSchema } from './Review';
+import AssessmentSchema from './Assessment';
+import ReviewSchema from './Review';
 
 const UnitSchema = new Schema<IUnit>({
   code: String, // Unit code - eg COMP1000
