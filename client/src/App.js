@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useEffect, useState } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import { Container, Grid } from "semantic-ui-react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
+import unitsService from './services/units'
 import HomePage from './HomePage'
 import AddUnit from './AddUnit'
 import LoginForm from './userAuth/LoginForm'
@@ -12,14 +13,36 @@ import About from "./About"
 import './styles/custom.css'
 
 const App = () => {
+
+  const [units, setUnits] = useState([])
+  const [user, setUser] = useState(null)
+
+    const getUnits = () => {
+        unitsService.getAllUnits()
+        .then(data => {
+            setUnits(data)
+            console.log(data)
+          })
+          .catch(() => {
+              alert("There was an error!")
+            }
+          )
+    }
+
+    useEffect(async () => {
+        getUnits()
+    }, [])
+
   return (
     <Router>
-        <NavBar />
+      <Container>
+        <NavBar user={user} setUser={setUser} />
         <Route exact path="/about" render={() => <About />}/>
         <Route exact path="/addunit" render={() => <AddUnit />}/>
-        <Route exact path="/login" render={() => <LoginForm />}/>
-        <Route exact path="/register" render={() => <RegisterForm />}/>
-        <Route exact path="/" render={() => <HomePage />}/>
+        <Route exact path="/login" render={() => <LoginForm setUser={setUser}/>}/>
+        <Route exact path="/register" render={() => <RegisterForm setUser={setUser} />}/>
+        <Route exact path="/" render={() => <HomePage units={units} />}/>
+      </Container>
     </Router>
   );
 }

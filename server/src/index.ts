@@ -34,7 +34,7 @@ app.use('/api/auth', authRouter);
 
 app.use(express.static('public'));
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Listening on http://0.0.0.0:${PORT}`);
+  console.log(`Listening on port ${PORT}`);
 });

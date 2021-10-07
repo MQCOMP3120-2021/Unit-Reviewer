@@ -1,9 +1,18 @@
 import React from 'react'
 import { Grid, Image, Card, Icon } from 'semantic-ui-react'
 
-const HomePage = () =>
-<>
+const HomePage = ({units}) => {
+return(<>
 <Grid padded centered>
+  {units.map(item => (
+                <Card key={item._id} style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
+                    <Card.Content header={item.code} />
+                    <Card.Content description={item.name} />
+                    <Card.Content extra>
+                        <Icon name="user" />{item.rating} Ratings
+                    </Card.Content>
+                </Card>
+            ))}
         
             <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
                 <Card.Content header="COMP3120" />
@@ -41,6 +50,7 @@ const HomePage = () =>
                 </Card.Content>
             </Card>
     </Grid>
-    </>
+    </>)
+}
 
 export default HomePage
