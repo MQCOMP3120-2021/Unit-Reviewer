@@ -4,10 +4,11 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 const initDB = async () => {
-  await mongoose.connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@comp3120-cluster.fv0cu.`
-      + 'mongodb.net/unit-reviewer?retryWrites=true&w=majority',
-  );
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI is not defined');
+  }
+
+  await mongoose.connect(process.env.MONGO_URI);
 };
 
 export default initDB;
