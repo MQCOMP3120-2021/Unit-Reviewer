@@ -2,8 +2,11 @@ import { useState } from "react";
 import { Grid, Header, Image, Form, Segment, Button, Message, Dropdown } from "semantic-ui-react";
 import logo from './img/logo.png'
 import unitsService from '../src/services/units'
+import { useHistory } from "react-router-dom";
 
-const AddUnit = ({getUnits, user}) => {
+const AddUnit = ({ getUnits, user }) => {
+
+  const history = useHistory()
 
   const groupOptions = [
     { key: "u", text: "Undergraduate", value: "Undergraduate" },
@@ -43,36 +46,31 @@ const AddUnit = ({getUnits, user}) => {
     ]
   }
   const addOffering = () => {
-    let offs = newUnit.offerings
     if (offering.attendance !== "" && offering.location !== "", offering.period !== "") {
-      offs["o" + (Object.keys(offs).length + 1)] = offering
-      setNewUnit({ ...newUnit, offerings: offs })
+      const newOffs = newUnit.offerings
+      newOffs.push(offering)
+      setNewUnit({ ...newUnit, offerings: newOffs })
+      console.log(newOffs)
       setOffering({
         attendance: "",
         location: "",
         period: ""
       })
-      console.log(offs)
     }
   }
 
-  const deleteOffering = (key) => {
+  const deleteOffering = (idx) => {
     let exOffs = newUnit.offerings
-    delete exOffs[key]
-    const keys = Object.keys(exOffs)
-    let upOffs = {}
-    for(let i = 0; i < keys.length; i++) {
-      upOffs["o"+(i+1)] = exOffs[keys[i]]
-    }
-    console.log(upOffs)
-    setNewUnit({...newUnit, offerings: upOffs})
+    exOffs.splice(idx, 1)
+    setNewUnit({ ...newUnit, offerings: exOffs })
+    console.log(exOffs)
   }
 
 
 
   const [assessment, setAssessment] = useState({
     description: "",
-    hurdle: "",
+    hurdle: false,
     title: "",
     type: "",
     weighting: ""
@@ -84,6 +82,7 @@ const AddUnit = ({getUnits, user}) => {
     ],
     type: [
       { key: "e", text: "Essay", value: "Essay" },
+      { key: "pr", text: "Project", value: "Project" },
       { key: "t", text: "Quiz/Test", value: "Quiz/Test" },
       { key: "x", text: "Examination", value: "Examination" },
       { key: "p", text: "Problem set", value: "Problem set" },
@@ -92,31 +91,26 @@ const AddUnit = ({getUnits, user}) => {
     ]
   }
   const addAssessment = () => {
-    let assess = newUnit.assessments
-    if (assessment.description !== "" && assessment.hurdle !== "", assessment.title !== "" && assessment.type !== ""
+    if (assessment.description !== "" && assessment.title !== "" && assessment.type !== ""
       && assessment.type !== "" && assessment.weighting !== "") {
-        assess["a" + Object.keys(assess).length] = assessment
-      setNewUnit({ ...newUnit, assessments: assess })
+      const newAssess = newUnit.assessments
+      newAssess.push(assessment)
+      setNewUnit({ ...newUnit, assessments: newAssess })
+      console.log(newAssess)
       setAssessment({
         description: "",
-        hurdle: "",
+        hurdle: false,
         title: "",
         type: "",
         weighting: ""
       })
-      console.log(assess)
     }
   }
-  const deleteAssessment = (key) => {
-    let exOffs = newUnit.assessments
-    delete exOffs[key]
-    const keys = Object.keys(exOffs)
-    let upOffs = {}
-    for(let i = 0; i < keys.length; i++) {
-      upOffs["a"+i] = exOffs[keys[i]]
-    }
-    console.log(upOffs)
-    setNewUnit({...newUnit, assessments: upOffs})
+  const deleteAssessment = (idx) => {
+    let exAssess = newUnit.assessments
+    exAssess.splice(idx, 1)
+    setNewUnit({ ...newUnit, assessments: exAssess })
+    console.log(exAssess)
   }
 
 
@@ -125,26 +119,21 @@ const AddUnit = ({getUnits, user}) => {
     description: ""
   })
   const addOutcome = () => {
-    let otcomes = newUnit.outcomes
     if (outcome.description !== "") {
-      otcomes["ULO" + (Object.keys(otcomes).length + 1)] = outcome.description
-      setNewUnit({ ...newUnit, outcomes: otcomes })
+      const newOut = newUnit.outcomes
+      newOut.push(outcome.description)
+      setNewUnit({ ...newUnit, outcomes: newOut })
+      console.log(newOut)
       setOutcome({
         description: ""
       })
-      console.log(otcomes)
     }
   }
-  const deleteOutcome = (key) => {
-    let exOffs = newUnit.outcomes
-    delete exOffs[key]
-    const keys = Object.keys(exOffs)
-    let upOffs = {}
-    for(let i = 0; i < keys.length; i++) {
-      upOffs["ULO"+(i+1)] = exOffs[keys[i]]
-    }
-    console.log(upOffs)
-    setNewUnit({...newUnit, outcomes: upOffs})
+  const deleteOutcome = (idx) => {
+    let exOut = newUnit.outcomes
+    exOut.splice(idx, 1)
+    setNewUnit({ ...newUnit, outcomes: exOut })
+    console.log(exOut)
   }
 
 
@@ -154,7 +143,7 @@ const AddUnit = ({getUnits, user}) => {
     description: "",
     name: "",
     offerings: [],
-    sched:""
+    sched: ""
   })
   const activityOptions = {
     scheduled: [
@@ -164,7 +153,7 @@ const AddUnit = ({getUnits, user}) => {
       { key: "lc", text: "Lecture (on campus)", value: "Lecture (on campus)" },
       { key: "fw", text: "Fieldwork", value: "Fieldwork" },
     ],
-    non_scheduled: [
+    nonScheduled: [
       { key: "rd", text: "Readings", value: "Readings" },
       { key: "rh", text: "Research", value: "Research" },
       { key: "or", text: "Online resources", value: "Online resources" },
@@ -184,93 +173,75 @@ const AddUnit = ({getUnits, user}) => {
     ]
   }
   const addActivity = () => {
-    let act = newUnit.activities
     if (activity.description !== "" && activity.name !== "" && activity.sched !== "" && activity.offerings.length !== 0) {
-      if(activity.sched === "Scheduled") {
-        act['scheduled']["s" + Object.keys(act['scheduled']).length] = {
-          description: activity.description, 
-          name: activity.name, 
-          offerings: activity.offerings.toString()
-        }
+      const newAct = newUnit.activities
+      if (activity.sched === "Scheduled") {
+        newAct.scheduled.push(activity)
+        setNewUnit({ ...newUnit, activities: newAct })
       } else {
-        act['non_scheduled']["ns" + Object.keys(act['non_scheduled']).length] = {
-          description: activity.description, 
-          name: activity.name, 
-          offerings: activity.offerings.toString()
-        }
+        newAct.nonScheduled.push(activity)
+        setNewUnit({ ...newUnit, activities: newAct })
       }
-      setNewUnit({...newUnit, activities: act})
       setActivity({
         description: "",
         name: "",
         offerings: [],
-        sched:""
+        sched: ""
       })
-      console.log(act)
+      console.log(newAct)
     }
   }
-  const deleteSchedActivity = (key) => {
-    let exOffs = newUnit.activities.scheduled
-    delete exOffs[key]
-    const keys = Object.keys(exOffs)
-    let upOffs = {scheduled: {}, non_scheduled: newUnit.activities.non_scheduled}
-    for(let i = 0; i < keys.length; i++) {
-      upOffs['scheduled']["s"+i] = exOffs[keys[i]]
-    }
-    console.log(upOffs)
-    setNewUnit({...newUnit, activities: upOffs})
+  const deleteSchedActivity = (idx) => {
+    let exAct = newUnit.activities
+    exAct.scheduled.splice(idx, 1)
+    setNewUnit({ ...newUnit, activities: exAct })
+    console.log(exAct)
   }
-  const deleteNonSchedActivity = (key) => {
-    let exOffs = newUnit.activities.non_scheduled
-    delete exOffs[key]
-    const keys = Object.keys(exOffs)
-    let upOffs = {scheduled: newUnit.activities.scheduled, non_scheduled: {}}
-    for(let i = 0; i < keys.length; i++) {
-      upOffs['non_scheduled']["ns"+i] = exOffs[keys[i]]
-    }
-    console.log(upOffs)
-    setNewUnit({...newUnit, activities: upOffs})
+  const deleteNonSchedActivity = (idx) => {
+    let exAct = newUnit.activities
+    exAct.nonScheduled.splice(idx, 1)
+    setNewUnit({ ...newUnit, activities: exAct })
+    console.log(exAct)
   }
-
-
-
 
   const [newUnit, setNewUnit] = useState({
     code: "",
-    activities: {scheduled:{}, non_scheduled:{}},
-    assessments: {},
-    credits: "",
-    department: "",
+    title: "",
     description: "",
+    offerings: [],
+    activities: { scheduled: [], nonScheduled: [] },
+    assessments: [],
+    credits: -1,
+    department: "",
     faculty: "",
     group: "",
     level: "",
-    nccw: "",
-    offerings: {},
-    outcomes: {},
-    prerequisite: "",
-    title: ""
+    prerequisites: [],
+    nccw: [],
+    outcomes: []
   })
 
   const addUnit = () => {
-    if(user) {
+    console.log(newUnit)
+    if (user) {
       console.log(newUnit)
-      let send = {...newUnit, user: user}
+      let send = { ...newUnit, user: user }
       unitsService.createUnit(send)
-      .then(data => {
-        getUnits()
-        console.log(data)
-      })
-      .catch(() => {
+        .then(data => {
+          getUnits()
+          console.log(data)
+          history.push("/")
+        })
+        .catch(() => {
           alert("There was an error!")
         }
-      )
+        )
     }
   }
 
-    return (
-      <>
-        <Grid padded centered>
+  return (
+    <>
+      <Grid padded centered>
         <Grid.Column>
           <Form size='large'>
             <Segment stacked>
@@ -313,7 +284,7 @@ const AddUnit = ({getUnits, user}) => {
               <Form.Field>
                 <label>Description</label>
                 <Form.TextArea rows={8} fluid icon='user' iconPosition='left' placeholder='Description'
-                value={newUnit.description} onChange={e => setNewUnit({ ...newUnit, description: e.target.value })} />
+                  value={newUnit.description} onChange={e => setNewUnit({ ...newUnit, description: e.target.value })} />
               </Form.Field>
               <Form.Field>
                 <label>Group</label>
@@ -328,23 +299,30 @@ const AddUnit = ({getUnits, user}) => {
               <Form.Field>
                 <label>NCCW</label>
                 <Form.Input fluid icon='code' iconPosition='left' placeholder='NCCW Codes'
-                  value={newUnit.nccw} onChange={e => setNewUnit({ ...newUnit, nccw: e.target.value })} />
+                  value={newUnit.nccw} onChange={e => {
+                    const str = e.target.value.split(",")
+                    setNewUnit({ ...newUnit, nccw: str })
+                  }
+                  } />
               </Form.Field>
               <Form.Field>
                 <label>Pre-requisites</label>
                 <Form.Input fluid icon='edit' iconPosition='left' placeholder='Pre-reqs'
-                  value={newUnit.prerequisite} onChange={e => setNewUnit({ ...newUnit, prerequisite: e.target.value })} />
+                  value={newUnit.prerequisites} onChange={e => {
+                    const str = e.target.value.split(",")
+                    setNewUnit({ ...newUnit, prerequisites: str })
+                  }
+                  } />
               </Form.Field>
 
               <Header as="h2">Offerings</Header>
-              {Object.keys(newUnit.offerings).map(function (key) {
-                return <Message onDismiss={(e) => deleteOffering(key)} key={key} size='small'>
-                  Attendance - {newUnit.offerings[key].attendance},
-                  Location - {newUnit.offerings[key].location},
-                  Period - {newUnit.offerings[key].period}
+              {newUnit.offerings.map((item, idx) => (
+                <Message onDismiss={(e) => deleteOffering(idx)} key={idx} size='small'>
+                  Attendance - {item.attendance},
+                  Location - {item.location},
+                  Period - {item.period}
                 </Message>
-
-              })}
+              ))}
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>Attendance</label>
@@ -378,51 +356,50 @@ const AddUnit = ({getUnits, user}) => {
                 </Form.Field>
               </Form.Group>
               <Button onClick={addOffering} color='green' size='small'>
-                  Add Offering
-                </Button>
+                Add Offering
+              </Button>
 
 
 
 
 
               <Header as="h2">Activities</Header>
-              {Object.keys(newUnit.activities.scheduled).length > 0 && <Header as="h3">Scheduled Activities</Header>}
-              {Object.keys(newUnit.activities.scheduled).map(function (key) {
-                return <Message key={key} onDismiss={(e) => deleteSchedActivity(key)} size='small'>
-                  Name - {newUnit.activities.scheduled[key].name},
-                  Description - {newUnit.activities.scheduled[key].description},
-                  Offerings - {newUnit.activities.scheduled[key].offerings}
+              {newUnit.activities.scheduled.length > 0 && <Header as="h3">Scheduled Activities</Header>}
+              {newUnit.activities.scheduled.map((item, idx) => (
+                <Message onDismiss={(e) => deleteSchedActivity(idx)} key={idx} size='small'>
+                  Name - {item.name},
+                  Description - {item.description},
+                  Offerings - {item.offerings}
                 </Message>
-              })}
-              {Object.keys(newUnit.activities.non_scheduled).length > 0 && <Header as="h3">Non-Scheduled Activities</Header>}
-              {Object.keys(newUnit.activities.non_scheduled).map(function (key) {
-                return <Message key={key} onDismiss={(e) => deleteNonSchedActivity(key)} size='small'>
-                  Name - {newUnit.activities.non_scheduled[key].name},
-                  Description - {newUnit.activities.non_scheduled[key].description},
-                  Offerings - {newUnit.activities.non_scheduled[key].offerings}
+              ))}
+              {newUnit.activities.nonScheduled.length > 0 && <Header as="h3">Non-Scheduled Activities</Header>}
+              {newUnit.activities.nonScheduled.map((item, idx) => (
+                <Message onDismiss={(e) => deleteNonSchedActivity(idx)} key={idx} size='small'>
+                  Name - {item.name},
+                  Description - {item.description},
+                  Offerings - {item.offerings}
                 </Message>
-
-              })}
+              ))}
               <Form.Group widths="equal">
                 <Form.Group inline>
-                <label>Scheduling Type</label>
-                <Form.Radio
-                  label='Scheduled'
-                  checked={activity.sched === "Scheduled" ? true : false}
-                  onChange={(e) => setActivity({ ...activity, sched: "Scheduled" })}
-                />
-                <Form.Radio
-                  label='Non-Scheduled'
-                  checked={activity.sched === "Non-Scheduled" ? true : false}
-                  onChange={(e) => setActivity({ ...activity, sched: "Non-Scheduled" })}
-                />
+                  <label>Scheduling Type</label>
+                  <Form.Radio
+                    label='Scheduled'
+                    checked={activity.sched === "Scheduled" ? true : false}
+                    onChange={(e) => setActivity({ ...activity, sched: "Scheduled" })}
+                  />
+                  <Form.Radio
+                    label='Non-Scheduled'
+                    checked={activity.sched === "Non-Scheduled" ? true : false}
+                    onChange={(e) => setActivity({ ...activity, sched: "Non-Scheduled" })}
+                  />
                 </Form.Group>
               </Form.Group>
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>Activity Name</label>
                   <Form.Select
-                    options={activity.sched === "" ? [] : activity.sched === "Scheduled" ? activityOptions.scheduled : activityOptions.non_scheduled}
+                    options={activity.sched === "" ? [] : activity.sched === "Scheduled" ? activityOptions.scheduled : activityOptions.nonScheduled}
                     disabled={activity.sched === "" ? true : false}
                     placeholder='Activity Name'
                     value={activity.name}
@@ -456,23 +433,22 @@ const AddUnit = ({getUnits, user}) => {
                 </Form.Field>
               </Form.Group>
               <Button onClick={addActivity} color='green' size='small'>
-                  Add Activity
-                </Button>
+                Add Activity
+              </Button>
 
 
 
 
               <Header as="h2">Assessments</Header>
-              {Object.keys(newUnit.assessments).map(function (key) {
-                return <Message onDismiss={(e) => deleteAssessment(key)} key={key} size='small'>
-                  Title - {newUnit.assessments[key].title},
-                  Type - {newUnit.assessments[key].type},
-                  Hurdle - {newUnit.assessments[key].hurdle},
-                  Description - {newUnit.assessments[key].description},
-                  Weighting - {newUnit.assessments[key].weighting}
+              {newUnit.assessments.map((item, idx) => (
+                <Message onDismiss={(e) => deleteAssessment(idx)} key={idx} size='small'>
+                  Title - {item.title},
+                  Type - {item.type},
+                  Hurdle - {item.hurdle ? "Yes" : "No"},
+                  Description - {item.description},
+                  Weighting - {item.weighting}%
                 </Message>
-
-              })}
+              ))}
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>Title</label>
@@ -487,7 +463,7 @@ const AddUnit = ({getUnits, user}) => {
                   <label>Type</label>
                   <Form.Select
                     options={assessmentOptions.type}
-                    placeholder='Attendance'
+                    placeholder='Assessment Type'
                     value={assessment.type}
                     onChange={(e, { value }) => setAssessment({ ...assessment, type: value })}
                     search
@@ -499,9 +475,9 @@ const AddUnit = ({getUnits, user}) => {
                   <label>Hurdle</label>
                   <Form.Select
                     options={assessmentOptions.hurdle}
-                    placeholder='Attendance'
-                    value={assessment.hurdle}
-                    onChange={(e, { value }) => setAssessment({ ...assessment, hurdle: value })}
+                    placeholder='Hurdle (automatically no if not set)'
+                    value={assessment.hurdle ? "Yes" : "No"}
+                    onChange={(e, { value }) => setAssessment({ ...assessment, hurdle: value === "Yes" ? true : false })}
                     search
                   />
                 </Form.Field>
@@ -515,8 +491,8 @@ const AddUnit = ({getUnits, user}) => {
                     onChange={(e) => setAssessment({ ...assessment, weighting: e.target.value })}
                   />
                 </Form.Field>
-                </Form.Group>
-                <Form.Group widths="equal">
+              </Form.Group>
+              <Form.Group widths="equal">
                 <Form.Field>
                   <label>Assessment Description</label>
                   <Form.TextArea
@@ -528,17 +504,17 @@ const AddUnit = ({getUnits, user}) => {
                 </Form.Field>
               </Form.Group>
               <Button onClick={addAssessment} color='green' size='small'>
-                  Add Assessment
-                </Button>
+                Add Assessment
+              </Button>
 
 
 
               <Header as="h2">Unit Learning Outcomes</Header>
-              {Object.keys(newUnit.outcomes).map(function (key) {
-                return <Message onDismiss={(e) => deleteOutcome(key)} key={key} size='small'>
-                  {key} - {newUnit.outcomes[key]}
+              {newUnit.outcomes.map((item, idx) => (
+                <Message onDismiss={(e) => deleteOutcome(idx)} key={idx} size='small'>
+                  ULO{idx + 1} - {item}
                 </Message>
-              })}
+              ))}
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>Description</label>
@@ -551,14 +527,14 @@ const AddUnit = ({getUnits, user}) => {
                 </Form.Field>
               </Form.Group>
               <Button onClick={addOutcome} color='green' size='small'>
-                  Add ULO
-                </Button>
+                Add ULO
+              </Button>
 
-              
+
             </Segment>
             <Button onClick={addUnit} color='teal' size='large'>
-                Submit New Unit
-              </Button>
+              Submit New Unit
+            </Button>
           </Form>
         </Grid.Column>
       </Grid></>

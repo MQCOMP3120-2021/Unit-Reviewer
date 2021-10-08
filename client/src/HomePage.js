@@ -7,7 +7,7 @@ return(<>
   {units.map(item => (
                 <Card key={item._id} style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
                     <Card.Content header={item.code} />
-                    <Card.Content description={item.name} />
+                    <Card.Content description={item.title} />
                     <Card.Content extra>
                         <Icon name="user" />{item.rating} Ratings
                     </Card.Content>
