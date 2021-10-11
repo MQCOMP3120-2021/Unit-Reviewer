@@ -1,54 +1,21 @@
 import React from 'react'
-import { Grid, Image, Card, Icon } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
+import { Grid, Image, Card, Icon, Rating } from 'semantic-ui-react'
 
 const HomePage = ({units}) => {
 return(<>
 <Grid padded centered>
   {units.map(item => (
-                <Card key={item._id} style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
+                <Link to={`unit/${item._id}`}><Card key={item._id} style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
                     <Card.Content header={item.code} />
                     <Card.Content description={item.title} />
                     <Card.Content extra>
-                        <Icon name="user" />{item.rating} Ratings
+                        <Rating icon='star' 
+                        defaultRating={item.reviews.length > 0 && item.reviews.map(rev => rev.rating).reduce((a, b) => (a + b))/item.reviews.length} 
+                        disabled maxRating={5} /> ({item.reviews.length} Ratings)
                     </Card.Content>
-                </Card>
+                </Card></Link>
             ))}
-        
-            <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
-                <Card.Content header="COMP3120" />
-                <Card.Content description={'Advanced Web Development'} />
-                <Card.Content extra>
-                    <Icon name="user" />5 Ratings
-                </Card.Content>
-            </Card>
-            <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
-                <Card.Content header="COMP3010" />
-                <Card.Content description={'Algorithm Theory and Design'} />
-                <Card.Content extra>
-                    <Icon name="user" />10 Ratings
-                </Card.Content>
-            </Card>
-            <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
-                <Card.Content header="COMP2050" />
-                <Card.Content description={'Software Engineering'} />
-                <Card.Content extra>
-                    <Icon name="user" />3 Ratings
-                </Card.Content>
-            </Card>
-            <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
-                <Card.Content header="COMP1010" />
-                <Card.Content description={'Fundamentals of Computer Science'} />
-                <Card.Content extra>
-                    <Icon name="user" />105 Ratings
-                </Card.Content>
-            </Card>
-            <Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
-                <Card.Content header="COMP4060" />
-                <Card.Content description={'Advanced Software Engineering'} />
-                <Card.Content extra>
-                    <Icon name="user" />5 Ratings
-                </Card.Content>
-            </Card>
     </Grid>
     </>)
 }

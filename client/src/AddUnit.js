@@ -277,7 +277,7 @@ const AddUnit = ({ getUnits, user }) => {
               </Form.Field>
               <Form.Field>
                 <label>Faculty</label>
-                <Form.Input fluid icon='warehouse' iconPosition='left' placeholder='Faculty'
+                <Form.Input fluid icon='plus square' iconPosition='left' placeholder='Faculty'
                   value={newUnit.faculty} onChange={e => setNewUnit({ ...newUnit, faculty: e.target.value })} />
               </Form.Field>
 
