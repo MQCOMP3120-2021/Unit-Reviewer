@@ -11,4 +11,10 @@ const createUnit = (unit) => {
                 .then(response => response.data)
 }
 
-export default {getAllUnits, createUnit} 
+const submitReview = (review) => {
+    return axios.post(baseURL+"review", review)
+                .then(response => response.data)
+}
+
+
+export default {getAllUnits, createUnit, submitReview} 

@@ -1,11 +1,40 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion } from 'semantic-ui-react'
+import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button } from 'semantic-ui-react'
+import unitsService from './services/units'
 
-const UnitPage = ({ units }) => {
+const UnitPage = ({ getUnits, units, user }) => {
+
     const id = useParams().id
     const unit = units.find(u => u._id === id)
     const [activeIndex, setActiveIndex] = useState(-1)
+    const [newReview, setNewReview] = useState({ content: "", rating: 0})
+
+    const addReview = () => {
+        if(user) {
+            if(newReview.content === "") {
+                alert("ERROR: comment not entered.")
+                return
+            }
+            if(newReview.rating === 0) {
+                alert("ERROR: review not rated.")
+                return
+            }
+            console.log(newReview)
+            unitsService.submitReview({...newReview, author: user.data.username, user: user, unitId: unit._id})
+            .then(data => {
+                console.log(data)
+                getUnits()
+              })
+              .catch(() => {
+                alert("There was an error!")
+              })
+
+        } else {
+            alert("ERROR: user not signed in.")
+            return
+        }
+    }
 
     return (!unit ? (<h1>Error: Unit does not exist</h1>) : (
         <>
@@ -16,11 +45,13 @@ const UnitPage = ({ units }) => {
             <Segment>
                 <Grid columns={2} relaxed='very'>
                     <Grid.Column>
+                        <Header as='h4' icon>Description</Header>
                         <p>
                             {unit.description}
                         </p>
                     </Grid.Column>
                     <Grid.Column>
+                        <Header as='h4' icon>Details</Header>
                         <List>
                             <List.Item>
                                 <List.Icon name='code' />
@@ -50,7 +81,7 @@ const UnitPage = ({ units }) => {
                                 <List.Icon name='warning circle' />
                                 <List.Content>
                                     <List.Content>NCCW : {unit.nccw.map((u, idx) =>
-                                        idx === unit.nccw.length - 1 ? <>{u}</> : <>{u},</>)}</List.Content>
+                                        idx === unit.nccw.length - 1 ? <>{u}</> : <>{u}, </>)}</List.Content>
                                 </List.Content>
                             </List.Item>
                             <List.Item>
@@ -190,7 +221,30 @@ const UnitPage = ({ units }) => {
                     </Accordion.Content>
                 </Accordion>
             </Segment>
+            <Segment.Group>
+                <Segment>
+                    <Form size='large'>
+                        {user && unit.reviews.find(rev => rev.author === user.data.username) ?
+                        (<Header as='h3'>You have submitted a review (see below)</Header>)
+                        : (<><Header as='h3'>Add Review</Header>
+                        <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e,data) => setNewReview({ ...newReview, rating: data.rating })} /></Form.Field>
+                        <Form.TextArea rows={5} fluid placeholder='Comment...'
+                            value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
+                        <Button onClick={addReview} color='green' size='small'>
+                            Submit Review
+                        </Button></>)}
+                    </Form>
+                </Segment>
+                <Segment><Header as='h3'>Reviews ({unit.reviews.length})</Header></Segment>
+                 <Segment.Group>
+                    {unit.reviews.map(rev => (<Segment key={rev._id}>
+                        <Header as='h5'><Icon name='user' />{rev.author}</Header>
+                        <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
+                        <p>{rev.content}</p>
+                    </Segment>))}
 
+                </Segment.Group>
+            </Segment.Group>
         </>
     ))
 }
