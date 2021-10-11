@@ -11,6 +11,7 @@ import NavBar from "./NavBar"
 import About from "./About"
 
 import './styles/custom.css'
+import UnitPage from './UnitPage'
 
 const App = () => {
 
@@ -41,6 +42,7 @@ const App = () => {
         <Route exact path="/addunit" render={() => <AddUnit getUnits={getUnits} user={user} />}/>
         <Route exact path="/login" render={() => <LoginForm setUser={setUser}/>}/>
         <Route exact path="/register" render={() => <RegisterForm setUser={setUser} />}/>
+        <Route exact path="/unit/:id" render={() => <UnitPage units={units}/>}/>
         <Route exact path="/" render={() => <HomePage units={units} />}/>
       </Container>
     </Router>
