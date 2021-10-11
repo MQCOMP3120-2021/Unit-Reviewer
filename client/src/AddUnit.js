@@ -232,8 +232,8 @@ const AddUnit = ({ getUnits, user }) => {
           console.log(data)
           history.push("/")
         })
-        .catch(() => {
-          alert("There was an error!")
+        .catch((error) => {
+          console.log("Error! " + error)
         }
         )
     }
