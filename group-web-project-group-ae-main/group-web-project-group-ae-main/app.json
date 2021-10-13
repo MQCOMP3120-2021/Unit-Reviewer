@@ -1,0 +1,17 @@
+{
+  "name": "COMP3120 Assignment 2",
+  "description": "Unit Reviewer app",
+  "repository": "https://github.com/MQCOMP3120-2021/group-web-project-group-ae",
+  "success_url": "/",
+  "stack": "container",
+  "environments": {
+    "review": {
+      "formation": {
+        "web": {
+          "quantity": 1,
+          "size": "free"
+        }
+      }
+    }
+  }
+}
