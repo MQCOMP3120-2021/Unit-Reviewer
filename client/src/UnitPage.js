@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button } from 'semantic-ui-react'
+import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input } from 'semantic-ui-react'
 import unitsService from './services/units'
 
 const UnitPage = ({ getUnits, units, user }) => {
@@ -235,7 +235,14 @@ const UnitPage = ({ getUnits, units, user }) => {
                         </Button></>)}
                     </Form>
                 </Segment>
-                <Segment><Header as='h3'>Reviews ({unit.reviews.length})</Header></Segment>
+                <Segment>
+                <Grid columns={2} stackable>
+                    <Grid.Row verticalAlign="middle">
+                <Grid.Column><Header as='h3'>Reviews ({unit.reviews.length})</Header></Grid.Column>
+                <Grid.Column textAlign="right"><Input icon='search' placeholder='Search for review...' /></Grid.Column>
+                </Grid.Row>
+                </Grid>
+                </Segment>
                  <Segment.Group>
                     {unit.reviews.map(rev => (<Segment key={rev._id}>
                         <Header as='h5'><Icon name='user' />{rev.author}</Header>
