@@ -128,7 +128,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                         <Header as='h4'>Scheduled</Header>
-                        <Table celled>
+                        {unit.activities.scheduled.length > 0 ? <Table celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -146,10 +146,10 @@ const UnitPage = ({ getUnits, units, user }) => {
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
-                        </Table>
+                        </Table> : <Header as='h5'>No Scheduled Activities</Header>}
 
                         <Header as='h4'>Non-Scheduled</Header>
-                        <Table celled>
+                        {unit.activities.nonScheduled.length > 0 ? <Table celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -167,7 +167,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
-                        </Table>
+                        </Table> : <Header as='h5'>No Non-scheduled Activities</Header>}
                     </Accordion.Content>
 
                     <Accordion.Title active={activeIndex === 2} onClick={e => setActiveIndex(activeIndex === 2 ? -1 : 2)}>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, Header, Image, Form, Segment, Button, Message, Dropdown } from "semantic-ui-react";
+import { Grid, Header, Image, Form, Segment, Button, Message, Dropdown, Modal, List, Loader, Dimmer } from "semantic-ui-react";
 import logo from './img/logo.png'
 import unitsService from '../src/services/units'
 import { useHistory } from "react-router-dom";
@@ -92,7 +92,7 @@ const AddUnit = ({ getUnits, user }) => {
   }
   const addAssessment = () => {
     if (assessment.description !== "" && assessment.title !== "" && assessment.type !== ""
-      && assessment.type !== "" && assessment.weighting !== "") {
+      && assessment.type !== "" && Number(assessment.weighting) >= 0) {
       const newAssess = newUnit.assessments
       newAssess.push(assessment)
       setNewUnit({ ...newUnit, assessments: newAssess })
@@ -102,7 +102,7 @@ const AddUnit = ({ getUnits, user }) => {
         hurdle: false,
         title: "",
         type: "",
-        weighting: ""
+        weighting: -1
       })
     }
   }
@@ -221,22 +221,105 @@ const AddUnit = ({ getUnits, user }) => {
     outcomes: []
   })
 
+  const [formErrors, setFormErrors] = useState([])
+  const [open, setOpen] = useState(false)
+
   const addUnit = () => {
     console.log(newUnit)
-    if (user) {
-      console.log(newUnit)
-      let send = { ...newUnit, user: user }
-      unitsService.createUnit(send)
-        .then(data => {
-          getUnits()
-          console.log(data)
-          history.push("/")
-        })
-        .catch((error) => {
-          console.log("Error! " + error)
-        }
-        )
+    setOpen(true)
+
+    if (!user) {
+      let frm = formErrors
+      frm.push("user is not signed in")
+      setFormErrors(frm)
     }
+    if (newUnit.code === "") {
+      let frm = formErrors
+      frm.push("code field is empty")
+      setFormErrors(frm)
+    }
+    if (newUnit.level === "") {
+      let frm = formErrors
+      frm.push("level field is empty")
+      setFormErrors(frm)
+    }
+    if (newUnit.title === "") {
+      let frm = formErrors
+      frm.push("title field is empty")
+      setFormErrors(frm)
+    }
+    if (Number(newUnit.credits) < 0 || newUnit.credits === "") {
+      let frm = formErrors
+      frm.push("credits field is empty or invalid (i.e., less than 0)")
+      setFormErrors(frm)
+    }
+    if (newUnit.department === "") {
+      let frm = formErrors
+      frm.push("department field is empty")
+      setFormErrors(frm)
+    }
+    if (newUnit.faculty === "") {
+      let frm = formErrors
+      frm.push("faculty field is empty")
+      setFormErrors(frm)
+    }
+    if (newUnit.description === "") {
+      let frm = formErrors
+      frm.push("description field is empty")
+      setFormErrors(frm)
+    }
+    if (newUnit.group === "") {
+      let frm = formErrors
+      frm.push("group field is empty")
+      setFormErrors(frm)
+    }
+    if (newUnit.offerings.length === 0) {
+      let frm = formErrors
+      frm.push("No offerings for unit, please enter at least one offering")
+      setFormErrors(frm)
+    }
+    if (newUnit.activities.scheduled.length === 0 && newUnit.activities.nonScheduled.length === 0) {
+      let frm = formErrors
+      frm.push("No activities for unit, please enter at least one scheduled or non-scheduled activity")
+      setFormErrors(frm)
+    }
+    if (newUnit.assessments.length === 0) {
+      let frm = formErrors
+      frm.push("No assessments for unit, please enter at least one assessment")
+      setFormErrors(frm)
+    }
+    if(newUnit.assessments.length > 0) {
+      const percentages = newUnit.assessments.map(assess => Number(assess.weighting))
+      const sum = percentages.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      if(sum !== 100) {
+        let frm = formErrors
+        frm.push(`Assessment weigthings do not add up to 100%, the current total is ${sum}%`)
+        setFormErrors(frm)
+      }
+    }
+    if (newUnit.outcomes.length === 0) {
+      let frm = formErrors
+      frm.push("No unit learning outcomes for unit, please enter at least one unit learning outcome")
+      setFormErrors(frm)
+    }
+
+    if(formErrors.length > 0) {
+      return
+    }
+
+    let send = { ...newUnit, user: user }
+    unitsService.createUnit(send)
+      .then(data => {
+        getUnits()
+        console.log(data)
+        history.push("/")
+      })
+      .catch((error) => {
+        console.log("Error! " + error)
+      }
+      )
   }
 
   return (
@@ -245,12 +328,12 @@ const AddUnit = ({ getUnits, user }) => {
         <Grid.Column>
           <Form size='large'>
             <Segment stacked>
-              <Form.Field>
+              <Form.Field required>
                 <label>Code</label>
                 <Form.Input fluid icon='code' iconPosition='left' placeholder='Code'
                   value={newUnit.code} onChange={e => setNewUnit({ ...newUnit, code: e.target.value })} />
               </Form.Field>
-              <Form.Field>
+              <Form.Field required>
                 <label>Level</label>
                 <Form.Select
                   options={levelOptions}
@@ -260,33 +343,33 @@ const AddUnit = ({ getUnits, user }) => {
                   search
                 />
               </Form.Field>
-              <Form.Field>
+              <Form.Field required>
                 <label>Title</label>
                 <Form.Input fluid icon='bookmark outline' iconPosition='left' placeholder='Title'
                   value={newUnit.title} onChange={e => setNewUnit({ ...newUnit, title: e.target.value })} />
               </Form.Field>
-              <Form.Field>
+              <Form.Field required>
                 <label>Credits</label>
                 <Form.Input type="number" fluid icon='money bill alternate' iconPosition='left' placeholder='Credits'
                   value={newUnit.credits} onChange={e => setNewUnit({ ...newUnit, credits: e.target.value })} />
               </Form.Field>
-              <Form.Field>
+              <Form.Field required>
                 <label>Department</label>
                 <Form.Input fluid icon='warehouse' iconPosition='left' placeholder='Department'
                   value={newUnit.department} onChange={e => setNewUnit({ ...newUnit, department: e.target.value })} />
               </Form.Field>
-              <Form.Field>
+              <Form.Field required>
                 <label>Faculty</label>
                 <Form.Input fluid icon='plus square' iconPosition='left' placeholder='Faculty'
                   value={newUnit.faculty} onChange={e => setNewUnit({ ...newUnit, faculty: e.target.value })} />
               </Form.Field>
 
-              <Form.Field>
+              <Form.Field required>
                 <label>Description</label>
                 <Form.TextArea rows={8} fluid icon='user' iconPosition='left' placeholder='Description'
                   value={newUnit.description} onChange={e => setNewUnit({ ...newUnit, description: e.target.value })} />
               </Form.Field>
-              <Form.Field>
+              <Form.Field required>
                 <label>Group</label>
                 <Form.Select
                   options={groupOptions}
@@ -532,12 +615,39 @@ const AddUnit = ({ getUnits, user }) => {
 
 
             </Segment>
-            <Button onClick={addUnit} color='teal' size='large'>
-              Submit New Unit
-            </Button>
+            <Modal
+              centered={false}
+              open={open}
+             trigger={<Button onClick={addUnit} color='teal' size='large'>
+                Submit New Unit
+              </Button>}>
+              {formErrors.length > 0 ? (<><Modal.Header>ERROR!</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <p>The following errors have occurred:</p>
+
+          <List bulleted>{formErrors.map((err, idx) => (
+            <List.Item key={idx}>{err}</List.Item>
+          ))}</List>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions><Button color='black' onClick={() => {setFormErrors([]);setOpen(false)}}>
+          Ok
+        </Button></Modal.Actions></>) : (
+        <><Modal.Header>Saving Form <Segment>
+        <Dimmer active inverted>
+    <Loader active/>
+</Dimmer>
+</Segment></Modal.Header>
+        <Modal.Actions><Button color='black' onClick={() => {setOpen(false)}}>
+        Ok
+      </Button></Modal.Actions></>
+      )}
+            </Modal>
           </Form>
         </Grid.Column>
-      </Grid></>
+      </Grid>
+      </>
   )
 }
 
