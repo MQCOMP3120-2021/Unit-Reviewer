@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input } from 'semantic-ui-react'
+import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader } from 'semantic-ui-react'
 import unitsService from './services/units'
 
 const UnitPage = ({ getUnits, units, user }) => {
@@ -10,24 +10,42 @@ const UnitPage = ({ getUnits, units, user }) => {
     const [activeIndex, setActiveIndex] = useState(-1)
     const [newReview, setNewReview] = useState({ content: "", rating: 0})
 
+    const [errors, setErrors] = useState({
+        content: {error: false, message: ""},
+        rating: {error: false, message: ""},
+    })
+    const [serverIssue, setServerIssue] = useState("")
+    const [load, setLoad] = useState(false)
+
     const addReview = () => {
         if(user) {
+            let err = {
+                content: {error: false, message: ""},
+                rating: {error: false, message: ""},
+            }
+            let issue = false
             if(newReview.content === "") {
-                alert("ERROR: comment not entered.")
-                return
+                err.content = {error: true, message: "comment field for review is empty"}
+                issue = true
             }
             if(newReview.rating === 0) {
-                alert("ERROR: review not rated.")
+                err.rating = {error: true, message: "please rate review using the stars"}
+                issue = true
+            }
+            setErrors(err)
+            if(issue) {
                 return
             }
+            setLoad(true)
             console.log(newReview)
             unitsService.submitReview({...newReview, author: user.data.username, user: user, unitId: unit._id})
             .then(data => {
                 console.log(data)
                 getUnits()
               })
-              .catch(() => {
-                alert("There was an error!")
+              .catch((error) => {
+                setServerIssue("Error! " + error.response.data.error)
+                setLoad(false)
               })
 
         } else {
@@ -128,7 +146,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                         <Header as='h4'>Scheduled</Header>
-                        <Table celled>
+                        {unit.activities.scheduled.length > 0 ? <Table celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -146,10 +164,10 @@ const UnitPage = ({ getUnits, units, user }) => {
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
-                        </Table>
+                        </Table> : <Header as='h5'>No Scheduled Activities</Header>}
 
                         <Header as='h4'>Non-Scheduled</Header>
-                        <Table celled>
+                        {unit.activities.nonScheduled.length > 0 ? <Table celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -167,7 +185,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
-                        </Table>
+                        </Table> : <Header as='h5'>No Non-scheduled Activities</Header>}
                     </Accordion.Content>
 
                     <Accordion.Title active={activeIndex === 2} onClick={e => setActiveIndex(activeIndex === 2 ? -1 : 2)}>
@@ -223,15 +241,23 @@ const UnitPage = ({ getUnits, units, user }) => {
             </Segment>
             <Segment.Group>
                 <Segment>
+                        {serverIssue && <Message size="mini" negative>
+                            <Message.Header>{serverIssue}</Message.Header>
+                        </Message>}
                     <Form size='large'>
                         {user && unit.reviews.find(rev => rev.author === user.data.username) ?
                         (<Header as='h3'>You have submitted a review (see below)</Header>)
                         : (<><Header as='h3'>Add Review</Header>
-                        <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e,data) => setNewReview({ ...newReview, rating: data.rating })} /></Form.Field>
-                        <Form.TextArea rows={5} fluid placeholder='Comment...'
+                        <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e,data) => setNewReview({ ...newReview, rating: data.rating })} />
+                        {errors.rating.error && <Message size="mini" negative>
+                            <Message.Header>{errors.rating.message}</Message.Header>
+                        </Message>}
+                        </Form.Field>
+                        <Form.TextArea error={errors.content.error && errors.content.message}
+                        rows={5} fluid placeholder='Comment...'
                             value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
                         <Button onClick={addReview} color='green' size='small'>
-                            Submit Review
+                            Submit Review <Loader active={load}/>
                         </Button></>)}
                     </Form>
                 </Segment>

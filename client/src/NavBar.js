@@ -16,10 +16,10 @@ const NavBar = ({user, setUser}) => {
           as={NavLink} exact to="/"
           name="home"
         />
-        <Menu.Item
+        {user && <Menu.Item
           as={NavLink} to="/addunit"
           name="add unit"
-        />
+        />}
         <Menu.Item
           as={NavLink} to="/about"
           name="about"
