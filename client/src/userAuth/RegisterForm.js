@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Image, Message, Segment, Loader } from 'semantic-ui-react'
 import authService from '../services/auth'
 import { Link, useHistory } from 'react-router-dom'
 
@@ -17,6 +17,7 @@ const RegisterForm = ({setUser}) => {
     password2: {error: false, message: ""},
   })
   const [serverIssue, setServerIssue] = useState("")
+  const [load, setLoad] = useState(false)
 
   const register = () => {
     setServerIssue("")
@@ -47,6 +48,7 @@ const RegisterForm = ({setUser}) => {
     if(issue) {
       return
     }
+    setLoad(true)
     authService.register({username, password})
       .then(data => {
           console.log("Success: ",data)
@@ -98,7 +100,7 @@ const RegisterForm = ({setUser}) => {
           />
 
           <Button color='teal' fluid size='large' onClick={register}>
-            Sign up
+            Sign up <Loader active={load}/>
           </Button>
         </Segment>
       </Form>

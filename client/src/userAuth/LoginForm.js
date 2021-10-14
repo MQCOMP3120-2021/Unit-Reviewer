@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Image, Message, Segment, Loader } from 'semantic-ui-react'
 import authService from '../services/auth'
 import { Link, useHistory } from 'react-router-dom'
 
@@ -16,6 +16,7 @@ import { Link, useHistory } from 'react-router-dom'
   })
 
   const [serverIssue, setServerIssue] = useState("")
+  const [load, setLoad] = useState(false)
 
   const login = () => {
     setServerIssue("")
@@ -36,7 +37,7 @@ import { Link, useHistory } from 'react-router-dom'
     if(issue) {
       return
     }
-    
+    setLoad(true)
     authService.login({username, password})
     .then(data => {
       console.log("Success: ",data)
@@ -78,7 +79,7 @@ import { Link, useHistory } from 'react-router-dom'
             />
 
             <Button color='teal' fluid size='large' onClick={login}>
-              Login
+              Login <Loader active={load}/>
             </Button>
           </Segment>
         </Form>
