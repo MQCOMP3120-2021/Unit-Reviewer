@@ -28,7 +28,7 @@ const NavBar = ({user, setUser}) => {
           {user ? (
           <>
           <Menu.Item
-            name={`Hello ${user.data.username}`}
+            name={`Hellodsf ${user.data.username}`}
           />
           <Menu.Item
             name="logout"
