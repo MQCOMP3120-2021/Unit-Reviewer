@@ -37,7 +37,7 @@ const App = () => {
   return (
     <Router>
       <Container>
-        <NavBar user={user} setUser={setUser} />
+        <NavBar user={user} setUser={setUser} units={units}/>
         <Route exact path="/about" render={() => <About />}/>
         <Route exact path="/addunit" render={() => <AddUnit getUnits={getUnits} user={user} />}/>
         <Route exact path="/login" render={() => <LoginForm setUser={setUser}/>}/>
