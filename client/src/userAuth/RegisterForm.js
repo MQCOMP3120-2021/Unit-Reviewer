@@ -58,6 +58,7 @@ const RegisterForm = ({setUser}) => {
         .catch((error) => {
             console.log(error.response.data.error)
             setServerIssue("Error! " + error.response.data.error)
+            setLoad(false)
         })
   }
   return (<>

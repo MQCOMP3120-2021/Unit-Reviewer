@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message } from 'semantic-ui-react'
+import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader } from 'semantic-ui-react'
 import unitsService from './services/units'
 
 const UnitPage = ({ getUnits, units, user }) => {
@@ -15,6 +15,7 @@ const UnitPage = ({ getUnits, units, user }) => {
         rating: {error: false, message: ""},
     })
     const [serverIssue, setServerIssue] = useState("")
+    const [load, setLoad] = useState(false)
 
     const addReview = () => {
         if(user) {
@@ -35,6 +36,7 @@ const UnitPage = ({ getUnits, units, user }) => {
             if(issue) {
                 return
             }
+            setLoad(true)
             console.log(newReview)
             unitsService.submitReview({...newReview, author: user.data.username, user: user, unitId: unit._id})
             .then(data => {
@@ -43,6 +45,7 @@ const UnitPage = ({ getUnits, units, user }) => {
               })
               .catch((error) => {
                 setServerIssue("Error! " + error.response.data.error)
+                setLoad(false)
               })
 
         } else {
@@ -254,7 +257,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                         rows={5} fluid placeholder='Comment...'
                             value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
                         <Button onClick={addReview} color='green' size='small'>
-                            Submit Review
+                            Submit Review <Loader active={load}/>
                         </Button></>)}
                     </Form>
                 </Segment>
