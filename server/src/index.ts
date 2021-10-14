@@ -33,11 +33,11 @@ expressJSDocSwagger(app)(options);
 app.use('/api/units', unitsRouter);
 app.use('/api/auth', authRouter);
 
+app.use(express.static('public'));
+
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
-
-app.use(express.static('public'));
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
