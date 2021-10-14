@@ -42,6 +42,7 @@ const UnitPage = ({ getUnits, units, user }) => {
             .then(data => {
                 console.log(data)
                 getUnits()
+                setLoad(false)
                 setNewReview({ content: "", rating: 0})
               })
               .catch((error) => {
@@ -246,7 +247,8 @@ const UnitPage = ({ getUnits, units, user }) => {
                             <Message.Header>{serverIssue}</Message.Header>
                         </Message>}
                     <Form size='large'>
-                        {user && unit.reviews.find(rev => rev.author === user.data.username) ?
+                        {!user ? <Header as='h2' textAlign="center">Login or create an account to add a review</Header> :  
+                        unit.reviews.find(rev => rev.author === user.data.username) ?
                         (<Header as='h3'>You have submitted a review (see below)</Header>)
                         : (<><Header as='h3'>Add Review</Header>
                         <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e,data) => setNewReview({ ...newReview, rating: data.rating })} />
