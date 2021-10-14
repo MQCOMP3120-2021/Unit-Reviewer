@@ -42,6 +42,8 @@ const UnitPage = ({ getUnits, units, user }) => {
             .then(data => {
                 console.log(data)
                 getUnits()
+                setLoad(false)
+                setNewReview({ content: "", rating: 0})
               })
               .catch((error) => {
                 setServerIssue("Error! " + error.response.data.error)
