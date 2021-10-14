@@ -3,8 +3,9 @@ import { createMedia } from '@artsy/fresnel'
 import PropTypes from 'prop-types'
 import { Menu, Segment, Input } from 'semantic-ui-react'
 import { NavLink, withRouter } from 'react-router-dom'
+import SearchBar from './SearchBar'
 
-const NavBar = ({user, setUser}) => {
+const NavBar = ({user, setUser, units}) => {
 
   return (
     <>
@@ -40,7 +41,7 @@ const NavBar = ({user, setUser}) => {
             name="login"
           />)}
           <Menu.Item>
-            <Input icon='search' placeholder='Search for unit...' />
+            <SearchBar units={units}/>
           </Menu.Item>
         </Menu.Menu>
       </Menu>
