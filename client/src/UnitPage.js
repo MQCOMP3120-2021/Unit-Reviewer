@@ -25,6 +25,7 @@ const UnitPage = ({ getUnits, units, user }) => {
             .then(data => {
                 console.log(data)
                 getUnits()
+                setNewReview({ content: "", rating: 0})
               })
               .catch(() => {
                 alert("There was an error!")
