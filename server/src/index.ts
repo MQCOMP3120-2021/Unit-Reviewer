@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import morgan from 'morgan';
+import path from 'path';
 
 import initDB from './db';
 import authRouter from './routes/auth';
@@ -31,6 +32,10 @@ expressJSDocSwagger(app)(options);
 
 app.use('/api/units', unitsRouter);
 app.use('/api/auth', authRouter);
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 
 app.use(express.static('public'));
 
