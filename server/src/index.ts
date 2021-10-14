@@ -34,7 +34,7 @@ app.use('/api/units', unitsRouter);
 app.use('/api/auth', authRouter);
 
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 app.use(express.static('public'));
