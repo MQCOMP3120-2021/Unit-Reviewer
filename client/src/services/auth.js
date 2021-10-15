@@ -11,4 +11,11 @@ const login = ({username, password}) => {
                 .then(response => response)
 }
 
-export default {register, login} 
+const getUser = () => {
+  return axios
+    .get(baseURL + 'me')
+    .then((response) => response)
+    .catch((e) => console.log(e));
+};
+
+export default {register, login, getUser} 
