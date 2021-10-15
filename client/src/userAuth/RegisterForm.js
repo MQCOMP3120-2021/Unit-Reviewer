@@ -70,6 +70,7 @@ const RegisterForm = ({setUser}) => {
       <Form size='large'>
         <Segment stacked>
           <Form.Input 
+            data-testid="username"
             fluid 
             icon='user' 
             iconPosition='left' 
@@ -80,6 +81,7 @@ const RegisterForm = ({setUser}) => {
             error={errors.username.error && errors.username.message}
             />
           <Form.Input
+            data-testid="password"
             fluid
             icon='lock'
             iconPosition='left'
@@ -90,6 +92,7 @@ const RegisterForm = ({setUser}) => {
             error={errors.password.error && errors.password.message}
           />
           <Form.Input
+            data-testid="password2"
             fluid
             icon='lock'
             iconPosition='left'
@@ -100,7 +103,7 @@ const RegisterForm = ({setUser}) => {
             error={errors.password2.error && errors.password2.message}
           />
 
-          <Button color='teal' fluid size='large' onClick={register}>
+          <Button data-testid="buttonSubmit" color='teal' fluid size='large' onClick={register}>
             Sign up <Loader active={load}/>
           </Button>
         </Segment>
