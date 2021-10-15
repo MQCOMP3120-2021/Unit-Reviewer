@@ -22,7 +22,6 @@ const App = () => {
         unitsService.getAllUnits()
         .then(data => {
             setUnits(data)
-            console.log(data)
           })
           .catch(() => {
               alert("There was an error!")
