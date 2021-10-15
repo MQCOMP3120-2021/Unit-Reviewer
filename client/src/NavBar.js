@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createMedia } from '@artsy/fresnel'
 import PropTypes from 'prop-types'
-import { Menu, Segment, Input } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 import { NavLink, withRouter } from 'react-router-dom'
 import UnitSearch from './UnitSearch'
 
@@ -29,6 +29,8 @@ const NavBar = ({user, setUser, units}) => {
           {user ? (
           <>
           <Menu.Item
+            as={NavLink}
+            to={`/user/${user.data.username}`}
             name={`Hello ${user.data.username}`}
           />
           <Menu.Item
