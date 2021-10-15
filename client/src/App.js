@@ -9,6 +9,7 @@ import LoginForm from './userAuth/LoginForm'
 import RegisterForm from "./userAuth/RegisterForm"
 import NavBar from "./NavBar"
 import About from "./About"
+import Profile from "./UserProfile"
 
 import './styles/custom.css'
 import UnitPage from './UnitPage'
@@ -22,7 +23,6 @@ const App = () => {
         unitsService.getAllUnits()
         .then(data => {
             setUnits(data)
-            console.log(data)
           })
           .catch(() => {
               alert("There was an error!")
@@ -43,6 +43,7 @@ const App = () => {
         <Route exact path="/login" render={() => <LoginForm setUser={setUser}/>}/>
         <Route exact path="/register" render={() => <RegisterForm setUser={setUser} />}/>
         <Route exact path="/unit/:id" render={() => <UnitPage getUnits={getUnits} units={units} user={user}/>}/>
+        <Route exact path="/user/:author" render={() => <Profile units={units}/>}/>
         <Route exact path="/" render={() => <HomePage units={units} />}/>
       </Container>
     </Router>
