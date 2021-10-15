@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader } from 'semantic-ui-react'
+import { BrowserRouter as Router, NavLink, Link} from "react-router-dom";
+import { Menu, Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader } from 'semantic-ui-react'
 import unitsService from './services/units'
 import ReviewSearch from './ReviewSearch'
 
@@ -277,7 +278,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                 </Segment>
                  <Segment.Group>
                     {unit.reviews.map(rev => (<Segment key={rev._id}>
-                        <Header as='h5'><Icon name='user' />{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Header>
+                        <Header as='h5'><Icon name='user' /><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
                         <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
                         <p>{rev.content}</p>
                     </Segment>))}
