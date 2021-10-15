@@ -6,7 +6,7 @@ const HomePage = ({units}) => {
 return(<>
 <Grid padded centered>
   {units.map(item => (
-                <Link to={`unit/${item._id}`}><Card key={item._id} style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
+                <Link key={item._id} to={`unit/${item._id}`}><Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10}}>
                     <Card.Content header={item.code} />
                     <Card.Content description={item.title} />
                     <Card.Content extra>
