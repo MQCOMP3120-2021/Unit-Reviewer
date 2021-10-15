@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader } from 'semantic-ui-react'
+import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader, Search } from 'semantic-ui-react'
 import unitsService from './services/units'
 import ReviewSearch from './ReviewSearch'
 
@@ -17,6 +17,22 @@ const UnitPage = ({ getUnits, units, user }) => {
     })
     const [serverIssue, setServerIssue] = useState("")
     const [load, setLoad] = useState(false)
+
+    const [reviews, setReviews] = useState(unit ? unit.reviews : [])
+
+    const searchReview = (qry) => {
+        console.log(qry)
+        if(qry !== "") {
+            const revSearch = unit.reviews.filter(rev =>
+               rev.author.toLowerCase().search(qry.toLowerCase()) !== -1
+            || rev.content.toLowerCase().search(qry.toLowerCase()) !== -1
+            || rev.rating.toString().toLowerCase().search(qry.toLowerCase()) !== -1)
+            console.log(revSearch)
+            setReviews(revSearch)
+        } else {
+            setReviews(unit ? unit.reviews : [])
+        }
+    }
 
     const addReview = () => {
         if(user) {
@@ -56,6 +72,8 @@ const UnitPage = ({ getUnits, units, user }) => {
             return
         }
     }
+
+
 
     return (!unit ? (<h1>Error: Unit does not exist</h1>) : (
         <>
@@ -270,13 +288,18 @@ const UnitPage = ({ getUnits, units, user }) => {
                     <Grid.Row verticalAlign="middle">
                 <Grid.Column><Header as='h3'>Reviews ({unit.reviews.length})</Header></Grid.Column>
                 <Grid.Column>
-                    <ReviewSearch reviews={unit.reviews}/>
+                <Search
+                onSearchChange={(e, data) => searchReview(data.value)}
+                input={{ fluid: true }}
+                results={[""]}
+                fluid
+                />
                 </Grid.Column>
                 </Grid.Row>
                 </Grid>
                 </Segment>
                  <Segment.Group>
-                    {unit.reviews.map(rev => (<Segment key={rev._id}>
+                    {reviews.map(rev => (<Segment key={rev._id}>
                         <Header as='h5'><Icon name='user' />{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Header>
                         <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
                         <p>{rev.content}</p>
