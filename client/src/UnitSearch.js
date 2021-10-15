@@ -26,7 +26,7 @@ function reducer(state, action) {
     }
 }
 
-function SearchBar({units}) {
+function UnitSearch({units}) {
     const [state, dispatch] = useReducer(reducer, initialState)
     const { loading, results, value } = state
 
@@ -68,8 +68,6 @@ function SearchBar({units}) {
         )
     }
 
-    console.log(units)
-
     return (
             <Search
             loading={loading}
@@ -84,4 +82,4 @@ function SearchBar({units}) {
     )
 }
 
-export default SearchBar
+export default UnitSearch

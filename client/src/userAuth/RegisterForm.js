@@ -74,7 +74,7 @@ const RegisterForm = ({setUser}) => {
             fluid 
             icon='user' 
             iconPosition='left' 
-            placeholder='E-mail address' 
+            placeholder='Username' 
             onChange={(e) => setUsername(e.target.value)} 
             value={username}
             id='form-input-control-error-email'
