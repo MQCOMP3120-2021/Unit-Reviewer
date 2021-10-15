@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import jwt from 'express-jwt';
 
 import { JWT_SECRET } from '../config';
-import { IReview, IUnit } from '../interfaces';
+import { IReview, ITokenUser, IUnit } from '../interfaces';
 import Unit, { addReview } from '../models/Unit';
 import { getToken } from './auth';
 
@@ -227,14 +227,17 @@ unitsRouter.post(
 unitsRouter.post(
   '/review',
   jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
     const { unitId } = req.body;
-    const { content, rating, author } = req.body as IReview;
+    const { content, rating } = req.body as IReview;
     const dateCreated = Date.now();
+
+    const user = req.user as ITokenUser;
+    const author = user.username;
 
     try {
       await addReview(unitId, {

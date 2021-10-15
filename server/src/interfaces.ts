@@ -55,3 +55,7 @@ export interface IUser {
   dateCreated: Date;
   passwordHash: string;
 }
+
+export interface ITokenUser {
+  username: string;
+}
