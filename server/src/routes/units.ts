@@ -234,7 +234,7 @@ unitsRouter.delete(
   '/:unitId',
   jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
   async (req, res) => {
-    if (!req.user) {
+    if (!req.user || !req.user.admin) {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 

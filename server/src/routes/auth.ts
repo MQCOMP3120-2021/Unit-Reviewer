@@ -4,7 +4,9 @@ import { sign } from 'jsonwebtoken';
 
 import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
 import { IUser } from '../interfaces';
-import { addUser, passwordValid, userExists } from '../models/User';
+import {
+  addUser, checkAdmin, passwordValid, userExists,
+} from '../models/User';
 
 const authRouter = express.Router();
 
@@ -79,14 +81,14 @@ authRouter.post('/register', async (req, res) => {
   }
 
   try {
-    await addUser(username, password);
+    await addUser(username, password, false);
 
     const token = sign({ username }, JWT_SECRET, {
       expiresIn: '1h',
       algorithm: 'HS512',
     });
 
-    return res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
+    return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
   } catch (error) {
     return res.status(400).send({ error: CANNOT_ADD_USER_ERROR });
   }
@@ -107,12 +109,14 @@ authRouter.post('/login', async (req, res) => {
     return res.status(400).json({ error: USER_DOES_NOT_EXIST_ERROR });
   }
   if (await passwordValid(username, password)) {
-    const token = sign({ username }, JWT_SECRET, {
+    const isAdmin = checkAdmin(username);
+
+    const token = sign({ username, admin: isAdmin }, JWT_SECRET, {
       expiresIn: '1h',
       algorithm: 'HS512',
     });
 
-    return res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
+    return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
   }
 
   return res.status(400).json({ error: INVALID_PASSWORD_ERROR });
