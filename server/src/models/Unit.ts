@@ -65,8 +65,21 @@ const UnitSchema = new Schema<IUnit>({
 
 const Unit = mongoose.model('Unit', UnitSchema);
 
-export const addReview = async (unitId: string, review: IReview) => {
-  await Unit.findByIdAndUpdate(unitId, { $push: { reviews: review } });
-};
+export const deleteUnit = async (unitId: string) => Unit.findByIdAndDelete(unitId);
+
+export const addReview = async (unitId: string, review: IReview) => Unit.findByIdAndUpdate(
+  unitId, { $push: { reviews: review } },
+);
+
+export const getUnit = async (unitId: string) => Unit.findOne(
+  { _id: unitId },
+);
+
+export const deleteReview = async (
+  unitId: string,
+  reviewId: string,
+) => Unit.findByIdAndUpdate(unitId, {
+  $pull: { reviews: { _id: reviewId } },
+});
 
 export default Unit;
