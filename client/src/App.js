@@ -3,6 +3,7 @@ import 'semantic-ui-css/semantic.min.css'
 import { Container, Grid } from "semantic-ui-react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 import unitsService from './services/units'
+import authService from './services/auth'
 import HomePage from './HomePage'
 import AddUnit from './AddUnit'
 import LoginForm from './userAuth/LoginForm'
@@ -30,8 +31,18 @@ const App = () => {
           )
     }
 
+    const getUser = () => {
+      authService
+        .getUser()
+        .then((data) => setUser(data))
+        .catch(() => {
+          alert('There was an error!');
+        });
+    };
+
     useEffect(async () => {
-        getUnits()
+      getUnits()
+      getUser()
     }, [])
 
   return (
