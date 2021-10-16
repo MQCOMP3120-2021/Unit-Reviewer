@@ -292,7 +292,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                 <Search
                 onSearchChange={(e, data) => searchReview(data.value)}
                 input={{ fluid: true }}
-                results={[""]}
+                showNoResults={false}
                 fluid
                 />
                 </Grid.Column>
@@ -300,11 +300,15 @@ const UnitPage = ({ getUnits, units, user }) => {
                 </Grid>
                 </Segment>
                  <Segment.Group>
-                    {reviews.map(rev => (<Segment key={rev._id}>
-                        <Header as='h5'><Icon name='user' /><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
-                        <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
-                        <p>{rev.content}</p>
-                    </Segment>))}
+                    {reviews.length > 0 
+                        ? reviews.map(rev => (<Segment key={rev._id}>
+                            <Header as='h5'><Icon name='user' /><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
+                            <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
+                            <p>{rev.content}</p>
+                        </Segment>))
+                        :
+                        <Header as="h1" align="center">No Reviews Found</Header>
+                    }
 
                 </Segment.Group>
             </Segment.Group>
