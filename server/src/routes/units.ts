@@ -4,7 +4,7 @@ import jwt from 'express-jwt';
 import { JWT_SECRET } from '../config';
 import { IReview, ITokenUser, IUnit } from '../interfaces';
 import Unit, {
-  addReview, deleteReview, deleteUnit, getUnit,
+  addReview, addUnit, deleteReview, deleteUnit, getUnit,
 } from '../models/Unit';
 import { getToken } from './auth';
 
@@ -173,7 +173,7 @@ unitsRouter.post(
   '/',
   jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
   async (req, res) => {
-    if (!req.user) {
+    if (!req.user || !req.user.admin) {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
@@ -196,7 +196,7 @@ unitsRouter.post(
     const rating = 0;
     const reviews: IReview[] = [];
 
-    const unit = new Unit({
+    const unit = {
       code,
       title,
       description,
@@ -213,10 +213,10 @@ unitsRouter.post(
       outcomes,
       rating,
       reviews,
-    });
+    };
 
     try {
-      const savedUnit = await unit.save();
+      const savedUnit = await addUnit(unit);
       return res.json(savedUnit.toJSON());
     } catch (error) {
       return res.status(400).send({ error: UNABLE_TO_ADD_UNIT_ERROR });

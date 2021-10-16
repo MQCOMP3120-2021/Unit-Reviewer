@@ -65,6 +65,10 @@ const UnitSchema = new Schema<IUnit>({
 
 const Unit = mongoose.model('Unit', UnitSchema);
 
+export const addUnit = async (unit: IUnit) => new Unit(
+  unit,
+).save();
+
 export const deleteUnit = async (unitId: string) => Unit.findByIdAndDelete(unitId);
 
 export const addReview = async (unitId: string, review: IReview) => Unit.findByIdAndUpdate(
