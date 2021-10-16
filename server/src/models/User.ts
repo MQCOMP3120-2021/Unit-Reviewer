@@ -44,6 +44,10 @@ export const checkAdmin = async (username: string) => {
   return user.admin;
 };
 
+export const setAdmin = async (username: string, admin: boolean) => User.findOneAndUpdate(
+  { username }, { admin },
+);
+
 export const userExists = async (username: string) => {
   const user: mongoose.Document | null = await User.findOne({ username });
   return user !== null;
