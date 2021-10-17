@@ -18,4 +18,10 @@ const getUser = () => {
     .catch((e) => console.log(e));
 };
 
-export default {register, login, getUser} 
+const logout = () => {
+  return axios.post(baseURL+"logout")
+              .then(response => "done")
+              .catch((e) => console.log(e));
+}
+
+export default {register, login, getUser, logout} 

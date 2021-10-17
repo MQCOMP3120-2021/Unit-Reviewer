@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import { createMedia } from '@artsy/fresnel'
 import PropTypes from 'prop-types'
 import { Menu } from 'semantic-ui-react'
-import { NavLink, withRouter } from 'react-router-dom'
+import { NavLink, withRouter, useHistory } from 'react-router-dom'
 import UnitSearch from './UnitSearch'
+import authService from './services/auth'
 
 const NavBar = ({user, setUser, units}) => {
+  const history = useHistory()
 
   return (
     <>
@@ -35,7 +37,7 @@ const NavBar = ({user, setUser, units}) => {
           />
           <Menu.Item
             name="logout"
-            onClick={(e) => {setUser(null)}}
+            onClick={(e) => {authService.logout().then(() => {setUser(null);history.push("/")})}}
           />
           </>) : (
           <Menu.Item

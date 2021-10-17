@@ -170,4 +170,12 @@ authRouter.post('/revokeAdmin', async (req, res) => {
   return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
 });
 
+authRouter.post('/logout', 
+jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
+async (req, res) => {
+  console.log("hi")
+  res.clearCookie(JWT_COOKIE_NAME);
+  res.redirect('/');
+});
+
 export default authRouter;

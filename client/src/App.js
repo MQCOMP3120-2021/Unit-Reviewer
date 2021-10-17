@@ -34,7 +34,7 @@ const App = () => {
     const getUser = () => {
       authService
         .getUser()
-        .then((data) => setUser(data))
+        .then((data) => {console.log(data);setUser(data)})
         .catch(() => {
           alert('There was an error!');
         });
@@ -51,8 +51,8 @@ const App = () => {
         <NavBar user={user} setUser={setUser} units={units}/>
         <Route exact path="/about" render={() => <About />}/>
         <Route exact path="/addunit" render={() => <AddUnit getUnits={getUnits} user={user} />}/>
-        <Route exact path="/login" render={() => <LoginForm setUser={setUser}/>}/>
-        <Route exact path="/register" render={() => <RegisterForm setUser={setUser} />}/>
+        <Route exact path="/login" render={() => <LoginForm getUser={getUser}/>}/>
+        <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
         <Route exact path="/unit/:id" render={() => <UnitPage getUnits={getUnits} units={units} user={user}/>}/>
         <Route exact path="/user/:author" render={() => <Profile units={units}/>}/>
         <Route exact path="/" render={() => <HomePage units={units} />}/>
