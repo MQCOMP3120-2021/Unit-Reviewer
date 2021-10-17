@@ -1,5 +1,11 @@
 # COMP3120 Assignment 2 - Unit Reviewer - Group AE
 
+## Admin Credentials
+
+```
+admin:admin
+```
+
 ## Deploy
 
 The official heroku url for the project is https://unit-reviewer.herokuapp.com/

@@ -3,14 +3,20 @@ import jwt from 'express-jwt';
 
 import { JWT_SECRET } from '../config';
 import { IReview, ITokenUser, IUnit } from '../interfaces';
-import Unit, { addReview } from '../models/Unit';
+import Unit, {
+  addReview, addUnit, deleteReview, deleteUnit, getUnit,
+} from '../models/Unit';
 import { getToken } from './auth';
 
 const unitsRouter = express.Router();
 
 const UNIT_NOT_FOUND_ERROR = 'Unit not found';
 const UNABLE_TO_ADD_UNIT_ERROR = 'Unable to add unit';
+const UNABLE_TO_DELETE_UNIT_ERROR = 'Unable to delete unit';
 const UNABLE_TO_ADD_REVIEW_ERROR = 'Unable to add review';
+const UNABLE_TO_DELETE_REVIEW_ERROR = 'Unable to delete review';
+const NO_PERMISSION_ERROR = "You don't have permission to do that";
+const REVIEW_NOT_FOUND_ERROR = 'Review not found';
 
 /**
  * The Actitivies type
@@ -167,7 +173,7 @@ unitsRouter.post(
   '/',
   jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
   async (req, res) => {
-    if (!req.user) {
+    if (!req.user || !req.user.admin) {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
@@ -190,7 +196,7 @@ unitsRouter.post(
     const rating = 0;
     const reviews: IReview[] = [];
 
-    const unit = new Unit({
+    const unit = {
       code,
       title,
       description,
@@ -207,13 +213,38 @@ unitsRouter.post(
       outcomes,
       rating,
       reviews,
-    });
+    };
 
     try {
-      const savedUnit = await unit.save();
+      const savedUnit = await addUnit(unit);
       return res.json(savedUnit.toJSON());
     } catch (error) {
       return res.status(400).send({ error: UNABLE_TO_ADD_UNIT_ERROR });
+    }
+  },
+);
+
+/**
+ * DELETE /api/units/{unitId}
+ * @summary Adds the given unit to the database
+ * @param {string} unitId.path.required - Unit ID
+ * @return {object} 200 - Success response
+ */
+unitsRouter.delete(
+  '/:unitId',
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
+  async (req, res) => {
+    if (!req.user || !req.user.admin) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+
+    const { unitId } = req.params;
+
+    try {
+      await deleteUnit(unitId);
+      return res.sendStatus(200);
+    } catch (error) {
+      return res.status(400).send({ error: UNABLE_TO_DELETE_UNIT_ERROR });
     }
   },
 );
@@ -249,6 +280,57 @@ unitsRouter.post(
       return res.sendStatus(200);
     } catch (error) {
       return res.status(400).send({ error: UNABLE_TO_ADD_REVIEW_ERROR });
+    }
+  },
+);
+
+/**
+ * DELETE /api/units/review/{unitId}/{reviewId}
+ * @summary Deletes a review from the given unit
+ * @param {string} unitId.path.required - Unit ID
+ * @param {string} reviewId.path.required - Review ID
+ * @return {object} 200 - Sucess Response
+ */
+unitsRouter.delete(
+  '/review/:unitId/:reviewId',
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
+  async (req: Request, res: Response) => {
+    if (!req.user) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+
+    const { unitId, reviewId } = req.params;
+
+    const user = req.user as ITokenUser;
+    const { username } = user;
+
+    try {
+      const unit = await getUnit(unitId);
+
+      if (unit === null) {
+        return res.status(404).send({ error: UNIT_NOT_FOUND_ERROR });
+      }
+
+      const { reviews } = unit as { reviews: any[] };
+      if (reviews.length === 0) {
+        return res.status(404).send({ error: REVIEW_NOT_FOUND_ERROR });
+      }
+
+      // eslint-disable-next-line no-underscore-dangle
+      const review = reviews.find((x) => x._id.equals(reviewId));
+
+      if (username !== review.author) {
+        return res.status(401).send({ error: NO_PERMISSION_ERROR });
+      }
+
+      try {
+        await deleteReview(unitId, reviewId);
+        return res.sendStatus(200);
+      } catch (error) {
+        return res.status(400).send({ error: UNABLE_TO_DELETE_REVIEW_ERROR });
+      }
+    } catch (error) {
+      return res.status(500).send({ error });
     }
   },
 );

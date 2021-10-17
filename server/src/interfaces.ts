@@ -52,6 +52,7 @@ export interface IUnit {
 
 export interface IUser {
   username: string;
+  admin: boolean;
   dateCreated: Date;
   passwordHash: string;
 }
