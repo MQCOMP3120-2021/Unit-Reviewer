@@ -54,7 +54,7 @@ const App = () => {
         <Route exact path="/login" render={() => <LoginForm getUser={getUser}/>}/>
         <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
         <Route exact path="/unit/:id" render={() => <UnitPage getUnits={getUnits} units={units} user={user}/>}/>
-        <Route exact path="/user/:author" render={() => <Profile units={units}/>}/>
+        <Route exact path="/user/:author" render={() => <Profile getUser={getUser} units={units} user={user}/>}/>
         <Route exact path="/" render={() => <HomePage units={units} />}/>
       </Container>
     </Router>

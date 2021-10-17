@@ -62,7 +62,7 @@ authRouter.get(
     }
 
     const user: IUser = req.user as IUser;
-    return res.status(200).json({ username: user.username });
+    return res.status(200).json({ username: user.username, admin: user.admin });
   },
 );
 

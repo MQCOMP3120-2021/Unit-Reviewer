@@ -19,7 +19,7 @@ const NavBar = ({user, setUser, units}) => {
           as={NavLink} exact to="/"
           name="home"
         />
-        {user && <Menu.Item
+        {user && user.data.admin && <Menu.Item
           as={NavLink} to="/addunit"
           name="add unit"
         />}
