@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom"
 import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader, Search } from 'semantic-ui-react'
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import unitsService from './services/units'
-import ReviewSearch from './ReviewSearch'
+import Error from './Error'
+import renderHTML from 'react-render-html';
 
 const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
 
@@ -80,10 +81,10 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
         console.log(u)
     }, [unit])
 
-    return (!unit ? (<h1>Error: Unit does not exist</h1>) : (
+    return (!unit ? (<Error/>) : (
         <>
             <Header as='h1' icon textAlign='center'>
-                <Icon name='chart bar' circular />
+                <Icon name='chart bar' circular inverted color={unit.level <= 1999 ? "blue" : (unit.level <= 2999 ? "green" : "red")}/>
                 <Header.Content>{unit.code}: {unit.title}</Header.Content>
             </Header>
             <Segment>
@@ -91,7 +92,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                     <Grid.Column>
                         <Header as='h4' icon>Description</Header>
                         <p>
-                            {unit.description}
+                            {renderHTML(unit.description)}
                         </p>
                     </Grid.Column>
                     <Grid.Column>
@@ -138,8 +139,6 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                         </List>
                     </Grid.Column>
                 </Grid>
-
-                <Divider vertical>Info</Divider>
             </Segment>
             <Segment>
                 <Accordion fluid styled>
@@ -185,7 +184,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                                 {unit.activities.scheduled.map(act => (
                                     <Table.Row key={act._id}>
                                         <Table.Cell>{act.name}</Table.Cell>
-                                        <Table.Cell>{act.description}</Table.Cell>
+                                        <Table.Cell>{renderHTML(act.description)}</Table.Cell>
                                         <Table.Cell>{act.offerings.map((a, idx) =>
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
@@ -234,8 +233,8 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                                     <Table.Row key={assess._id}>
                                         <Table.Cell>{assess.title}</Table.Cell>
                                         <Table.Cell>{assess.type}</Table.Cell>
-                                        <Table.Cell>{assess.hurdle ? <>Yes</> : <>No</>}</Table.Cell>
-                                        <Table.Cell>{assess.description}</Table.Cell>
+                                        <Table.Cell>{assess.hurdle ? <font color="red">Yes</font> : <>No</>}</Table.Cell>
+                                        <Table.Cell>{renderHTML(assess.description)}</Table.Cell>
                                         <Table.Cell>{assess.weighting}%</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
@@ -258,7 +257,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                                 {unit.outcomes.map((out, idx) => (
                                     <Table.Row key={idx}>
                                         <Table.Cell>ULO{idx + 1}</Table.Cell>
-                                        <Table.Cell>{out}</Table.Cell>
+                                        <Table.Cell>{renderHTML(out)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
                         </Table>
@@ -307,10 +306,10 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                 <Segment.Group>
                     {reviews.length > 0
                         ? reviews.map(rev => (<Segment key={rev._id}>
-                                    <Header as='h5'><Icon name='user' /><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
-                                    <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
-                                    <p>{rev.content}</p>
-                                    {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue)} icon='trash alternate' color='red'>
+                            <Header as='h5'><Image src={`https://robohash.org/${rev.author}`} centered circular size="small"/><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
+                            <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
+                            <p>{rev.content}</p>
+                            {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue)} icon='trash alternate' color='red'>
                                     </Button>}
                         </Segment>))
                         :
