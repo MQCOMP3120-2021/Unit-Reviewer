@@ -3,7 +3,7 @@ import { Button, Form, Grid, Header, Image, Message, Segment, Loader } from 'sem
 import authService from '../services/auth'
 import { Link, useHistory } from 'react-router-dom'
 
-const RegisterForm = ({setUser}) => {
+const RegisterForm = ({ getUser }) => {
 
   const history = useHistory()
 
@@ -52,7 +52,7 @@ const RegisterForm = ({setUser}) => {
     authService.register({username, password})
       .then(data => {
           console.log("Success: ",data)
-          setUser(data)
+          getUser()
           history.push("/")
         })
         .catch((error) => {

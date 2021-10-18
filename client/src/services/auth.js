@@ -18,4 +18,24 @@ const getUser = () => {
     .catch((e) => console.log(e));
 };
 
-export default {register, login, getUser} 
+const makeAdmin = (username) => {
+  console.log(username)
+  return axios
+    .post(baseURL + 'makeAdmin', {username})
+    .then(response => response)
+};
+
+const revokeAdmin = (username) => {
+  console.log(username)
+  return axios
+    .post(baseURL + 'revokeAdmin', {username})
+    .then(response => response)
+};
+
+const logout = () => {
+  return axios.post(baseURL+"logout")
+              .then(response => "done")
+              .catch((e) => console.log(e));
+}
+
+export default {register, login, getUser, logout, makeAdmin, revokeAdmin} 

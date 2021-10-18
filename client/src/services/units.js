@@ -11,10 +11,20 @@ const createUnit = (unit) => {
                 .then(response => response.data)
 }
 
+const deleteUnit = (unitId, user) => {
+    return axios.delete(baseURL+`${unitId}`, {user:user.data})
+    .then(response => response)
+}
+
 const submitReview = (review) => {
     return axios.post(baseURL+"review", review)
                 .then(response => response.data)
 }
 
+const deleteReview = (revId,unitId, username) => {
+    return axios.delete(baseURL+`review/${unitId}/${revId}`, {username})
+    .then(response => response)
+}
 
-export default {getAllUnits, createUnit, submitReview} 
+
+export default {getAllUnits, createUnit, deleteUnit, submitReview, deleteReview} 
