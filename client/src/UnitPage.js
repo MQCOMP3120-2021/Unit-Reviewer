@@ -184,7 +184,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                                 {unit.activities.scheduled.map(act => (
                                     <Table.Row key={act._id}>
                                         <Table.Cell>{act.name}</Table.Cell>
-                                        <Table.Cell>{act.description}</Table.Cell>
+                                        <Table.Cell>{renderHTML(act.description)}</Table.Cell>
                                         <Table.Cell>{act.offerings.map((a, idx) =>
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
@@ -234,7 +234,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                                         <Table.Cell>{assess.title}</Table.Cell>
                                         <Table.Cell>{assess.type}</Table.Cell>
                                         <Table.Cell>{assess.hurdle ? <font color="red">Yes</font> : <>No</>}</Table.Cell>
-                                        <Table.Cell>{assess.description}</Table.Cell>
+                                        <Table.Cell>{renderHTML(assess.description)}</Table.Cell>
                                         <Table.Cell>{assess.weighting}%</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
@@ -257,7 +257,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                                 {unit.outcomes.map((out, idx) => (
                                     <Table.Row key={idx}>
                                         <Table.Cell>ULO{idx + 1}</Table.Cell>
-                                        <Table.Cell>{out}</Table.Cell>
+                                        <Table.Cell>{renderHTML(out)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
                         </Table>
