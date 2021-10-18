@@ -84,7 +84,7 @@ const UnitPage = ({ getUnits, units, user }) => {
     return (!unit ? (<Error/>) : (
         <>
             <Header as='h1' icon textAlign='center'>
-                <Icon name='chart bar' circular inverted color={unit.level <= 1000 ? "blue" : (unit.level <= 2000 ? "green" : "red")}/>
+                <Icon name='chart bar' circular inverted color={unit.level <= 1999 ? "blue" : (unit.level <= 2999 ? "green" : "red")}/>
                 <Header.Content>{unit.code}: {unit.title}</Header.Content>
             </Header>
             <Segment>
