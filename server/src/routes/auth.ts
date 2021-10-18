@@ -175,7 +175,7 @@ authRouter.post(
   jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
   async (req, res) => {
     res.clearCookie(JWT_COOKIE_NAME);
-    return res.redirect('/')
+    return res.redirect('/');
   },
 );
 
