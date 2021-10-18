@@ -34,11 +34,57 @@ const App = () => {
     const getUser = () => {
       authService
         .getUser()
-        .then((data) => setUser(data))
+        .then((data) => {console.log(data);setUser(data)})
         .catch(() => {
           alert('There was an error!');
         });
     };
+
+    const reviewDelete = (revId, unitId, setServerIssue, setLoad) => {
+      setServerIssue("")
+      setLoad(true)
+      console.log(revId)
+      console.log(unitId)
+      if (!user) {
+          return setServerIssue("User not signed in")
+      }
+      unitsService.deleteReview(revId, unitId, user.data.username)
+      .then(data => {
+          console.log(data.status)
+          getUnits()
+          getUser()
+          setLoad(false)
+      })
+      .catch((error) => {
+          console.log(error.response.data.error)
+          setLoad(false)
+          setServerIssue("Error! " + error.response.data.error)
+      })
+    }
+
+    const unitDelete = (unitId, setServerIssue, setLoad) => {
+      setServerIssue("")
+      setLoad(true)
+      console.log(unitId)
+      if (!user) {
+          return setServerIssue("User not signed in")
+      }
+      if (user && !user.data.admin) {
+        return setServerIssue("User does not have permission to delete unit")
+      }
+      unitsService.deleteUnit(unitId, user)
+      .then(data => {
+          console.log(data.status)
+          getUnits()
+          getUser()
+          setLoad(false)
+      })
+      .catch((error) => {
+          console.log(error)
+          setLoad(false)
+          setServerIssue("Error! " + error)
+      })
+    }
 
     useEffect(async () => {
       getUnits()
@@ -51,10 +97,10 @@ const App = () => {
         <NavBar user={user} setUser={setUser} units={units}/>
         <Route exact path="/about" render={() => <About />}/>
         <Route exact path="/addunit" render={() => <AddUnit getUnits={getUnits} user={user} />}/>
-        <Route exact path="/login" render={() => <LoginForm setUser={setUser}/>}/>
-        <Route exact path="/register" render={() => <RegisterForm setUser={setUser} />}/>
-        <Route exact path="/unit/:id" render={() => <UnitPage getUnits={getUnits} units={units} user={user}/>}/>
-        <Route exact path="/user/:author" render={() => <Profile units={units}/>}/>
+        <Route exact path="/login" render={() => <LoginForm getUser={getUser}/>}/>
+        <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
+        <Route exact path="/unit/:id" render={() => <UnitPage unitDelete={unitDelete} reviewDelete={reviewDelete} getUnits={getUnits} units={units} user={user}/>}/>
+        <Route exact path="/user/:author" render={() => <Profile reviewDelete={reviewDelete} getUser={getUser} units={units} user={user}/>}/>
         <Route exact path="/" render={() => <HomePage units={units} />}/>
       </Container>
     </Router>

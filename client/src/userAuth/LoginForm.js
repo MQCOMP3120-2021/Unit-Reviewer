@@ -3,7 +3,7 @@ import { Button, Form, Grid, Header, Image, Message, Segment, Loader } from 'sem
 import authService from '../services/auth'
 import { Link, useHistory } from 'react-router-dom'
 
-  const LoginForm = ({ setUser }) => {
+  const LoginForm = ({ getUser }) => {
 
   const history = useHistory()
 
@@ -41,7 +41,7 @@ import { Link, useHistory } from 'react-router-dom'
     authService.login({username, password})
     .then(data => {
       console.log("Success: ",data)
-      setUser(data)
+      getUser()
       history.push("/")
     })
     .catch((error) => {

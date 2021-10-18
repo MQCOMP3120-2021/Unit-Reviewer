@@ -62,7 +62,7 @@ authRouter.get(
     }
 
     const user: IUser = req.user as IUser;
-    return res.status(200).json({ username: user.username });
+    return res.status(200).json({ username: user.username, admin: user.admin });
   },
 );
 
@@ -169,5 +169,14 @@ authRouter.post('/revokeAdmin', async (req, res) => {
 
   return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
 });
+
+authRouter.post(
+  '/logout',
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
+  async (req, res) => {
+    res.clearCookie(JWT_COOKIE_NAME);
+    return res.redirect('/');
+  },
+);
 
 export default authRouter;
