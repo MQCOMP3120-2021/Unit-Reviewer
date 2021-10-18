@@ -56,6 +56,7 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
 
     return (
         <>
+            <Dimmer active={load} inverted><Loader active={load} /></Dimmer>
             {serverIssue && <Message onDismiss={e => setServerIssue("")} negative>
                 <Message.Header>{serverIssue}</Message.Header>
             </Message>}
@@ -85,7 +86,7 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
                                 <p>{rev.content}</p>
                             </Grid.Column>
                             <Grid.Column width={4} verticalAlign='middle'>
-                                {user && rev.author === user.data.username && <Button fluid color='red' onClick={e => reviewDelete(rev._id, rev.unitId, setServerIssue)}>
+                                {user && rev.author === user.data.username && <Button fluid color='red' onClick={e => reviewDelete(rev._id, rev.unitId, setServerIssue, setLoad)}>
                                     <Icon name='trash alternate' /> Delete
                                 </Button>}
                             </Grid.Column>

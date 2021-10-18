@@ -40,8 +40,9 @@ const App = () => {
         });
     };
 
-    const reviewDelete = (revId, unitId, setServerIssue) => {
+    const reviewDelete = (revId, unitId, setServerIssue, setLoad) => {
       setServerIssue("")
+      setLoad(true)
       console.log(revId)
       console.log(unitId)
       if (!user) {
@@ -52,15 +53,18 @@ const App = () => {
           console.log(data.status)
           getUnits()
           getUser()
+          setLoad(false)
       })
       .catch((error) => {
           console.log(error.response.data.error)
+          setLoad(false)
           setServerIssue("Error! " + error.response.data.error)
       })
     }
 
-    const unitDelete = (unitId, setServerIssue) => {
+    const unitDelete = (unitId, setServerIssue, setLoad) => {
       setServerIssue("")
+      setLoad(true)
       console.log(unitId)
       if (!user) {
           return setServerIssue("User not signed in")
@@ -73,9 +77,11 @@ const App = () => {
           console.log(data.status)
           getUnits()
           getUser()
+          setLoad(false)
       })
       .catch((error) => {
           console.log(error)
+          setLoad(false)
           setServerIssue("Error! " + error)
       })
     }

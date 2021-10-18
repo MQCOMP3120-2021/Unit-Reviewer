@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader, Search } from 'semantic-ui-react'
+import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader, Search, Dimmer } from 'semantic-ui-react'
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import unitsService from './services/units'
 import Error from './Error'
@@ -83,6 +83,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
 
     return (!unit ? (<Error/>) : (
         <>
+            <Dimmer inverted active={load}><Loader active={load} /></Dimmer>
             <Header as='h1' icon textAlign='center'>
                 <Icon name='chart bar' circular inverted color={unit.level <= 1999 ? "blue" : (unit.level <= 2999 ? "green" : "red")}/>
                 <Header.Content>{unit.code}: {unit.title}</Header.Content>
@@ -280,7 +281,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                                         rows={5} fluid placeholder='Comment...'
                                         value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
                                     <Button onClick={addReview} color='green' size='small'>
-                                        Submit Review <Loader active={load} />
+                                        Submit Review
                                     </Button></>)}
                     </Form>
                     {serverIssue && <Message onDismiss={e => setServerIssue("")} size="large" negative>
@@ -309,7 +310,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                             <Header as='h5'><Image src={`https://robohash.org/${rev.author}`} centered circular size="small"/><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
                             <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
                             <p>{rev.content}</p>
-                            {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue)} icon='trash alternate' color='red'>
+                            {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue, setLoad)} icon='trash alternate' color='red'>
                                     </Button>}
                         </Segment>))
                         :
@@ -318,7 +319,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
 
                 </Segment.Group>
             </Segment.Group>
-            {user && user.data.admin && <Button fluid onClick={e => unitDelete(unit._id, setServerIssue)} color='red'>
+            {user && user.data.admin && <Button fluid onClick={e => unitDelete(unit._id, setServerIssue, setLoad)} color='red'>
             <Icon name='trash alternate'/> DELETE UNIT</Button>}
         </>
     ))
