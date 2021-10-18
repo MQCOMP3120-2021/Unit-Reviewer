@@ -19,8 +19,23 @@ const App = () => {
 
   const [units, setUnits] = useState([])
   const [user, setUser] = useState(null)
+  const [unitsLength, setUnitsLength] = useState(-1)
 
-    const getUnits = () => {
+    const getUnitNums = async () => {
+    unitsService.getNumUnits()
+    .then(data => {
+        setUnitsLength(data.data.numUnits)
+        getUnits(data.data.numUnits)
+      })
+      .catch(() => {
+          alert("There was an error!")
+          return
+        }
+      )
+    }
+
+    const getUnits = (c) => {
+        console.log(c)
         unitsService.getAllUnits()
         .then(data => {
             setUnits(data)
@@ -87,7 +102,7 @@ const App = () => {
     }
 
     useEffect(async () => {
-      getUnits()
+      getUnitNums()
       getUser()
     }, [])
 

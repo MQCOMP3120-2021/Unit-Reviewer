@@ -16,6 +16,11 @@ const deleteUnit = (unitId, user) => {
     .then(response => response)
 }
 
+const getNumUnits = () => {
+    return axios.get(baseURL+"numUnits")
+    .then(response => response)
+}
+
 const submitReview = (review) => {
     return axios.post(baseURL+"review", review)
                 .then(response => response.data)
@@ -27,4 +32,4 @@ const deleteReview = (revId,unitId, username) => {
 }
 
 
-export default {getAllUnits, createUnit, deleteUnit, submitReview, deleteReview} 
+export default {getAllUnits, createUnit, deleteUnit, getNumUnits, submitReview, deleteReview} 
