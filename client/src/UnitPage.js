@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader, Search } from 'semantic-ui-react'
-import { BrowserRouter as Router, NavLink, Link} from "react-router-dom";
+import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import unitsService from './services/units'
 import ReviewSearch from './ReviewSearch'
 
-const UnitPage = ({ getUnits, units, user }) => {
+const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
 
     const id = useParams().id
     const unit = units.find(u => u._id === id)
     const [activeIndex, setActiveIndex] = useState(-1)
-    const [newReview, setNewReview] = useState({ content: "", rating: 0})
+    const [newReview, setNewReview] = useState({ content: "", rating: 0 })
 
     const [errors, setErrors] = useState({
-        content: {error: false, message: ""},
-        rating: {error: false, message: ""},
+        content: { error: false, message: "" },
+        rating: { error: false, message: "" },
     })
     const [serverIssue, setServerIssue] = useState("")
     const [load, setLoad] = useState(false)
@@ -23,11 +23,11 @@ const UnitPage = ({ getUnits, units, user }) => {
 
     const searchReview = (qry) => {
         console.log(qry)
-        if(qry !== "") {
+        if (qry !== "") {
             const revSearch = unit.reviews.filter(rev =>
-               rev.author.toLowerCase().search(qry.toLowerCase()) !== -1
-            || rev.content.toLowerCase().search(qry.toLowerCase()) !== -1
-            || rev.rating.toString().toLowerCase().search(qry.toLowerCase()) !== -1)
+                rev.author.toLowerCase().search(qry.toLowerCase()) !== -1
+                || rev.content.toLowerCase().search(qry.toLowerCase()) !== -1
+                || rev.rating.toString().toLowerCase().search(qry.toLowerCase()) !== -1)
             console.log(revSearch)
             setReviews(revSearch)
         } else {
@@ -36,37 +36,37 @@ const UnitPage = ({ getUnits, units, user }) => {
     }
 
     const addReview = () => {
-        if(user) {
+        if (user) {
             let err = {
-                content: {error: false, message: ""},
-                rating: {error: false, message: ""},
+                content: { error: false, message: "" },
+                rating: { error: false, message: "" },
             }
             let issue = false
-            if(newReview.content === "") {
-                err.content = {error: true, message: "comment field for review is empty"}
+            if (newReview.content === "") {
+                err.content = { error: true, message: "comment field for review is empty" }
                 issue = true
             }
-            if(newReview.rating === 0) {
-                err.rating = {error: true, message: "please rate review using the stars"}
+            if (newReview.rating === 0) {
+                err.rating = { error: true, message: "please rate review using the stars" }
                 issue = true
             }
             setErrors(err)
-            if(issue) {
+            if (issue) {
                 return
             }
             setLoad(true)
             console.log(newReview)
-            unitsService.submitReview({...newReview, author: user.data.username, user: user, unitId: unit._id})
-            .then(data => {
-                console.log(data)
-                getUnits()
-                setLoad(false)
-                setNewReview({ content: "", rating: 0})
-              })
-              .catch((error) => {
-                setServerIssue("Error! " + error.response.data.error)
-                setLoad(false)
-              })
+            unitsService.submitReview({ ...newReview, author: user.data.username, user: user, unitId: unit._id })
+                .then(data => {
+                    console.log(data)
+                    getUnits()
+                    setLoad(false)
+                    setNewReview({ content: "", rating: 0 })
+                })
+                .catch((error) => {
+                    setServerIssue("Error! " + error.response.data.error)
+                    setLoad(false)
+                })
 
         } else {
             alert("ERROR: user not signed in.")
@@ -267,48 +267,51 @@ const UnitPage = ({ getUnits, units, user }) => {
             </Segment>
             <Segment.Group>
                 <Segment>
-                        {serverIssue && <Message size="mini" negative>
-                            <Message.Header>{serverIssue}</Message.Header>
-                        </Message>}
                     <Form size='large'>
-                        {!user ? <Header as='h2' textAlign="center">Login or create an account to add a review</Header> :  
-                        unit.reviews.find(rev => rev.author === user.data.username) ?
-                        (<Header as='h3'>You have submitted a review (see below)</Header>)
-                        : (<><Header as='h3'>Add Review</Header>
-                        <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e,data) => setNewReview({ ...newReview, rating: data.rating })} />
-                        {errors.rating.error && <Message size="mini" negative>
-                            <Message.Header>{errors.rating.message}</Message.Header>
-                        </Message>}
-                        </Form.Field>
-                        <Form.TextArea error={errors.content.error && errors.content.message}
-                        rows={5} fluid placeholder='Comment...'
-                            value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
-                        <Button onClick={addReview} color='green' size='small'>
-                            Submit Review <Loader active={load}/>
-                        </Button></>)}
+                        {!user ? <Header as='h2' textAlign="center">Login or create an account to add a review</Header> :
+                            unit.reviews.find(rev => rev.author === user.data.username) ?
+                                (<Header as='h3'>You have submitted a review (see below)</Header>)
+                                : (<><Header as='h3'>Add Review</Header>
+                                    <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e, data) => setNewReview({ ...newReview, rating: data.rating })} />
+                                        {errors.rating.error && <Message size="mini" negative>
+                                            <Message.Header>{errors.rating.message}</Message.Header>
+                                        </Message>}
+                                    </Form.Field>
+                                    <Form.TextArea error={errors.content.error && errors.content.message}
+                                        rows={5} fluid placeholder='Comment...'
+                                        value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
+                                    <Button onClick={addReview} color='green' size='small'>
+                                        Submit Review <Loader active={load} />
+                                    </Button></>)}
                     </Form>
+                    {serverIssue && <Message onDismiss={e => setServerIssue("")} size="large" negative>
+                        <Message.Header>{serverIssue}</Message.Header>
+                    </Message>}
                 </Segment>
                 <Segment>
-                <Grid columns={3} stackable>
-                    <Grid.Row verticalAlign="middle">
-                <Grid.Column><Header as='h3'>Reviews ({unit.reviews.length})</Header></Grid.Column>
-                <Grid.Column>
-                <Search
-                onSearchChange={(e, data) => searchReview(data.value)}
-                input={{ fluid: true }}
-                showNoResults={false}
-                fluid
-                />
-                </Grid.Column>
-                </Grid.Row>
-                </Grid>
+                    <Grid columns={3} stackable>
+                        <Grid.Row verticalAlign="middle">
+                            <Grid.Column><Header as='h3'>Reviews ({unit.reviews.length})</Header>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Search
+                                    onSearchChange={(e, data) => searchReview(data.value)}
+                                    input={{ fluid: true }}
+                                    showNoResults={false}
+                                    fluid
+                                />
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </Segment>
-                 <Segment.Group>
-                 {reviews.length > 0 
+                <Segment.Group>
+                    {reviews.length > 0
                         ? reviews.map(rev => (<Segment key={rev._id}>
-                            <Header as='h5'><Icon name='user' /><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
-                            <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
-                            <p>{rev.content}</p>
+                                    <Header as='h5'><Icon name='user' /><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
+                                    <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
+                                    <p>{rev.content}</p>
+                                    {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue)} icon='trash alternate' color='red'>
+                                    </Button>}
                         </Segment>))
                         :
                         <Header as="h1" align="center">No Reviews Found</Header>
@@ -316,6 +319,8 @@ const UnitPage = ({ getUnits, units, user }) => {
 
                 </Segment.Group>
             </Segment.Group>
+            {user && user.data.admin && <Button fluid onClick={e => unitDelete(unit._id, setServerIssue)} color='red'>
+            <Icon name='trash alternate'/> DELETE UNIT</Button>}
         </>
     ))
 }

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router-dom";
-import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer } from 'semantic-ui-react'
+import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message } from 'semantic-ui-react'
 import authService from './services/auth'
+import unitsService from './services/units'
 
-const Profile = ({ units, user, getUser }) => {
+const Profile = ({ reviewDelete, units, user, getUser }) => {
     const history = useHistory()
     const author = useParams().author
     const reviews = []
@@ -21,6 +22,7 @@ const Profile = ({ units, user, getUser }) => {
     }
     const [open, setOpen] = useState(false)
     const [load, setLoad] = useState(false)
+    const [serverIssue, setServerIssue] = useState("")
     const changeAdmin = () => {
         setLoad(true)
         let usrname = user.data.username
@@ -54,14 +56,17 @@ const Profile = ({ units, user, getUser }) => {
 
     return (
         <>
+            {serverIssue && <Message onDismiss={e => setServerIssue("")} negative>
+                <Message.Header>{serverIssue}</Message.Header>
+            </Message>}
             <Image src={`https://robohash.org/${author}`} centered circular size="small" />
             <Header size='huge' icon textAlign='center'>
 
                 <Header as="h2">{author.charAt(0).toUpperCase() + author.slice(1)}</Header>
                 <Label padded size="medium">{reviews.length} Reviews</Label>
                 <Grid.Row textAlign="center">
-                    {user && user.data.admin ? <Button size="small" onClick={e => setOpen(true)}>Revoke administrator privileges</Button> :
-                        <Button size="small" onClick={e => setOpen(true)}>Add administrator privileges</Button>}
+                    {user && user.data.username === author && (user.data.admin ? <Button size="small" onClick={e => setOpen(true)}>Revoke administrator privileges</Button> :
+                        <Button size="small" onClick={e => setOpen(true)}>Add administrator privileges</Button>)}
                 </Grid.Row>
 
             </Header>
@@ -73,9 +78,18 @@ const Profile = ({ units, user, getUser }) => {
                 </Segment>
                 <Segment.Group>
                     {reviews.map(rev => (<Segment key={rev._id}>
-                        <Header as='h5'><Link to={`/unit/${rev.unitId}`} as={NavLink}>{rev.unitName}</Link></Header>
-                        <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
-                        <p>{rev.content}</p>
+                        <Grid stackable container columns={2}>
+                            <Grid.Column width={12}>
+                                <Header as='h5'><Link to={`/unit/${rev.unitId}`} as={NavLink}>{rev.unitName}</Link></Header>
+                                <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
+                                <p>{rev.content}</p>
+                            </Grid.Column>
+                            <Grid.Column width={4} verticalAlign='middle'>
+                                {user && rev.author === user.data.username && <Button fluid color='red' onClick={e => reviewDelete(rev._id, rev.unitId, setServerIssue)}>
+                                    <Icon name='trash alternate' /> Delete
+                                </Button>}
+                            </Grid.Column>
+                        </Grid>
                     </Segment>))}
                 </Segment.Group>
             </Segment.Group> :

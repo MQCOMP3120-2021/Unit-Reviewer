@@ -228,9 +228,9 @@ const AddUnit = ({ getUnits, user }) => {
     console.log(newUnit)
     setOpen(true)
 
-    if (!user) {
+    if (!user || user && !user.data.admin) {
       let frm = formErrors
-      frm.push("user is not signed in")
+      frm.push("user is not signed in or does not have permission")
       setFormErrors(frm)
     }
     if (newUnit.code === "") {
