@@ -1,9 +1,14 @@
 import axios from 'axios'
 const baseURL = "/api/units/"
 
-const getAllUnits = () => {
-    return axios.get(baseURL)
+const getAllUnits = (start) => {
+    return axios.get(baseURL, { params: { start: start } })
                 .then(response => response.data)
+}
+
+const getUnit = (id) => {
+    return axios.get(baseURL+`${id}`)
+                .then(response => response)
 }
 
 const createUnit = (unit) => {
@@ -32,4 +37,4 @@ const deleteReview = (revId,unitId, username) => {
 }
 
 
-export default {getAllUnits, createUnit, deleteUnit, getNumUnits, submitReview, deleteReview} 
+export default {getAllUnits, getUnit, createUnit, deleteUnit, getNumUnits, submitReview, deleteReview} 

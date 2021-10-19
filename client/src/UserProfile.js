@@ -64,7 +64,7 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
             <Header size='huge' icon textAlign='center'>
 
                 <Header as="h2">{author.charAt(0).toUpperCase() + author.slice(1)}</Header>
-                <Label padded size="medium">{reviews.length} Reviews</Label>
+                {/*<Label padded size="medium">{reviews.length} Reviews</Label>*/}
                 <Grid.Row textAlign="center">
                     {user && user.data.username === author && (user.data.admin ? <Button size="small" onClick={e => setOpen(true)}>Revoke administrator privileges</Button> :
                         <Button size="small" onClick={e => setOpen(true)}>Add administrator privileges</Button>)}
@@ -72,7 +72,7 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
 
             </Header>
 
-            {count > 0 ? <Segment.Group>
+            {/*{count > 0 ? <Segment.Group>
                 <Segment>
                     <Grid columns={3} stackable>
                     </Grid>
@@ -95,7 +95,7 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
                 </Segment.Group>
             </Segment.Group> :
                 <Segment><Header as='h3' icon textAlign='center'>User's reviews will show up here once at least one is submitted</Header></Segment>
-            }
+            }*/}
             <Modal
 
                 onClose={() => setOpen(false)}
