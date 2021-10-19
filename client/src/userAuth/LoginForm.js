@@ -60,6 +60,7 @@ import { Link, useHistory } from 'react-router-dom'
         <Form size='large'>
           <Segment stacked>
             <Form.Input 
+              data-testid="usernameLog"
               fluid 
               icon='user' 
               iconPosition='left' 
@@ -69,6 +70,7 @@ import { Link, useHistory } from 'react-router-dom'
               error={errors.username.error && errors.username.message}
               />
             <Form.Input
+              data-testid="passwordLog"
               fluid
               icon='lock'
               iconPosition='left'
@@ -79,7 +81,7 @@ import { Link, useHistory } from 'react-router-dom'
               error={errors.password.error && errors.password.message}
             />
 
-            <Button color='teal' fluid size='large' onClick={login}>
+            <Button data-testid="buttonSubmitLog" color='teal' fluid size='large' onClick={login}>
               Login <Loader active={load}/>
             </Button>
           </Segment>

@@ -63,4 +63,22 @@ describe("Register errors", () => {
         expect(component.container).toHaveTextContent("password fields do not match")
         
     })
+
+    test('form username empty submit', () => {
+        const setUser = jest.fn(() => done())
+
+        const component = render(
+            <Router>
+                <RegisterForm setUser={setUser} />
+            </Router>
+        )
+
+        const username = component.getByTestId('username').querySelector('input')
+        fireEvent.change(username, { target: { value: 'hi' } })
+        
+        const submitButton = component.getByTestId("buttonSubmit")
+        fireEvent.click(submitButton)
+        expect(component.container).toHaveTextContent("password field is empty")
+        
+    })
 })
