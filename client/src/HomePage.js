@@ -27,9 +27,7 @@ const HomePage = ({ units, unitsLength, getUnits, activePage, setActivePage }) =
             <Grid.Row>
                 <Pagination
                     onPageChange={(e, { activePage }) => setActivePage(activePage)}
-                    boundaryRange={1}
                     size='mini'
-                    siblingRange={1}
                     activePage={activePage}
                     totalPages={Math.ceil(unitsLength / 10)} />
             </Grid.Row>
