@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, Image, Card, Icon, Rating, Pagination } from 'semantic-ui-react'
 
-const HomePage = ({ units, unitsLength, getUnits, activePage, setActivePage }) => {
+const HomePage = ({ units, unitsLength, getUnits }) => {
+    const [activePage, setActivePage] = useState(1)
     console.log(Math.ceil(unitsLength / 10))
 
     useEffect(() => {
@@ -12,7 +13,10 @@ const HomePage = ({ units, unitsLength, getUnits, activePage, setActivePage }) =
     return (<>
         <Grid padded centered>
             <Grid.Row>
-                {units.map(item => (
+                {units.filter((u, idx) => activePage*10 > units.length ?
+                idx >= Math.floor(units.length/10)*10 && idx < units.length
+                : 
+                idx >= (activePage-1)*10 && idx < activePage*10).map(item => (
                     <Link key={item._id} to={`unit/${item._id}`}><Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10 }}>
                         <Card.Content header={item.code} />
                         <Card.Content description={item.title} />

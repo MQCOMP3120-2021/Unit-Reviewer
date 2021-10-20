@@ -20,7 +20,7 @@ const App = () => {
   const [units, setUnits] = useState([])
   const [user, setUser] = useState(null)
   const [unitsLength, setUnitsLength] = useState(-1)
-  const [activePage, setActivePage] = useState(1)
+  const [loaded, setLoaded] = useState([])
 
     const getUnitNums = () => {
     unitsService.getNumUnits()
@@ -36,19 +36,24 @@ const App = () => {
 
     const getUnits = async (count) => {
         if(!count) count = 0
-        if(count != 0) count = (count-1)*10
-        console.log("start Count:", count)
-        unitsService.getAllUnits(count)
-        .then(data => {
-            data.map(d => units.push(d))
-            setUnits(data)
-            return data.length
-          })
-          .catch(() => {
-              alert("There was an error!")
-              return
-            }
-          )
+        if(count != 0) count = count - 1 
+        
+        for(let i = 1; i < 4; i++) {
+          console.log("start Count:", count+i)
+          if(loaded.includes(count+i) || (unitsLength !== -1 && Math.ceil(unitsLength/10) < count+i)) continue
+          unitsService.getAllUnits((count+i-1)*10)
+          .then(data => {
+              data.map((u,idx) => units.splice((count+i-1)*10+idx,0,u))
+              loaded.push(count+i)
+              console.log("loaded pages is: ", loaded)
+              console.log(units)
+            })
+            .catch(() => {
+                alert("There was an error!")
+                return
+              }
+            )
+        }
     }
 
     const getUser = () => {
@@ -85,11 +90,9 @@ const App = () => {
     }
 
     useEffect(() => {
-      getUnitNums()
       getUser()
+      getUnitNums()
     }, [])
-
-    console.log(units)
 
   return (
     <Router>
@@ -101,7 +104,7 @@ const App = () => {
         <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
         <Route exact path="/unit/:id" render={() => <UnitPage reviewDelete={reviewDelete} user={user}/>}/>
         <Route exact path="/user/:author" render={() => <Profile reviewDelete={reviewDelete} getUser={getUser} units={units} user={user}/>}/>
-        <Route exact path="/" render={() => <HomePage units={units} activePage={activePage} setActivePage={setActivePage} getUnits={getUnits} unitsLength={unitsLength} />}/>
+        <Route exact path="/" render={() => <HomePage units={units} getUnits={getUnits} unitsLength={unitsLength} />}/>
       </Container>
     </Router>
   );
