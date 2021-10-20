@@ -13,7 +13,7 @@ const getUnit = (id) => {
 
 const createUnit = (unit) => {
     return axios.post(baseURL, unit)
-                .then(response => response.data)
+                .then(response => response)
 }
 
 const deleteUnit = (unitId, user) => {

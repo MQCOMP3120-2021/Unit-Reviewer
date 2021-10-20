@@ -100,7 +100,7 @@ const App = () => {
       <Container>
         <NavBar user={user} setUser={setUser} units={units}/>
         <Route exact path="/about" render={() => <About />}/>
-        <Route exact path="/addunit" render={() => <AddUnit getUnits={getUnits} user={user} />}/>
+        <Route exact path="/addunit" render={() => <AddUnit user={user} />}/>
         <Route exact path="/login" render={() => <LoginForm getUser={getUser}/>}/>
         <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
         <Route exact path="/unit/:id" render={() => <UnitPage reviewDelete={reviewDelete} user={user}/>}/>
