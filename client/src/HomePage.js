@@ -2,21 +2,37 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, Image, Card, Icon, Rating, Pagination } from 'semantic-ui-react'
 
-const HomePage = ({ units, unitsLength, getUnits }) => {
+const HomePage = ({ units,unitsLength, getUnits }) => {
     const [activePage, setActivePage] = useState(1)
+    const [homeUnits, setHomeUnits] = useState([])
+    const [loaded, setLoaded] = useState([])
     console.log(Math.ceil(unitsLength / 10))
 
+    const getHomeUnits = async () => {
+        console.log("hi")
+        console.log("active Page: ",activePage)
+        let info = await getUnits(activePage)
+        const allUnits = info[0]
+        let pages = info[1]
+        console.log("loaded: ",pages)
+        console.log("allUnits: ",allUnits)
+        console.log("allUnits last: ",allUnits[allUnits.length-1])
+        setLoaded(pages)
+        setHomeUnits(allUnits)
+    }
+
     useEffect(() => {
-        getUnits(activePage)
+        setHomeUnits([])
+        getHomeUnits()
     }, [activePage])
 
     return (<>
         <Grid padded centered>
             <Grid.Row>
-                {units.filter((u, idx) => activePage*10 > units.length ?
-                idx >= Math.floor(units.length/10)*10 && idx < units.length
-                : 
-                idx >= (activePage-1)*10 && idx < activePage*10).map(item => (
+                {homeUnits.filter(function(elem,idx) {
+                    const c = loaded.indexOf(activePage)*10
+                    return idx >= c && idx < c+10
+                }).map(item => (
                     <Link key={item._id} to={`unit/${item._id}`}><Card style={{ marginBottom: 10, marginTop: 10, marginRight: 10 }}>
                         <Card.Content header={item.code} />
                         <Card.Content description={item.title} />

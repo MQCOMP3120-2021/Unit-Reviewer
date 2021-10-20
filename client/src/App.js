@@ -41,12 +41,12 @@ const App = () => {
         for(let i = 1; i < 4; i++) {
           console.log("start Count:", count+i)
           if(loaded.includes(count+i) || (unitsLength !== -1 && Math.ceil(unitsLength/10) < count+i)) continue
-          unitsService.getAllUnits((count+i-1)*10)
+          await unitsService.getAllUnits((count+i-1)*10)
           .then(data => {
               data.map((u,idx) => units.splice((count+i-1)*10+idx,0,u))
               loaded.push(count+i)
-              console.log("loaded pages is: ", loaded)
-              console.log(units)
+              loaded.sort()
+              //console.log(units)
             })
             .catch(() => {
                 alert("There was an error!")
@@ -54,6 +54,7 @@ const App = () => {
               }
             )
         }
+        return [units,loaded]
     }
 
     const getUser = () => {
