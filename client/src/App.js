@@ -34,7 +34,12 @@ const App = () => {
       )
     }
 
-    const getUnits = async (count) => {
+    const getUnits = async (count, clearData) => {
+        if(clearData) {
+          setLoaded([])
+          setUnits([])
+          await getUnitNums([])
+        }
         if(!count) count = 0
         if(count != 0) count = count - 1 
         
@@ -46,7 +51,9 @@ const App = () => {
               data.map((u,idx) => units.splice((count+i-1)*10+idx,0,u))
               loaded.push(count+i)
               loaded.sort()
-              //console.log(units)
+              setLoaded(loaded)
+              setUnits(units)
+              console.log(units)
             })
             .catch(() => {
                 alert("There was an error!")
@@ -92,7 +99,7 @@ const App = () => {
 
     useEffect(() => {
       getUser()
-      getUnitNums()
+      //getUnitNums()
     }, [])
 
   return (

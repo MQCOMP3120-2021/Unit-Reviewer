@@ -11,12 +11,19 @@ const HomePage = ({ units,unitsLength, getUnits }) => {
     const getHomeUnits = async () => {
         console.log("hi")
         console.log("active Page: ",activePage)
-        let info = await getUnits(activePage)
+        let info = []
+        if(loaded.length < 1) {
+            console.log("new load")
+            info = await getUnits(activePage, true)
+        } else {
+            info = await getUnits(activePage)
+        }
+        //console.log("info: ",info)
         const allUnits = info[0]
         let pages = info[1]
         console.log("loaded: ",pages)
         console.log("allUnits: ",allUnits)
-        console.log("allUnits last: ",allUnits[allUnits.length-1])
+        //console.log("allUnits last: ",allUnits[allUnits.length-1])
         setLoaded(pages)
         setHomeUnits(allUnits)
     }
