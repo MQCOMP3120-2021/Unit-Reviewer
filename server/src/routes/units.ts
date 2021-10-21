@@ -226,7 +226,7 @@ unitsRouter.post(
 
 /**
  * DELETE /api/units/{unitId}
- * @summary Adds the given unit to the database
+ * @summary Deletes the given unit to the database
  * @param {string} unitId.path.required - Unit ID
  * @return {object} 200 - Success response
  */
