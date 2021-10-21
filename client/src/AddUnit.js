@@ -4,7 +4,7 @@ import logo from './img/logo.png'
 import unitsService from '../src/services/units'
 import { useHistory } from "react-router-dom";
 
-const AddUnit = ({ getUnits, user }) => {
+const AddUnit = ({ user }) => {
 
   const history = useHistory()
 
@@ -312,9 +312,8 @@ const AddUnit = ({ getUnits, user }) => {
     let send = { ...newUnit, user: user }
     unitsService.createUnit(send)
       .then(data => {
-        getUnits()
         console.log(data)
-        history.push("/")
+        history.push(`/unit/${data.data._id}`)
       })
       .catch((error) => {
         console.log("Error! " + error)
