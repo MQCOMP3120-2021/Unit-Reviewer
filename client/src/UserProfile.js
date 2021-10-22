@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router-dom";
 import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message } from 'semantic-ui-react'
@@ -8,18 +8,7 @@ import unitsService from './services/units'
 const Profile = ({ reviewDelete, units, user, getUser }) => {
     const history = useHistory()
     const author = useParams().author
-    const reviews = []
-    let count = 0
-    for (let i = 0; i < units.length; i++) {
-        for (let j = 0; j < units[i].reviews.length; j++) {
-            if (units[i].reviews[j].author === author) {
-                reviews.push(units[i].reviews[j])
-                reviews[reviews.length - 1].unitName = units[i].title
-                reviews[reviews.length - 1].unitId = units[i]._id
-                count++
-            }
-        }
-    }
+
     const [open, setOpen] = useState(false)
     const [load, setLoad] = useState(false)
     const [serverIssue, setServerIssue] = useState("")
@@ -54,6 +43,8 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
         }
     }
 
+    console.log("user info: ", user)
+
     return (
         <>
             <Dimmer active={load} inverted><Loader active={load} /></Dimmer>
@@ -72,16 +63,16 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
 
             </Header>
 
-            {/*{count > 0 ? <Segment.Group>
+            {user && user.data.reviews && user.data.reviews.length > 0 ? <Segment.Group>
                 <Segment>
                     <Grid columns={3} stackable>
                     </Grid>
                 </Segment>
                 <Segment.Group>
-                    {reviews.map(rev => (<Segment key={rev._id}>
+                    {user.data.reviews.map(rev => (<Segment key={rev._id}>
                         <Grid stackable container columns={2}>
                             <Grid.Column width={12}>
-                                <Header as='h5'><Link to={`/unit/${rev.unitId}`} as={NavLink}>{rev.unitName}</Link></Header>
+                                <Header as='h5'><Link to={`/unit/${rev.unitId}`} as={NavLink}>Unit <Icon name='arrow circle right'></Icon></Link></Header>
                                 <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
                                 <p>{rev.content}</p>
                             </Grid.Column>
@@ -94,8 +85,9 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
                     </Segment>))}
                 </Segment.Group>
             </Segment.Group> :
-                <Segment><Header as='h3' icon textAlign='center'>User's reviews will show up here once at least one is submitted</Header></Segment>
-            }*/}
+                <Segment>{user && user.data.username === author ? <Header as='h3' icon textAlign='center'>User's reviews will show up here once at least one is submitted</Header>
+            : <Header as='h3' icon textAlign='center'>You do not have permission to see other reviews from user</Header>}</Segment>
+            }
             <Modal
 
                 onClose={() => setOpen(false)}

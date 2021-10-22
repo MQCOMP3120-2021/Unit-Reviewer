@@ -31,8 +31,8 @@ const submitReview = (review) => {
                 .then(response => response.data)
 }
 
-const deleteReview = (revId,unitId, username) => {
-    return axios.delete(baseURL+`review/${unitId}/${revId}`, {username})
+const deleteReview = (revId,unitId, user) => {
+    return axios.delete(baseURL+`review/${unitId}/${revId}`, user)
     .then(response => response)
 }
 
