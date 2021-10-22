@@ -65,7 +65,7 @@ authRouter.get(
     return res.status(200).json({
       username: user.username,
       admin: user.admin,
-      reviews: user.reviews
+      reviews: user.reviews,
     });
   },
 );

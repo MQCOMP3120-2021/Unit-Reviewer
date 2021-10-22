@@ -293,9 +293,10 @@ unitsRouter.delete(
         unitId,
       });
       const hasReviews = await checkReviews(user.username);
-      const token = sign({ username: user.username,
+      const token = sign({
+        username: user.username,
         admin: user.admin,
-        reviews: hasReviews
+        reviews: hasReviews,
       }, JWT_SECRET, {
         expiresIn: '1h',
         algorithm: 'HS512',
@@ -324,11 +325,10 @@ unitsRouter.delete(
 
     const { unitId, reviewId } = req.params;
 
-    const initUser = req.body; //as IUser;
-    //const { username } = user;
+    const initUser = req.body; // as IUser;
+    // const { username } = user;
 
     try {
-      
       const unit = await getUnit(unitId);
 
       if (unit === null) {
@@ -338,7 +338,7 @@ unitsRouter.delete(
       const user = await User.findOne({
         username: initUser.username,
         admin: initUser.admin,
-        reviews: initUser.reviews
+        reviews: initUser.reviews,
       });
 
       if (user === null) {
@@ -354,11 +354,13 @@ unitsRouter.delete(
       // finding review in user's record
       const reviewUser = user.reviews.find((x : any) => x.unitId === unitId);
 
-      // finding review in unit's record. As the provided reviewId in the route may be the reviewId
-      // of the review in the user's record, we then check according to the information provided in reviewUser
+      // finding review in unit's record. As the provided reviewId 
+      // in the route may be the reviewId
+      // of the review in the user's record, we then check according 
+      // to the information provided in reviewUser
       // eslint-disable-next-line no-underscore-dangle
-      const reviewUnit = reviews.find((x) => x._id.equals(reviewId)) ? reviews.find((x) => x._id.equals(reviewId)) :
-      reviewUser ? reviews.find((x) => x.unitId === reviewUser.unitId && x.author === reviewUser.author 
+      const reviewUnit = reviews.find((x) => x._id.equals(reviewId)) ? reviews.find((x) => x._id.equals(reviewId))
+      : reviewUser ? reviews.find((x) => x.unitId === reviewUser.unitId && x.author === reviewUser.author 
       && x.content === reviewUser.content && x.rating === reviewUser.rating)
       : null;
 
@@ -375,7 +377,7 @@ unitsRouter.delete(
         const token = sign({
           username: user.username,
           admin: user.admin,
-          reviews: hasReviews
+          reviews: hasReviews,
         }, JWT_SECRET, {
           expiresIn: '1h',
           algorithm: 'HS512',
