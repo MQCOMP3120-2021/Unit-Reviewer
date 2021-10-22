@@ -62,7 +62,11 @@ authRouter.get(
     }
 
     const user: IUser = req.user as IUser;
-    return res.status(200).json({ username: user.username, admin: user.admin, reviews: user.reviews });
+    return res.status(200).json({ 
+      username: user.username, 
+      admin: user.admin, 
+      reviews: user.reviews 
+    });
   },
 );
 
@@ -138,7 +142,7 @@ authRouter.post('/makeAdmin', async (req, res) => {
   }
 
   await setAdmin(username, true);
-  const hasReviews = await checkReviews(username)
+  const hasReviews = await checkReviews(username);
 
   const token = sign({ username, admin: true, reviews: hasReviews }, JWT_SECRET, {
     expiresIn: '1h',
@@ -163,7 +167,7 @@ authRouter.post('/revokeAdmin', async (req, res) => {
   }
 
   await setAdmin(username, false);
-  const hasReviews = await checkReviews(username)
+  const hasReviews = await checkReviews(username);
 
   const token = sign({ username, admin: false, reviews: hasReviews }, JWT_SECRET, {
     expiresIn: '1h',

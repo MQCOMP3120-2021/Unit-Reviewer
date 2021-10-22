@@ -2,8 +2,8 @@ import bcrypt from 'bcrypt';
 import mongoose, { Schema } from 'mongoose';
 
 import { SALT_ROUNDS } from '../config';
-import { IReview, IUnit, IUser } from '../interfaces';
-import ReviewSchema from './Review'
+import { IReview, IUser } from '../interfaces';
+import ReviewSchema from './Review';
 
 const UserSchema = new Schema<IUser>({
   username: String, // User's username

@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import jwt from 'express-jwt';
+import { sign } from 'jsonwebtoken';
 
 import { JWT_SECRET, JWT_COOKIE_NAME } from '../config';
-import { sign } from 'jsonwebtoken';
-import { IReview, ITokenUser, IUnit, IUser } from '../interfaces';
+import { IReview, IUnit } from '../interfaces';
 import Unit, {
   addReview, addUnit, deleteReview, deleteUnit, getUnit,
 } from '../models/Unit';
@@ -273,15 +273,9 @@ unitsRouter.delete(
     if (!user) {
       return res.status(404).send({ error: 'user not found' });
     }
-    const userId = user._id
-    console.log("user Id: ", userId)
-    console.log("username is: ", {
-      content,
-      rating,
-      author,
-      dateCreated,
-      unitId
-    })
+
+    // eslint-disable-next-line no-underscore-dangle
+    const userId = user._id;
 
     try {
       await addReview(unitId, {
@@ -289,14 +283,14 @@ unitsRouter.delete(
         rating,
         author,
         dateCreated,
-        unitId
+        unitId,
       });
       await addUserReview(userId, {
         content,
         rating,
         author: user.username,
         dateCreated,
-        unitId
+        unitId,
       })
       const hasReviews = await checkReviews(user.username)
       const token = sign({ username: user.username, admin: user.admin, reviews: hasReviews }, JWT_SECRET, {
@@ -345,23 +339,20 @@ unitsRouter.delete(
       }
 
       const { reviews } = unit as { reviews: any[] };
-      console.log(reviews)
+
       if (reviews.length === 0) {
         return res.status(404).send({ error: REVIEW_NOT_FOUND_ERROR });
       }
       
-      //finding review in user's record
-      const reviewUser = user.reviews.find((x : any) => x.unitId === unitId)
-      console.log("reviewUser: ", reviewUser)
+      // finding review in user's record
+      const reviewUser = user.reviews.find((x : any) => x.unitId === unitId);
 
-      //finding review in unit's record. As the provided reviewId in the route may be the reviewId
-      //of the review in the user's record, we then check according to the information provided in reviewUser
+      // finding review in unit's record. As the provided reviewId in the route may be the reviewId
+      // of the review in the user's record, we then check according to the information provided in reviewUser
       const reviewUnit = reviews.find((x) => x._id.equals(reviewId)) ? reviews.find((x) => x._id.equals(reviewId)) :
       reviewUser ? reviews.find((x) => x.unitId === reviewUser.unitId && x.author === reviewUser.author 
       && x.content === reviewUser.content && x.rating === reviewUser.rating)
       : null;
-      
-      console.log("reviewUnit: ", reviewUnit)
 
       if (user.username !== reviewUser.author) {
         return res.status(401).send({ error: NO_PERMISSION_ERROR });
@@ -369,8 +360,8 @@ unitsRouter.delete(
 
       try {
         await deleteReview(reviewUnit.unitId, reviewUnit._id);
-        await deleteUserReview(user._id, reviewUser._id)
-        const hasReviews = await checkReviews(user.username)
+        await deleteUserReview(user._id, reviewUser._id);
+        const hasReviews = await checkReviews(user.username);
         const token = sign({ username: user.username, admin: user.admin, reviews: hasReviews }, JWT_SECRET, {
           expiresIn: '1h',
           algorithm: 'HS512',
