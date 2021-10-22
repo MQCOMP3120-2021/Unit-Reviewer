@@ -2,12 +2,12 @@ import express, { Request, Response } from 'express';
 import jwt from 'express-jwt';
 import { sign } from 'jsonwebtoken';
 
-import { JWT_SECRET, JWT_COOKIE_NAME } from '../config';
+import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
 import { IReview, IUnit } from '../interfaces';
 import Unit, {
   addReview, addUnit, deleteReview, deleteUnit, getUnit,
 } from '../models/Unit';
-import User, { addUserReview, deleteUserReview, checkReviews } from '../models/User';
+import User, { addUserReview, checkReviews, deleteUserReview } from '../models/User';
 import { getToken } from './auth';
 
 const unitsRouter = express.Router();
@@ -257,7 +257,7 @@ unitsRouter.delete(
  * @param {Review} request.body.required - Review info
  * @return {Unit} 200 - The saved unit
  */
- unitsRouter.post(
+unitsRouter.post(
   '/review',
   jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
   async (req: Request, res: Response) => {
@@ -350,19 +350,28 @@ unitsRouter.delete(
       if (reviews.length === 0) {
         return res.status(404).send({ error: REVIEW_NOT_FOUND_ERROR });
       }
-      
+
       // finding review in user's record
       const reviewUser = user.reviews.find((x : any) => x.unitId === unitId);
 
-      // finding review in unit's record. As the provided reviewId 
+      // finding review in unit's record. As the provided reviewId
       // in the route may be the reviewId
-      // of the review in the user's record, we then check according 
+      // of the review in the user's record, we then check according
       // to the information provided in reviewUser
+      let reviewUnit;
+
       // eslint-disable-next-line no-underscore-dangle
-      const reviewUnit = reviews.find((x) => x._id.equals(reviewId)) ? reviews.find((x) => x._id.equals(reviewId))
-      : reviewUser ? reviews.find((x) => x.unitId === reviewUser.unitId && x.author === reviewUser.author 
-      && x.content === reviewUser.content && x.rating === reviewUser.rating)
-      : null;
+      if (reviews.find((x) => x._id.equals(reviewId))) {
+        // eslint-disable-next-line no-underscore-dangle
+        reviewUnit = reviews.find((x) => x._id.equals(reviewId));
+      } else if (reviewUser) {
+        reviewUnit = reviews.find((x) => x.unitId === reviewUser.unitId
+        && x.author === reviewUser.author
+        && x.content === reviewUser.content
+        && x.rating === reviewUser.rating);
+      } else {
+        reviewUnit = null;
+      }
 
       if (user.username !== reviewUser.author) {
         return res.status(401).send({ error: NO_PERMISSION_ERROR });
