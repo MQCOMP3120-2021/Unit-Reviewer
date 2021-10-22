@@ -350,9 +350,12 @@ unitsRouter.delete(
         return res.status(404).send({ error: REVIEW_NOT_FOUND_ERROR });
       }
       
+      //finding review in user's record
       const reviewUser = user.reviews.find((x : any) => x.unitId === unitId)
       console.log("reviewUser: ", reviewUser)
 
+      //finding review in unit's record. As the provided reviewId in the route may be the reviewId
+      //of the review in the user's record, we then check according to the information provided in reviewUser
       const reviewUnit = reviews.find((x) => x._id.equals(reviewId)) ? reviews.find((x) => x._id.equals(reviewId)) :
       reviewUser ? reviews.find((x) => x.unitId === reviewUser.unitId && x.author === reviewUser.author 
       && x.content === reviewUser.content && x.rating === reviewUser.rating)
