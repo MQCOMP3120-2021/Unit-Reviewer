@@ -6,7 +6,7 @@ import unitsService from './services/units'
 import Error from './Error'
 import renderHTML from 'react-render-html';
 
-const UnitPage = ({ reviewDelete, user }) => {
+const UnitPage = ({ getUser, reviewDelete, user }) => {
 
     const id = useParams().id
     const [unit, setUnit] = useState(null)
@@ -27,11 +27,12 @@ const UnitPage = ({ reviewDelete, user }) => {
         .then(data => {
             console.log(data)
             setUnit(data.data)
+            console.log("reviews: ", data.data.reviews)
             setReviews(data.data.reviews)
             setLoad(false)
           })
           .catch((error) => {
-            setServerIssue("Error! " + error.response.data.error)
+            setServerIssue("Error! " + error)
             setLoad(false)
             }
           )
@@ -98,6 +99,7 @@ const UnitPage = ({ reviewDelete, user }) => {
             unitsService.submitReview({ ...newReview, author: user.data.username, user: user, unitId: unit._id })
                 .then(data => {
                     console.log(data)
+                    getUser()
                     retrieveUnit()
                     setNewReview({ content: "", rating: 0 })
                 })

@@ -36,10 +36,12 @@ const App = () => {
 
     const getUnits = async (count, clearData) => {
         if(clearData) {
+          console.log("it is working!")
           setLoaded([])
           setUnits([])
           await getUnitNums([])
         }
+        console.log("actual loaded: ", loaded)
         if(!count) count = 0
         if(count != 0) count = count - 1 
         
@@ -81,11 +83,13 @@ const App = () => {
       if (!user) {
           return setServerIssue("User not signed in")
       }
-      unitsService.deleteReview(revId, unitId, user.data.username)
+      unitsService.deleteReview(revId, unitId, user)
       .then(data => {
           console.log(data.status)
           if (window.location.pathname !== `/user/${user.data.username}`) {
             retrieveUnit()
+            getUser()
+          } else {
             getUser()
           }
           setLoad(false)
@@ -110,7 +114,7 @@ const App = () => {
         <Route exact path="/addunit" render={() => <AddUnit user={user} />}/>
         <Route exact path="/login" render={() => <LoginForm getUser={getUser}/>}/>
         <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
-        <Route exact path="/unit/:id" render={() => <UnitPage reviewDelete={reviewDelete} user={user}/>}/>
+        <Route exact path="/unit/:id" render={() => <UnitPage getUser={getUser} reviewDelete={reviewDelete} user={user}/>}/>
         <Route exact path="/user/:author" render={() => <Profile reviewDelete={reviewDelete} getUser={getUser} units={units} user={user}/>}/>
         <Route exact path="/" render={() => <HomePage units={units} getUnits={getUnits} unitsLength={unitsLength} />}/>
       </Container>
