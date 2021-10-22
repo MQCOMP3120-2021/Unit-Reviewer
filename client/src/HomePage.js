@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, Image, Card, Icon, Rating, Pagination } from 'semantic-ui-react'
+import Loading from './Loading'
 
 const HomePage = ({ units,unitsLength, getUnits }) => {
     const [activePage, setActivePage] = useState(1)
     const [homeUnits, setHomeUnits] = useState([])
     const [loaded, setLoaded] = useState([])
+    const [loading, setLoading] = useState()
     console.log(Math.ceil(unitsLength / 10))
 
     const getHomeUnits = async () => {
@@ -14,8 +16,10 @@ const HomePage = ({ units,unitsLength, getUnits }) => {
         let info = []
         if(loaded.length < 1) {
             console.log("new load")
+            setLoading(true)
             info = await getUnits(activePage, true)
         } else {
+            setLoading(true)
             info = await getUnits(activePage)
         }
         //console.log("info: ",info)
@@ -26,6 +30,7 @@ const HomePage = ({ units,unitsLength, getUnits }) => {
         //console.log("allUnits last: ",allUnits[allUnits.length-1])
         setLoaded(pages)
         setHomeUnits(allUnits)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -36,7 +41,12 @@ const HomePage = ({ units,unitsLength, getUnits }) => {
     return (<>
         <Grid padded centered>
             <Grid.Row>
-                {homeUnits.filter(function(elem,idx) {
+                {loading ? (
+                    <>
+                        {[...Array(10).keys()].map(item => (<div><Loading/></div>))}
+                    </>
+                    ) : (
+                homeUnits.filter(function(elem,idx) {
                     const c = loaded.indexOf(activePage)*10
                     return idx >= c && idx < c+10
                 }).map(item => (
@@ -49,7 +59,7 @@ const HomePage = ({ units,unitsLength, getUnits }) => {
                                 disabled maxRating={5} /> ({item.reviews.length} Ratings)
                         </Card.Content>
                     </Card></Link>
-                ))}
+                )))}
             </Grid.Row>
             <Grid.Row>
                 <Pagination
