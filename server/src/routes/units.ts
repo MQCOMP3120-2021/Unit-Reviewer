@@ -5,7 +5,7 @@ import { sign } from 'jsonwebtoken';
 import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
 import { IReview, IUnit } from '../interfaces';
 import Unit, {
-  addReview, addUnit, deleteReview, deleteUnit, getUnit,
+  addReview, addUnit, deleteReview, deleteUnit, getUnit, searchUnits,
 } from '../models/Unit';
 import User, { addUserReview, checkReviews, deleteUserReview } from '../models/User';
 import { getToken } from './auth';
@@ -106,31 +106,36 @@ unitsRouter.get('/', async (req, res) => {
 });
 
 /**
- * GET /api/units/search
- * @summary Returns units that match the given query text in any text field
- * @param {string} q.query.required - The content to search for
- * @return {array<Unit>} 200 - Success response
- * @return {object} 404 - No results found
+ * GET /api/units/search?code
+ * @summary Returns the unit containing the given query text
+ * @param {string} code.query.required - String to search for
+ * @return {array<Unit>} 200 - Matching units found
+ * @return {object} 404 - No units found
  */
-unitsRouter.get('/search', async (req, res) => {
-  const query = req.query.q || '';
+/**
+ * GET /api/units/search?title
+ * @summary Returns the unit containing the given query text
+ * @param {string} title.query.required - String to search for
+ * @return {array<Unit>} 200 - Matching units found
+ * @return {object} 404 - No units found
+ */
+unitsRouter.get('/search?', async (req, res) => {
+  const query = req.query.code || req.query.title || '';
 
-  if (query === '') {
-    res.status(404).send({ error: 'No query provided' });
-    return;
+  if (typeof query !== 'string') {
+    return res.status(404).send();
   }
 
-  const units = await Unit.aggregate().search({
-    index: 'default',
-    text: {
-      query,
-      path: {
-        wildcard: '*',
-      },
-    },
-  });
+  if (query === '') {
+    return res.status(404).send();
+  }
 
-  res.json(units);
+  if (req.query.code !== undefined) {
+    const units = await searchUnits(query, 'code');
+    return res.send(units);
+  }
+  const units = await searchUnits(query, 'title');
+  return res.send(units);
 });
 
 /**
