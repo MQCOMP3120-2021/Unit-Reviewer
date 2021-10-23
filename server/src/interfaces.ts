@@ -29,6 +29,7 @@ export interface IReview {
   rating: number;
   author: string;
   dateCreated: number;
+  unitId: string;
 }
 
 export interface IUnit {
@@ -52,6 +53,12 @@ export interface IUnit {
 
 export interface IUser {
   username: string;
+  admin: boolean;
   dateCreated: Date;
   passwordHash: string;
+  reviews: IReview[];
+}
+
+export interface ITokenUser {
+  username: string;
 }

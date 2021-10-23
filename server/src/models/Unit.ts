@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
+import { UNIT_SEARCH_INDEX } from '../config';
 import { IReview, IUnit } from '../interfaces';
 import ActivitiesSchema from './Activities';
 import AssessmentSchema from './Assessment';
@@ -65,8 +66,36 @@ const UnitSchema = new Schema<IUnit>({
 
 const Unit = mongoose.model('Unit', UnitSchema);
 
-export const addReview = async (unitId: string, review: IReview) => {
-  await Unit.findByIdAndUpdate(unitId, { $push: { reviews: review } });
-};
+export const addUnit = async (unit: IUnit) => new Unit(
+  unit,
+).save();
+
+export const deleteUnit = async (unitId: string) => Unit.findByIdAndDelete(unitId);
+
+export const addReview = async (unitId: string, review: IReview) => Unit.findByIdAndUpdate(
+  unitId, { $push: { reviews: review } },
+);
+
+export const getUnit = async (unitId: string) => Unit.findOne(
+  { _id: unitId },
+);
+
+export const deleteReview = async (
+  unitId: string,
+  reviewId: string,
+) => Unit.findByIdAndUpdate(unitId, {
+  $pull: { reviews: { _id: reviewId } },
+});
+
+export const searchUnits = async (query: string, path: string) => Unit.aggregate().search({
+  index: UNIT_SEARCH_INDEX,
+  text: {
+    query,
+    path,
+    // {
+    //   wildcard: '*',
+    // },
+  },
+});
 
 export default Unit;

@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import morgan from 'morgan';
+import path from 'path';
 
 import initDB from './db';
 import authRouter from './routes/auth';
@@ -33,6 +34,10 @@ app.use('/api/units', unitsRouter);
 app.use('/api/auth', authRouter);
 
 app.use(express.static('public'));
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

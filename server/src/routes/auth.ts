@@ -4,7 +4,9 @@ import { sign } from 'jsonwebtoken';
 
 import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
 import { IUser } from '../interfaces';
-import { addUser, passwordValid, userExists } from '../models/User';
+import {
+  addUser, checkAdmin, checkReviews, passwordValid, setAdmin, userExists,
+} from '../models/User';
 
 const authRouter = express.Router();
 
@@ -60,7 +62,11 @@ authRouter.get(
     }
 
     const user: IUser = req.user as IUser;
-    return res.status(200).json({ username: user.username });
+    return res.status(200).json({
+      username: user.username,
+      admin: user.admin,
+      reviews: user.reviews,
+    });
   },
 );
 
@@ -79,14 +85,14 @@ authRouter.post('/register', async (req, res) => {
   }
 
   try {
-    await addUser(username, password);
+    await addUser(username, password, false);
 
     const token = sign({ username }, JWT_SECRET, {
       expiresIn: '1h',
       algorithm: 'HS512',
     });
 
-    return res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
+    return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
   } catch (error) {
     return res.status(400).send({ error: CANNOT_ADD_USER_ERROR });
   }
@@ -107,15 +113,77 @@ authRouter.post('/login', async (req, res) => {
     return res.status(400).json({ error: USER_DOES_NOT_EXIST_ERROR });
   }
   if (await passwordValid(username, password)) {
-    const token = sign({ username }, JWT_SECRET, {
+    const isAdmin = await checkAdmin(username);
+    const hasReviews = await checkReviews(username);
+
+    const token = sign({ username, admin: isAdmin, reviews: hasReviews }, JWT_SECRET, {
       expiresIn: '1h',
       algorithm: 'HS512',
     });
 
-    return res.status(200).cookie(JWT_COOKIE_NAME, token).json({ username });
+    return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
   }
 
   return res.status(400).json({ error: INVALID_PASSWORD_ERROR });
 });
+
+/**
+ * POST /api/auth/makeAdmin
+ * @summary Makes the given user admin
+ * @param {User} request.body.required - User info
+ * @return {object} 200 - Success response
+ */
+authRouter.post('/makeAdmin', async (req, res) => {
+  const { username } = req.body;
+
+  const exists = await userExists(username);
+  if (!exists) {
+    return res.status(400).json({ error: USER_DOES_NOT_EXIST_ERROR });
+  }
+
+  await setAdmin(username, true);
+  const hasReviews = await checkReviews(username);
+
+  const token = sign({ username, admin: true, reviews: hasReviews }, JWT_SECRET, {
+    expiresIn: '1h',
+    algorithm: 'HS512',
+  });
+
+  return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
+});
+
+/**
+ * POST /api/auth/revokeAdmin
+ * @summary Revokes admin privileges from the given user
+ * @param {User} request.body.required - User info
+ * @return {object} 200 - Success response
+ */
+authRouter.post('/revokeAdmin', async (req, res) => {
+  const { username } = req.body;
+
+  const exists = await userExists(username);
+  if (!exists) {
+    return res.status(400).json({ error: USER_DOES_NOT_EXIST_ERROR });
+  }
+
+  await setAdmin(username, false);
+  const hasReviews = await checkReviews(username);
+
+  const token = sign({ username, admin: false, reviews: hasReviews }, JWT_SECRET, {
+    expiresIn: '1h',
+    algorithm: 'HS512',
+  });
+
+  return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
+});
+
+authRouter.post(
+  '/logout',
+  jwt({ secret: JWT_SECRET, algorithms: ['HS512'], getToken }),
+  async (req, res) => {
+    res.clearCookie(JWT_COOKIE_NAME);
+    return res.redirect('/');
+  },
+);
 
 export default authRouter;

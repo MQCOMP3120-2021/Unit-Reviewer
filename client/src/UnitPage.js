@@ -1,34 +1,112 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input } from 'semantic-ui-react'
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"
+import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader, Search, Dimmer } from 'semantic-ui-react'
+import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import unitsService from './services/units'
+import Error from './Error'
+import renderHTML from 'react-render-html';
 
-const UnitPage = ({ getUnits, units, user }) => {
+const UnitPage = ({ getUser, reviewDelete, user }) => {
 
     const id = useParams().id
-    const unit = units.find(u => u._id === id)
+    const [unit, setUnit] = useState(null)
     const [activeIndex, setActiveIndex] = useState(-1)
-    const [newReview, setNewReview] = useState({ content: "", rating: 0})
+    const [newReview, setNewReview] = useState({ content: "", rating: 0 })
+
+    const [errors, setErrors] = useState({
+        content: { error: false, message: "" },
+        rating: { error: false, message: "" },
+    })
+    const [serverIssue, setServerIssue] = useState("")
+    const [load, setLoad] = useState(false)
+
+    const [reviews, setReviews] = useState(unit ? unit.reviews : [])
+
+    const retrieveUnit = () => {
+        unitsService.getUnit(id)
+        .then(data => {
+            console.log(data)
+            setUnit(data.data)
+            console.log("reviews: ", data.data.reviews)
+            setReviews(data.data.reviews)
+            setLoad(false)
+          })
+          .catch((error) => {
+            setServerIssue("Error! " + error)
+            setLoad(false)
+            }
+          )
+    }
+
+    const unitDelete = () => {
+        setServerIssue("")
+        setLoad(true)
+        console.log(unit._id)
+        if (!user) {
+            return setServerIssue("User not signed in")
+        }
+        if (user && !user.data.admin) {
+          return setServerIssue("User does not have permission to delete unit")
+        }
+        unitsService.deleteUnit(unit._id, user)
+        .then(data => {
+            console.log(data.status)
+            setUnit(null)
+            retrieveUnit()
+        })
+        .catch((error) => {
+            console.log(error)
+            setLoad(false)
+            setServerIssue("Error! " + error)
+        })
+      } 
+
+    const searchReview = (qry) => {
+        console.log(qry)
+        if (qry !== "") {
+            const revSearch = unit.reviews.filter(rev =>
+                rev.author.toLowerCase().search(qry.toLowerCase()) !== -1
+                || rev.content.toLowerCase().search(qry.toLowerCase()) !== -1
+                || rev.rating.toString().toLowerCase().search(qry.toLowerCase()) !== -1)
+            console.log(revSearch)
+            setReviews(revSearch)
+        } else {
+            setReviews(unit ? unit.reviews : [])
+        }
+    }
 
     const addReview = () => {
-        if(user) {
-            if(newReview.content === "") {
-                alert("ERROR: comment not entered.")
+        if (user) {
+            let err = {
+                content: { error: false, message: "" },
+                rating: { error: false, message: "" },
+            }
+            let issue = false
+            if (newReview.content === "") {
+                err.content = { error: true, message: "comment field for review is empty" }
+                issue = true
+            }
+            if (newReview.rating === 0) {
+                err.rating = { error: true, message: "please rate review using the stars" }
+                issue = true
+            }
+            setErrors(err)
+            if (issue) {
                 return
             }
-            if(newReview.rating === 0) {
-                alert("ERROR: review not rated.")
-                return
-            }
+            setLoad(true)
             console.log(newReview)
-            unitsService.submitReview({...newReview, author: user.data.username, user: user, unitId: unit._id})
-            .then(data => {
-                console.log(data)
-                getUnits()
-              })
-              .catch(() => {
-                alert("There was an error!")
-              })
+            unitsService.submitReview({ ...newReview, author: user.data.username, user: user, unitId: unit._id })
+                .then(data => {
+                    console.log(data)
+                    getUser()
+                    retrieveUnit()
+                    setNewReview({ content: "", rating: 0 })
+                })
+                .catch((error) => {
+                    setServerIssue("Error! " + error.response.data.error)
+                    setLoad(false)
+                })
 
         } else {
             alert("ERROR: user not signed in.")
@@ -36,10 +114,15 @@ const UnitPage = ({ getUnits, units, user }) => {
         }
     }
 
-    return (!unit ? (<h1>Error: Unit does not exist</h1>) : (
+    useEffect(() => {
+        setLoad(true)
+        retrieveUnit()
+    }, [])
+
+    return (load ? (<Dimmer inverted active={load}><Loader active={load} /></Dimmer>) : (!unit ? (<Error/>) : (
         <>
             <Header as='h1' icon textAlign='center'>
-                <Icon name='chart bar' circular />
+                <Icon name='chart bar' circular inverted color={unit.level <= 1999 ? "blue" : (unit.level <= 2999 ? "green" : "red")}/>
                 <Header.Content>{unit.code}: {unit.title}</Header.Content>
             </Header>
             <Segment>
@@ -47,7 +130,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                     <Grid.Column>
                         <Header as='h4' icon>Description</Header>
                         <p>
-                            {unit.description}
+                            {renderHTML(unit.description)}
                         </p>
                     </Grid.Column>
                     <Grid.Column>
@@ -94,8 +177,6 @@ const UnitPage = ({ getUnits, units, user }) => {
                         </List>
                     </Grid.Column>
                 </Grid>
-
-                <Divider vertical>Info</Divider>
             </Segment>
             <Segment>
                 <Accordion fluid styled>
@@ -128,7 +209,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                         <Header as='h4'>Scheduled</Header>
-                        <Table celled>
+                        {unit.activities.scheduled.length > 0 ? <Table celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -141,15 +222,15 @@ const UnitPage = ({ getUnits, units, user }) => {
                                 {unit.activities.scheduled.map(act => (
                                     <Table.Row key={act._id}>
                                         <Table.Cell>{act.name}</Table.Cell>
-                                        <Table.Cell>{act.description}</Table.Cell>
+                                        <Table.Cell>{renderHTML(act.description)}</Table.Cell>
                                         <Table.Cell>{act.offerings.map((a, idx) =>
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
-                        </Table>
+                        </Table> : <Header as='h5'>No Scheduled Activities</Header>}
 
                         <Header as='h4'>Non-Scheduled</Header>
-                        <Table celled>
+                        {unit.activities.nonScheduled.length > 0 ? <Table celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -167,7 +248,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                                             idx === act.offerings.length - 1 ? <>{a}</> : <>{a}, </>)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
-                        </Table>
+                        </Table> : <Header as='h5'>No Non-scheduled Activities</Header>}
                     </Accordion.Content>
 
                     <Accordion.Title active={activeIndex === 2} onClick={e => setActiveIndex(activeIndex === 2 ? -1 : 2)}>
@@ -190,8 +271,8 @@ const UnitPage = ({ getUnits, units, user }) => {
                                     <Table.Row key={assess._id}>
                                         <Table.Cell>{assess.title}</Table.Cell>
                                         <Table.Cell>{assess.type}</Table.Cell>
-                                        <Table.Cell>{assess.hurdle ? <>Yes</> : <>No</>}</Table.Cell>
-                                        <Table.Cell>{assess.description}</Table.Cell>
+                                        <Table.Cell>{assess.hurdle ? <font color="red">Yes</font> : <>No</>}</Table.Cell>
+                                        <Table.Cell>{renderHTML(assess.description)}</Table.Cell>
                                         <Table.Cell>{assess.weighting}%</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
@@ -214,7 +295,7 @@ const UnitPage = ({ getUnits, units, user }) => {
                                 {unit.outcomes.map((out, idx) => (
                                     <Table.Row key={idx}>
                                         <Table.Cell>ULO{idx + 1}</Table.Cell>
-                                        <Table.Cell>{out}</Table.Cell>
+                                        <Table.Cell>{renderHTML(out)}</Table.Cell>
                                     </Table.Row>))}
                             </Table.Body>
                         </Table>
@@ -224,36 +305,61 @@ const UnitPage = ({ getUnits, units, user }) => {
             <Segment.Group>
                 <Segment>
                     <Form size='large'>
-                        {user && unit.reviews.find(rev => rev.author === user.data.username) ?
-                        (<Header as='h3'>You have submitted a review (see below)</Header>)
-                        : (<><Header as='h3'>Add Review</Header>
-                        <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e,data) => setNewReview({ ...newReview, rating: data.rating })} /></Form.Field>
-                        <Form.TextArea rows={5} fluid placeholder='Comment...'
-                            value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
-                        <Button onClick={addReview} color='green' size='small'>
-                            Submit Review
-                        </Button></>)}
+                        {!user ? <Header as='h2' textAlign="center">Login or create an account to add a review</Header> :
+                            unit.reviews.find(rev => rev.author === user.data.username) ?
+                                (<Header as='h3'>You have submitted a review (see below)</Header>)
+                                : (<><Header as='h3'>Add Review</Header>
+                                    <Form.Field>Rate Unit: <Rating icon='star' defaultRating={newReview.rating} maxRating={5} onRate={(e, data) => setNewReview({ ...newReview, rating: data.rating })} />
+                                        {errors.rating.error && <Message size="mini" negative>
+                                            <Message.Header>{errors.rating.message}</Message.Header>
+                                        </Message>}
+                                    </Form.Field>
+                                    <Form.TextArea error={errors.content.error && errors.content.message}
+                                        rows={5} fluid placeholder='Comment...'
+                                        value={newReview.content} onChange={e => setNewReview({ ...newReview, content: e.target.value })} />
+                                    <Button onClick={addReview} color='green' size='small'>
+                                        Submit Review
+                                    </Button></>)}
                     </Form>
+                    {serverIssue && <Message onDismiss={e => setServerIssue("")} size="large" negative>
+                        <Message.Header>{serverIssue}</Message.Header>
+                    </Message>}
                 </Segment>
                 <Segment>
-                <Grid columns={2} stackable>
-                    <Grid.Row verticalAlign="middle">
-                <Grid.Column><Header as='h3'>Reviews ({unit.reviews.length})</Header></Grid.Column>
-                <Grid.Column textAlign="right"><Input icon='search' placeholder='Search for review...' /></Grid.Column>
-                </Grid.Row>
-                </Grid>
+                    <Grid columns={3} stackable>
+                        <Grid.Row verticalAlign="middle">
+                            <Grid.Column><Header as='h3'>Reviews ({unit.reviews.length})</Header>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Search
+                                    onSearchChange={(e, data) => searchReview(data.value)}
+                                    input={{ fluid: true }}
+                                    showNoResults={false}
+                                    fluid
+                                />
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </Segment>
-                 <Segment.Group>
-                    {unit.reviews.map(rev => (<Segment key={rev._id}>
-                        <Header as='h5'><Icon name='user' />{rev.author}</Header>
-                        <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
-                        <p>{rev.content}</p>
-                    </Segment>))}
+                <Segment.Group>
+                    {reviews.length > 0
+                        ? reviews.map(rev => (<Segment key={rev._id}>
+                            <Header as='h5'><Image src={`https://robohash.org/${rev.author}`} centered circular size="small"/><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
+                            <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
+                            <p>{rev.content}</p>
+                            {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue, setLoad, retrieveUnit)} icon='trash alternate' color='red'>
+                                    </Button>}
+                        </Segment>))
+                        :
+                        <Header as="h1" align="center">No Reviews Found</Header>
+                    }
 
                 </Segment.Group>
             </Segment.Group>
+            {user && user.data.admin && <Button fluid onClick={e => unitDelete()} color='red'>
+            <Icon name='trash alternate'/> DELETE UNIT</Button>}
         </>
-    ))
+    )))
 }
 
 export default UnitPage;

@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import { createMedia } from '@artsy/fresnel'
 import PropTypes from 'prop-types'
-import { Menu, Segment, Input } from 'semantic-ui-react'
-import { NavLink, withRouter } from 'react-router-dom'
+import { Menu } from 'semantic-ui-react'
+import { NavLink, withRouter, useHistory } from 'react-router-dom'
+import UnitSearch from './UnitSearch'
+import authService from './services/auth'
 
-const NavBar = ({user, setUser}) => {
+const NavBar = ({user, setUser, units}) => {
+  const history = useHistory()
 
   return (
     <>
@@ -16,10 +19,10 @@ const NavBar = ({user, setUser}) => {
           as={NavLink} exact to="/"
           name="home"
         />
-        <Menu.Item
+        {user && user.data.admin && <Menu.Item
           as={NavLink} to="/addunit"
           name="add unit"
-        />
+        />}
         <Menu.Item
           as={NavLink} to="/about"
           name="about"
@@ -28,11 +31,13 @@ const NavBar = ({user, setUser}) => {
           {user ? (
           <>
           <Menu.Item
-            name={`Hellodsf ${user.data.username}`}
+            as={NavLink}
+            to={`/user/${user.data.username}`}
+            name={`Hello ${user.data.username}`}
           />
           <Menu.Item
             name="logout"
-            onClick={(e) => {setUser(null)}}
+            onClick={(e) => {authService.logout().then(() => {setUser(null);history.push("/")})}}
           />
           </>) : (
           <Menu.Item
@@ -40,7 +45,7 @@ const NavBar = ({user, setUser}) => {
             name="login"
           />)}
           <Menu.Item>
-            <Input icon='search' placeholder='Search for unit...' />
+            <UnitSearch units={units}/>
           </Menu.Item>
         </Menu.Menu>
       </Menu>
