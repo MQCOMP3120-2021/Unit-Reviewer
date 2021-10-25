@@ -40,4 +40,4 @@ RUN cp -r /app/client/build ./public
 
 RUN yarn run lint && yarn run build
 
-CMD node ./bin/index.js
+CMD node ./bin/src/index.js
