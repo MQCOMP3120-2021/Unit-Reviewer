@@ -3,12 +3,18 @@ on:
   pull_request:
     branches:
       - '*'
+    paths:
+      - 'server/**'
   workflow_dispatch:
     branches:
       - '*'
+    paths:
+      - 'server/**'
   push:
     branches:
       - main
+    paths:
+      - 'server/**'
 
 jobs:
   build:
