@@ -4,6 +4,11 @@
     This react app is a MQ University unit review platform. It provides information on units and allows users to leave reviews.
   </p>
 </p>
+<div align="center">
+<a href="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/main.yaml">
+  <img src="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/main.yaml/badge.svg" alt="Workflow status badge" height="20">
+</a>
+</div>
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
