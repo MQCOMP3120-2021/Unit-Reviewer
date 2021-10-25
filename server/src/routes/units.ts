@@ -1,11 +1,13 @@
 import express, { Request, Response } from 'express';
 import jwt from 'express-jwt';
+import { sign } from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../config';
-import { IReview, ITokenUser, IUnit } from '../interfaces';
+import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
+import { IReview, IUnit } from '../interfaces';
 import Unit, {
   addReview, addUnit, deleteReview, deleteUnit, getUnit, searchUnits,
 } from '../models/Unit';
+import User, { addUserReview, checkReviews, deleteUserReview } from '../models/User';
 import { getToken } from './auth';
 
 const unitsRouter = express.Router();
@@ -231,7 +233,7 @@ unitsRouter.post(
 
 /**
  * DELETE /api/units/{unitId}
- * @summary Adds the given unit to the database
+ * @summary Deletes the given unit to the database
  * @param {string} unitId.path.required - Unit ID
  * @return {object} 200 - Success response
  */
@@ -269,11 +271,16 @@ unitsRouter.post(
     }
 
     const { unitId } = req.body;
-    const { content, rating } = req.body as IReview;
+    const { content, rating, author } = req.body as IReview;
     const dateCreated = Date.now();
 
-    const user = req.user as ITokenUser;
-    const author = user.username;
+    const user = await User.findOne({ username: author });
+    if (!user) {
+      return res.status(404).send({ error: 'user not found' });
+    }
+
+    // eslint-disable-next-line no-underscore-dangle
+    const userId = user._id;
 
     try {
       await addReview(unitId, {
@@ -281,8 +288,25 @@ unitsRouter.post(
         rating,
         author,
         dateCreated,
+        unitId,
       });
-      return res.sendStatus(200);
+      await addUserReview(userId, {
+        content,
+        rating,
+        author: user.username,
+        dateCreated,
+        unitId,
+      });
+      const hasReviews = await checkReviews(user.username);
+      const token = sign({
+        username: user.username,
+        admin: user.admin,
+        reviews: hasReviews,
+      }, JWT_SECRET, {
+        expiresIn: '1h',
+        algorithm: 'HS512',
+      });
+      return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
     } catch (error) {
       return res.status(400).send({ error: UNABLE_TO_ADD_REVIEW_ERROR });
     }
@@ -306,31 +330,73 @@ unitsRouter.delete(
 
     const { unitId, reviewId } = req.params;
 
-    const user = req.user as ITokenUser;
-    const { username } = user;
+    const initUser = req.body; // as IUser;
+    // const { username } = user;
 
     try {
       const unit = await getUnit(unitId);
 
       if (unit === null) {
-        return res.status(404).send({ error: UNIT_NOT_FOUND_ERROR });
+        return res.status(404).send({ error: 'Unit does not exist' });
+      }
+
+      const user = await User.findOne({
+        username: initUser.username,
+        admin: initUser.admin,
+        reviews: initUser.reviews,
+      });
+
+      if (user === null) {
+        return res.status(404).send({ error: 'User does not exist' });
       }
 
       const { reviews } = unit as { reviews: any[] };
+
       if (reviews.length === 0) {
         return res.status(404).send({ error: REVIEW_NOT_FOUND_ERROR });
       }
 
-      // eslint-disable-next-line no-underscore-dangle
-      const review = reviews.find((x) => x._id.equals(reviewId));
+      // finding review in user's record
+      const reviewUser = user.reviews.find((x : any) => x.unitId === unitId);
 
-      if (username !== review.author) {
+      // finding review in unit's record. As the provided reviewId
+      // in the route may be the reviewId
+      // of the review in the user's record, we then check according
+      // to the information provided in reviewUser
+      let reviewUnit;
+
+      // eslint-disable-next-line no-underscore-dangle
+      if (reviews.find((x) => x._id.equals(reviewId))) {
+        // eslint-disable-next-line no-underscore-dangle
+        reviewUnit = reviews.find((x) => x._id.equals(reviewId));
+      } else if (reviewUser) {
+        reviewUnit = reviews.find((x) => x.unitId === reviewUser.unitId
+        && x.author === reviewUser.author
+        && x.content === reviewUser.content
+        && x.rating === reviewUser.rating);
+      } else {
+        reviewUnit = null;
+      }
+
+      if (user.username !== reviewUser.author) {
         return res.status(401).send({ error: NO_PERMISSION_ERROR });
       }
 
       try {
-        await deleteReview(unitId, reviewId);
-        return res.sendStatus(200);
+        // eslint-disable-next-line no-underscore-dangle
+        await deleteReview(reviewUnit.unitId, reviewUnit._id);
+        // eslint-disable-next-line no-underscore-dangle
+        await deleteUserReview(user._id, reviewUser._id);
+        const hasReviews = await checkReviews(user.username);
+        const token = sign({
+          username: user.username,
+          admin: user.admin,
+          reviews: hasReviews,
+        }, JWT_SECRET, {
+          expiresIn: '1h',
+          algorithm: 'HS512',
+        });
+        return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
       } catch (error) {
         return res.status(400).send({ error: UNABLE_TO_DELETE_REVIEW_ERROR });
       }

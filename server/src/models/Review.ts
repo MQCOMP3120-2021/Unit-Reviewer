@@ -5,4 +5,5 @@ export default new Schema({
   rating: Number,
   author: String,
   dateCreated: Number, // The date this review was received
+  unitId: String,
 });

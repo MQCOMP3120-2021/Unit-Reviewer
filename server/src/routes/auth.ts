@@ -5,7 +5,7 @@ import { sign } from 'jsonwebtoken';
 import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
 import { IUser } from '../interfaces';
 import {
-  addUser, checkAdmin, passwordValid, setAdmin, userExists,
+  addUser, checkAdmin, checkReviews, passwordValid, setAdmin, userExists,
 } from '../models/User';
 
 const authRouter = express.Router();
@@ -62,7 +62,11 @@ authRouter.get(
     }
 
     const user: IUser = req.user as IUser;
-    return res.status(200).json({ username: user.username, admin: user.admin });
+    return res.status(200).json({
+      username: user.username,
+      admin: user.admin,
+      reviews: user.reviews,
+    });
   },
 );
 
@@ -110,8 +114,9 @@ authRouter.post('/login', async (req, res) => {
   }
   if (await passwordValid(username, password)) {
     const isAdmin = await checkAdmin(username);
+    const hasReviews = await checkReviews(username);
 
-    const token = sign({ username, admin: isAdmin }, JWT_SECRET, {
+    const token = sign({ username, admin: isAdmin, reviews: hasReviews }, JWT_SECRET, {
       expiresIn: '1h',
       algorithm: 'HS512',
     });
@@ -137,8 +142,9 @@ authRouter.post('/makeAdmin', async (req, res) => {
   }
 
   await setAdmin(username, true);
+  const hasReviews = await checkReviews(username);
 
-  const token = sign({ username, admin: true }, JWT_SECRET, {
+  const token = sign({ username, admin: true, reviews: hasReviews }, JWT_SECRET, {
     expiresIn: '1h',
     algorithm: 'HS512',
   });
@@ -161,8 +167,9 @@ authRouter.post('/revokeAdmin', async (req, res) => {
   }
 
   await setAdmin(username, false);
+  const hasReviews = await checkReviews(username);
 
-  const token = sign({ username, admin: false }, JWT_SECRET, {
+  const token = sign({ username, admin: false, reviews: hasReviews }, JWT_SECRET, {
     expiresIn: '1h',
     algorithm: 'HS512',
   });

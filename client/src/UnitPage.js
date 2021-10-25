@@ -6,10 +6,10 @@ import unitsService from './services/units'
 import Error from './Error'
 import renderHTML from 'react-render-html';
 
-const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
+const UnitPage = ({ getUser, reviewDelete, user }) => {
 
     const id = useParams().id
-    const unit = units.find(u => u._id === id)
+    const [unit, setUnit] = useState(null)
     const [activeIndex, setActiveIndex] = useState(-1)
     const [newReview, setNewReview] = useState({ content: "", rating: 0 })
 
@@ -21,6 +21,45 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
     const [load, setLoad] = useState(false)
 
     const [reviews, setReviews] = useState(unit ? unit.reviews : [])
+
+    const retrieveUnit = () => {
+        unitsService.getUnit(id)
+        .then(data => {
+            console.log(data)
+            setUnit(data.data)
+            console.log("reviews: ", data.data.reviews)
+            setReviews(data.data.reviews)
+            setLoad(false)
+          })
+          .catch((error) => {
+            setServerIssue("Error! " + error)
+            setLoad(false)
+            }
+          )
+    }
+
+    const unitDelete = () => {
+        setServerIssue("")
+        setLoad(true)
+        console.log(unit._id)
+        if (!user) {
+            return setServerIssue("User not signed in")
+        }
+        if (user && !user.data.admin) {
+          return setServerIssue("User does not have permission to delete unit")
+        }
+        unitsService.deleteUnit(unit._id, user)
+        .then(data => {
+            console.log(data.status)
+            setUnit(null)
+            retrieveUnit()
+        })
+        .catch((error) => {
+            console.log(error)
+            setLoad(false)
+            setServerIssue("Error! " + error)
+        })
+      } 
 
     const searchReview = (qry) => {
         console.log(qry)
@@ -60,8 +99,8 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
             unitsService.submitReview({ ...newReview, author: user.data.username, user: user, unitId: unit._id })
                 .then(data => {
                     console.log(data)
-                    getUnits()
-                    setLoad(false)
+                    getUser()
+                    retrieveUnit()
                     setNewReview({ content: "", rating: 0 })
                 })
                 .catch((error) => {
@@ -76,14 +115,12 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
     }
 
     useEffect(() => {
-        const u = units.find(u => u._id === id)
-        setReviews(u ? u.reviews : [])
-        console.log(u)
-    }, [unit])
+        setLoad(true)
+        retrieveUnit()
+    }, [])
 
-    return (!unit ? (<Error/>) : (
+    return (load ? (<Dimmer inverted active={load}><Loader active={load} /></Dimmer>) : (!unit ? (<Error/>) : (
         <>
-            <Dimmer inverted active={load}><Loader active={load} /></Dimmer>
             <Header as='h1' icon textAlign='center'>
                 <Icon name='chart bar' circular inverted color={unit.level <= 1999 ? "blue" : (unit.level <= 2999 ? "green" : "red")}/>
                 <Header.Content>{unit.code}: {unit.title}</Header.Content>
@@ -310,7 +347,7 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
                             <Header as='h5'><Image src={`https://robohash.org/${rev.author}`} centered circular size="small"/><Link to={`/user/${rev.author}`} as={NavLink}>{rev.author.charAt(0).toUpperCase() + rev.author.slice(1)}</Link></Header>
                             <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
                             <p>{rev.content}</p>
-                            {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue, setLoad)} icon='trash alternate' color='red'>
+                            {user && rev.author === user.data.username && <Button onClick={e => reviewDelete(rev._id, unit._id, setServerIssue, setLoad, retrieveUnit)} icon='trash alternate' color='red'>
                                     </Button>}
                         </Segment>))
                         :
@@ -319,10 +356,10 @@ const UnitPage = ({ unitDelete, reviewDelete, getUnits, units, user }) => {
 
                 </Segment.Group>
             </Segment.Group>
-            {user && user.data.admin && <Button fluid onClick={e => unitDelete(unit._id, setServerIssue, setLoad)} color='red'>
+            {user && user.data.admin && <Button fluid onClick={e => unitDelete()} color='red'>
             <Icon name='trash alternate'/> DELETE UNIT</Button>}
         </>
-    ))
+    )))
 }
 
 export default UnitPage;

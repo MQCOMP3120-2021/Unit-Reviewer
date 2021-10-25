@@ -19,16 +19,51 @@ const App = () => {
 
   const [units, setUnits] = useState([])
   const [user, setUser] = useState(null)
+  const [unitsLength, setUnitsLength] = useState(-1)
+  const [loaded, setLoaded] = useState([])
 
-    const getUnits = () => {
-        unitsService.getAllUnits()
-        .then(data => {
-            setUnits(data)
-          })
-          .catch(() => {
-              alert("There was an error!")
-            }
-          )
+    const getUnitNums = () => {
+    unitsService.getNumUnits()
+    .then(data => {
+        setUnitsLength(data.data.numUnits)
+      })
+      .catch(() => {
+          alert("There was an error!")
+          return
+        }
+      )
+    }
+
+    const getUnits = async (count, clearData) => {
+        if(clearData) {
+          console.log("it is working!")
+          setLoaded([])
+          setUnits([])
+          await getUnitNums([])
+        }
+        console.log("actual loaded: ", loaded)
+        if(!count) count = 0
+        if(count != 0) count = count - 1 
+        
+        for(let i = 1; i < 4; i++) {
+          console.log("start Count:", count+i)
+          if(loaded.includes(count+i) || (unitsLength !== -1 && Math.ceil(unitsLength/10) < count+i)) continue
+          await unitsService.getAllUnits((count+i-1)*10)
+          .then(data => {
+              data.map((u,idx) => units.splice((count+i-1)*10+idx,0,u))
+              loaded.push(count+i)
+              loaded.sort()
+              setLoaded(loaded)
+              setUnits(units)
+              console.log(units)
+            })
+            .catch(() => {
+                alert("There was an error!")
+                return
+              }
+            )
+        }
+        return [units,loaded]
     }
 
     const getUser = () => {
@@ -40,7 +75,7 @@ const App = () => {
         });
     };
 
-    const reviewDelete = (revId, unitId, setServerIssue, setLoad) => {
+    const reviewDelete = (revId, unitId, setServerIssue, setLoad, retrieveUnit) => {
       setServerIssue("")
       setLoad(true)
       console.log(revId)
@@ -48,11 +83,15 @@ const App = () => {
       if (!user) {
           return setServerIssue("User not signed in")
       }
-      unitsService.deleteReview(revId, unitId, user.data.username)
+      unitsService.deleteReview(revId, unitId, user)
       .then(data => {
           console.log(data.status)
-          getUnits()
-          getUser()
+          if (window.location.pathname !== `/user/${user.data.username}`) {
+            retrieveUnit()
+            getUser()
+          } else {
+            getUser()
+          }
           setLoad(false)
       })
       .catch((error) => {
@@ -62,33 +101,9 @@ const App = () => {
       })
     }
 
-    const unitDelete = (unitId, setServerIssue, setLoad) => {
-      setServerIssue("")
-      setLoad(true)
-      console.log(unitId)
-      if (!user) {
-          return setServerIssue("User not signed in")
-      }
-      if (user && !user.data.admin) {
-        return setServerIssue("User does not have permission to delete unit")
-      }
-      unitsService.deleteUnit(unitId, user)
-      .then(data => {
-          console.log(data.status)
-          getUnits()
-          getUser()
-          setLoad(false)
-      })
-      .catch((error) => {
-          console.log(error)
-          setLoad(false)
-          setServerIssue("Error! " + error)
-      })
-    }
-
-    useEffect(async () => {
-      getUnits()
+    useEffect(() => {
       getUser()
+      //getUnitNums()
     }, [])
 
   return (
@@ -96,12 +111,12 @@ const App = () => {
       <Container>
         <NavBar user={user} setUser={setUser} units={units}/>
         <Route exact path="/about" render={() => <About />}/>
-        <Route exact path="/addunit" render={() => <AddUnit getUnits={getUnits} user={user} />}/>
+        <Route exact path="/addunit" render={() => <AddUnit user={user} />}/>
         <Route exact path="/login" render={() => <LoginForm getUser={getUser}/>}/>
         <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
-        <Route exact path="/unit/:id" render={() => <UnitPage unitDelete={unitDelete} reviewDelete={reviewDelete} getUnits={getUnits} units={units} user={user}/>}/>
+        <Route exact path="/unit/:id" render={() => <UnitPage getUser={getUser} reviewDelete={reviewDelete} user={user}/>}/>
         <Route exact path="/user/:author" render={() => <Profile reviewDelete={reviewDelete} getUser={getUser} units={units} user={user}/>}/>
-        <Route exact path="/" render={() => <HomePage units={units} />}/>
+        <Route exact path="/" render={() => <HomePage units={units} getUnits={getUnits} unitsLength={unitsLength} />}/>
       </Container>
     </Router>
   );
