@@ -8,6 +8,8 @@ RUN yarn install
 
 COPY ./client/public/index.html ./public/index.html
 
+###
+
 FROM node:16.10.0 AS server-builder
 
 WORKDIR /build
@@ -15,6 +17,8 @@ WORKDIR /build
 COPY ./server/package.json ./server/yarn.lock ./
 
 RUN yarn install
+
+###
 
 FROM node:16.10.0
 
@@ -34,6 +38,6 @@ COPY --from=server-builder /build/ ./
 
 RUN cp -r /app/client/build ./public
 
-RUN yarn run lint && yarn run build
+RUN yarn run lint && yarn run test && yarn run build
 
 CMD node ./bin/index.js

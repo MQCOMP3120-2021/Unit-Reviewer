@@ -12,8 +12,8 @@ const authRouter = express.Router();
 
 const CANNOT_ADD_USER_ERROR = 'Unable to add user';
 const USER_EXISTS_ERROR = 'User already exists';
-const USER_DOES_NOT_EXIST_ERROR = 'User does not exist';
-const INVALID_PASSWORD_ERROR = 'Password is invalid';
+const BAD_LOGIN_ERROR = 'Incorrect username or password';
+const EMPTY_USERNAME_OR_PASSWORD_ERROR = 'Username or password cannot be empty';
 
 export const getToken = (req: express.Request) => {
   if (req.headers.authorization) {
@@ -77,8 +77,11 @@ authRouter.get(
  * @return {User} 200 - The saved user
  */
 authRouter.post('/register', async (req, res) => {
-  const { username } = req.body;
-  const { password } = req.body;
+  const { username, password } = req.body as { username: string, password: string };
+
+  if (username.length === 0 || password.length === 0) {
+    return res.status(400).json({ error: EMPTY_USERNAME_OR_PASSWORD_ERROR });
+  }
 
   if (await userExists(username)) {
     return res.status(400).json({ error: USER_EXISTS_ERROR });
@@ -110,7 +113,7 @@ authRouter.post('/login', async (req, res) => {
 
   const exists = await userExists(username);
   if (!exists) {
-    return res.status(400).json({ error: USER_DOES_NOT_EXIST_ERROR });
+    return res.status(400).json({ error: BAD_LOGIN_ERROR });
   }
   if (await passwordValid(username, password)) {
     const isAdmin = await checkAdmin(username);
@@ -124,7 +127,7 @@ authRouter.post('/login', async (req, res) => {
     return res.status(200).cookie(JWT_COOKIE_NAME, token).send();
   }
 
-  return res.status(400).json({ error: INVALID_PASSWORD_ERROR });
+  return res.status(400).json({ error: BAD_LOGIN_ERROR });
 });
 
 /**
@@ -138,7 +141,7 @@ authRouter.post('/makeAdmin', async (req, res) => {
 
   const exists = await userExists(username);
   if (!exists) {
-    return res.status(400).json({ error: USER_DOES_NOT_EXIST_ERROR });
+    return res.status(400).json({ error: BAD_LOGIN_ERROR });
   }
 
   await setAdmin(username, true);
@@ -163,7 +166,7 @@ authRouter.post('/revokeAdmin', async (req, res) => {
 
   const exists = await userExists(username);
   if (!exists) {
-    return res.status(400).json({ error: USER_DOES_NOT_EXIST_ERROR });
+    return res.status(400).json({ error: BAD_LOGIN_ERROR });
   }
 
   await setAdmin(username, false);
