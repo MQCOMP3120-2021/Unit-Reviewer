@@ -1,10 +1,7 @@
 /* eslint-disable no-undef */
-import supertest from 'supertest';
 
-import server from '../src/index';
 import { addUser, removeUser, userExists } from '../src/models/User';
-
-const requestWithSupertest = supertest(server);
+import requestWithSupertest from './index';
 
 const USERNAME = 'test';
 const UNIQUE_USERNAME = 'W9ZpV8fKdgkgCR2geZ4EsTf5zKxY';
