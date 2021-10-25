@@ -1,5 +1,15 @@
 name: Run Tests Server
-on: [push, pull_request, workflow_dispatch]
+on: 
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+    branches:
+      - '*'
+  push:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
