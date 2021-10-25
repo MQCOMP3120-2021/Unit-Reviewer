@@ -28,7 +28,7 @@ COPY ./client/ ./
 
 COPY --from=client-builder /build/ ./
 
-RUN yarn run build
+RUN yarn build
 
 WORKDIR /app/server
 
@@ -38,6 +38,6 @@ COPY --from=server-builder /build/ ./
 
 RUN cp -r /app/client/build ./public
 
-RUN yarn run lint && yarn run test && yarn run build
+RUN yarn run lint && yarn run build
 
 CMD node ./bin/index.js

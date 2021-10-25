@@ -1,0 +1,12 @@
+name: Run Tests Server
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup and run tests
+      working-directory: ./server
+      run: |
+        yarn
+        yarn run test
