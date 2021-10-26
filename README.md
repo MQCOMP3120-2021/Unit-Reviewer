@@ -8,6 +8,9 @@
 <a href="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/server.yaml">
   <img src="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/server.yaml/badge.svg" alt="Workflow status badge" height="20">
 </a>
+<a href="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/client.yaml">
+  <img src="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/client.yaml/badge.svg" alt="Workflow status badge" height="20">
+</a>
 </div>
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
