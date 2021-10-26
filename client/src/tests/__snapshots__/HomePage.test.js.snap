@@ -11,9 +11,7 @@ Object {
         <div
           class="row"
         >
-          <a
-            href="/unit/615f9936490575598b5a0835"
-          >
+          <div>
             <div
               class="ui card"
               style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -22,78 +20,50 @@ Object {
                 class="content"
               >
                 <div
-                  class="header"
+                  class="ui placeholder"
                 >
-                  COMP2320
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="content"
               >
                 <div
-                  class="description"
+                  class="ui placeholder"
                 >
-                  Offensive Security
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="extra content"
               >
                 <div
-                  class="ui star disabled rating"
-                  role="radiogroup"
-                  tabindex="0"
+                  class="ui placeholder"
                 >
-                  <i
-                    aria-checked="false"
-                    aria-posinset="1"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="2"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="3"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="4"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="5"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
-                 (
-                6
-                 Ratings)
               </div>
             </div>
-          </a>
-          <a
-            href="/unit/615f9a3f490575598b5a0854"
-          >
+          </div>
+          <div>
             <div
               class="ui card"
               style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -102,78 +72,50 @@ Object {
                 class="content"
               >
                 <div
-                  class="header"
+                  class="ui placeholder"
                 >
-                  COMP5323
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="content"
               >
                 <div
-                  class="description"
+                  class="ui placeholder"
                 >
-                  345634534t45h45htr4
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="extra content"
               >
                 <div
-                  class="ui star disabled rating"
-                  role="radiogroup"
-                  tabindex="0"
+                  class="ui placeholder"
                 >
-                  <i
-                    aria-checked="false"
-                    aria-posinset="1"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="2"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="true"
-                    aria-posinset="3"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="4"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="5"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
-                 (
-                4
-                 Ratings)
               </div>
             </div>
-          </a>
-          <a
-            href="/unit/6163d3bfdd4d7c1df98aa57e"
-          >
+          </div>
+          <div>
             <div
               class="ui card"
               style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -182,78 +124,50 @@ Object {
                 class="content"
               >
                 <div
-                  class="header"
+                  class="ui placeholder"
                 >
-                  COMP34634
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="content"
               >
                 <div
-                  class="description"
+                  class="ui placeholder"
                 >
-                  ntrgmnhmyytju,,,,,u.
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="extra content"
               >
                 <div
-                  class="ui star disabled rating"
-                  role="radiogroup"
-                  tabindex="0"
+                  class="ui placeholder"
                 >
-                  <i
-                    aria-checked="false"
-                    aria-posinset="1"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="true"
-                    aria-posinset="2"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="3"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="4"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="5"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
-                 (
-                2
-                 Ratings)
               </div>
             </div>
-          </a>
-          <a
-            href="/unit/6167684c2f84f347c78fece9"
-          >
+          </div>
+          <div>
             <div
               class="ui card"
               style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -262,78 +176,50 @@ Object {
                 class="content"
               >
                 <div
-                  class="header"
+                  class="ui placeholder"
                 >
-                  ENGG3465
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="content"
               >
                 <div
-                  class="description"
+                  class="ui placeholder"
                 >
-                  tgrtjy
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="extra content"
               >
                 <div
-                  class="ui star disabled rating"
-                  role="radiogroup"
-                  tabindex="0"
+                  class="ui placeholder"
                 >
-                  <i
-                    aria-checked="false"
-                    aria-posinset="1"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="2"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="3"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="4"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="5"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
-                 (
-                2
-                 Ratings)
               </div>
             </div>
-          </a>
-          <a
-            href="/unit/61676be72f84f347c78fed15"
-          >
+          </div>
+          <div>
             <div
               class="ui card"
               style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -342,75 +228,309 @@ Object {
                 class="content"
               >
                 <div
-                  class="header"
+                  class="ui placeholder"
                 >
-                  PHYS45645
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="content"
               >
                 <div
-                  class="description"
+                  class="ui placeholder"
                 >
-                  trhrtjhyktyuyikty
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
               </div>
               <div
                 class="extra content"
               >
                 <div
-                  class="ui star disabled rating"
-                  role="radiogroup"
-                  tabindex="0"
+                  class="ui placeholder"
                 >
-                  <i
-                    aria-checked="false"
-                    aria-posinset="1"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="2"
-                    aria-setsize="5"
-                    class="active icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="3"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="4"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
-                  <i
-                    aria-checked="false"
-                    aria-posinset="5"
-                    aria-setsize="5"
-                    class="icon"
-                    role="radio"
-                    tabindex="-1"
-                  />
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
                 </div>
-                 (
-                3
-                 Ratings)
               </div>
             </div>
-          </a>
+          </div>
+          <div>
+            <div
+              class="ui card"
+              style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+            >
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="extra content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="ui card"
+              style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+            >
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="extra content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="ui card"
+              style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+            >
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="extra content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="ui card"
+              style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+            >
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="extra content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="ui card"
+              style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+            >
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="header"
+                  >
+                    <div
+                      class="line medium"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="extra content"
+              >
+                <div
+                  class="ui placeholder"
+                >
+                  <div
+                    class="paragraph"
+                  >
+                    <div
+                      class="line"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div
           class="row"
@@ -454,32 +574,12 @@ Object {
             </a>
             <a
               aria-current="false"
-              aria-disabled="true"
-              class="item"
-              tabindex="-1"
-              type="ellipsisItem"
-              value="NaN"
-            >
-              ...
-            </a>
-            <a
-              aria-current="false"
-              aria-disabled="true"
-              class="item"
-              tabindex="-1"
-              type="ellipsisItem"
-              value="NaN"
-            >
-              ...
-            </a>
-            <a
-              aria-current="false"
               aria-disabled="false"
               aria-label="Next item"
               class="item"
               tabindex="0"
               type="nextItem"
-              value="NaN"
+              value="1"
             >
               ⟩
             </a>
@@ -490,7 +590,7 @@ Object {
               class="item"
               tabindex="0"
               type="lastItem"
-              value="NaN"
+              value="1"
             >
               »
             </a>
@@ -506,9 +606,7 @@ Object {
       <div
         class="row"
       >
-        <a
-          href="/unit/615f9936490575598b5a0835"
-        >
+        <div>
           <div
             class="ui card"
             style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -517,78 +615,50 @@ Object {
               class="content"
             >
               <div
-                class="header"
+                class="ui placeholder"
               >
-                COMP2320
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="content"
             >
               <div
-                class="description"
+                class="ui placeholder"
               >
-                Offensive Security
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="extra content"
             >
               <div
-                class="ui star disabled rating"
-                role="radiogroup"
-                tabindex="0"
+                class="ui placeholder"
               >
-                <i
-                  aria-checked="false"
-                  aria-posinset="1"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="2"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="3"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="4"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="5"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
-               (
-              6
-               Ratings)
             </div>
           </div>
-        </a>
-        <a
-          href="/unit/615f9a3f490575598b5a0854"
-        >
+        </div>
+        <div>
           <div
             class="ui card"
             style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -597,78 +667,50 @@ Object {
               class="content"
             >
               <div
-                class="header"
+                class="ui placeholder"
               >
-                COMP5323
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="content"
             >
               <div
-                class="description"
+                class="ui placeholder"
               >
-                345634534t45h45htr4
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="extra content"
             >
               <div
-                class="ui star disabled rating"
-                role="radiogroup"
-                tabindex="0"
+                class="ui placeholder"
               >
-                <i
-                  aria-checked="false"
-                  aria-posinset="1"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="2"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="true"
-                  aria-posinset="3"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="4"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="5"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
-               (
-              4
-               Ratings)
             </div>
           </div>
-        </a>
-        <a
-          href="/unit/6163d3bfdd4d7c1df98aa57e"
-        >
+        </div>
+        <div>
           <div
             class="ui card"
             style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -677,78 +719,50 @@ Object {
               class="content"
             >
               <div
-                class="header"
+                class="ui placeholder"
               >
-                COMP34634
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="content"
             >
               <div
-                class="description"
+                class="ui placeholder"
               >
-                ntrgmnhmyytju,,,,,u.
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="extra content"
             >
               <div
-                class="ui star disabled rating"
-                role="radiogroup"
-                tabindex="0"
+                class="ui placeholder"
               >
-                <i
-                  aria-checked="false"
-                  aria-posinset="1"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="true"
-                  aria-posinset="2"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="3"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="4"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="5"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
-               (
-              2
-               Ratings)
             </div>
           </div>
-        </a>
-        <a
-          href="/unit/6167684c2f84f347c78fece9"
-        >
+        </div>
+        <div>
           <div
             class="ui card"
             style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -757,78 +771,50 @@ Object {
               class="content"
             >
               <div
-                class="header"
+                class="ui placeholder"
               >
-                ENGG3465
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="content"
             >
               <div
-                class="description"
+                class="ui placeholder"
               >
-                tgrtjy
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="extra content"
             >
               <div
-                class="ui star disabled rating"
-                role="radiogroup"
-                tabindex="0"
+                class="ui placeholder"
               >
-                <i
-                  aria-checked="false"
-                  aria-posinset="1"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="2"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="3"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="4"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="5"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
-               (
-              2
-               Ratings)
             </div>
           </div>
-        </a>
-        <a
-          href="/unit/61676be72f84f347c78fed15"
-        >
+        </div>
+        <div>
           <div
             class="ui card"
             style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
@@ -837,75 +823,309 @@ Object {
               class="content"
             >
               <div
-                class="header"
+                class="ui placeholder"
               >
-                PHYS45645
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="content"
             >
               <div
-                class="description"
+                class="ui placeholder"
               >
-                trhrtjhyktyuyikty
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
             </div>
             <div
               class="extra content"
             >
               <div
-                class="ui star disabled rating"
-                role="radiogroup"
-                tabindex="0"
+                class="ui placeholder"
               >
-                <i
-                  aria-checked="false"
-                  aria-posinset="1"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="2"
-                  aria-setsize="5"
-                  class="active icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="3"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="4"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
-                <i
-                  aria-checked="false"
-                  aria-posinset="5"
-                  aria-setsize="5"
-                  class="icon"
-                  role="radio"
-                  tabindex="-1"
-                />
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
               </div>
-               (
-              3
-               Ratings)
             </div>
           </div>
-        </a>
+        </div>
+        <div>
+          <div
+            class="ui card"
+            style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+          >
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="extra content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="ui card"
+            style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+          >
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="extra content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="ui card"
+            style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+          >
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="extra content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="ui card"
+            style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+          >
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="extra content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="ui card"
+            style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px;"
+          >
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="header"
+                >
+                  <div
+                    class="line medium"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="extra content"
+            >
+              <div
+                class="ui placeholder"
+              >
+                <div
+                  class="paragraph"
+                >
+                  <div
+                    class="line"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="row"
@@ -949,32 +1169,12 @@ Object {
           </a>
           <a
             aria-current="false"
-            aria-disabled="true"
-            class="item"
-            tabindex="-1"
-            type="ellipsisItem"
-            value="NaN"
-          >
-            ...
-          </a>
-          <a
-            aria-current="false"
-            aria-disabled="true"
-            class="item"
-            tabindex="-1"
-            type="ellipsisItem"
-            value="NaN"
-          >
-            ...
-          </a>
-          <a
-            aria-current="false"
             aria-disabled="false"
             aria-label="Next item"
             class="item"
             tabindex="0"
             type="nextItem"
-            value="NaN"
+            value="1"
           >
             ⟩
           </a>
@@ -985,7 +1185,7 @@ Object {
             class="item"
             tabindex="0"
             type="lastItem"
-            value="NaN"
+            value="1"
           >
             »
           </a>

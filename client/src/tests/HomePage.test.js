@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import fs from 'fs'
 
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -16,27 +16,32 @@ const sampleData = (fileName) => {
 }
 
 describe("Homepage Display", () => {
-    test('hompage displays all units', done => {
+    test('hompage displays all units', async () => {
         const units = sampleData('src/tests/samples/units.json')
-        const getUnits = jest.fn(() => done())
+        const getUnits = async () => {return [units, [1]]}
         const component = render(
             <Router>
-                <HomePage units={units} getUnits={getUnits} />
+                <HomePage units={units} unitsLength={5} getUnits={getUnits} />
             </Router>
         )
 
-        units.map(u => expect(component.container).toHaveTextContent(u.title))
+        await waitFor(() => {
+            units.map(u => expect(component.container).toHaveTextContent(u.title))
+        });
+        
     })
 
-    test('snapshot test', done => {
+    test('snapshot test', async () => {
         const units = sampleData('src/tests/samples/units.json')
-        const getUnits = jest.fn(() => done())
+        const getUnits = async () => {return [units, [1]]}
         const component = render(
             <Router>
-                <HomePage units={units} getUnits={getUnits} />
+                <HomePage units={units} unitsLength={5} getUnits={getUnits} />
             </Router>
         )
 
-        expect(component).toMatchSnapshot()
+        await waitFor(() => {
+            expect(component).toMatchSnapshot()
+        });
     })
 })
