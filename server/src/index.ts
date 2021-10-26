@@ -39,7 +39,11 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
-app.listen(PORT, () => {
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Listening on port ${PORT}`);
-});
+    console.log(`Listening on port ${PORT}`);
+  });
+}
+
+export default app;

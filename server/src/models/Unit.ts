@@ -72,6 +72,8 @@ export const addUnit = async (unit: IUnit) => new Unit(
 
 export const deleteUnit = async (unitId: string) => Unit.findByIdAndDelete(unitId);
 
+export const deleteAllUnits = async () => Unit.deleteMany({});
+
 export const addReview = async (unitId: string, review: IReview) => Unit.findByIdAndUpdate(
   unitId, { $push: { reviews: review } },
 );

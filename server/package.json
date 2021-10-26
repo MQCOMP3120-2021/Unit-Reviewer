@@ -9,7 +9,8 @@
     "start": "yarn run build && node ./bin/index.js",
     "build": "tsc",
     "lint": "eslint --no-error-on-unmatched-pattern src/**/*.{ts,js} *.{ts,js}",
-    "dev": "nodemon --files src/index.ts"
+    "dev": "nodemon --files src/index.ts",
+    "test": "NODE_ENV=test jest --config test/jest.config.js --testTimeout=10000 --forceExit test/"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -21,7 +22,8 @@
     "express-jwt": "^6.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.8",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "supertest": "^6.1.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -29,17 +31,21 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/express-jwt": "^6.0.2",
+    "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.10.2",
+    "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "jest": "^27.3.1",
     "nodemon": "^2.0.13",
+    "ts-jest": "^27.0.7",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   }
