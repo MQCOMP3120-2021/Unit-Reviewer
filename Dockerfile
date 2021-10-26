@@ -8,6 +8,8 @@ RUN yarn install
 
 COPY ./client/public/index.html ./public/index.html
 
+###
+
 FROM node:16.10.0 AS server-builder
 
 WORKDIR /build
@@ -15,6 +17,8 @@ WORKDIR /build
 COPY ./server/package.json ./server/yarn.lock ./
 
 RUN yarn install
+
+###
 
 FROM node:16.10.0
 
@@ -24,7 +28,7 @@ COPY ./client/ ./
 
 COPY --from=client-builder /build/ ./
 
-RUN yarn run build
+RUN yarn build
 
 WORKDIR /app/server
 

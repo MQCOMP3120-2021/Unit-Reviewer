@@ -6,7 +6,11 @@ import { IReview, IUser } from '../interfaces';
 import ReviewSchema from './Review';
 
 const UserSchema = new Schema<IUser>({
-  username: String, // User's username
+  // User's username
+  username: {
+    type: String,
+    minlength: 1,
+  },
   admin: Boolean, // Wether a user is admin or not
   passwordHash: String, // Hash of the users password
   dateCreated: Date, // Date the user was created
@@ -28,6 +32,10 @@ export const addUser = async (username: string, password: string, admin: boolean
     dateCreated: Date.now(),
     reviews: [],
   });
+};
+
+export const removeUser = async (username: string) => {
+  await User.findOneAndDelete({ username });
 };
 
 export const passwordValid = async (username: string, password: string) => {
