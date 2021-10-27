@@ -106,21 +106,28 @@ unitsRouter.get('/', async (req, res) => {
 });
 
 /**
- * GET /api/units/search?code
+ * GET /api/units/search?any
  * @summary Returns the unit containing the given query text
  * @param {string} code.query.required - String to search for
  * @return {array<Unit>} 200 - Matching units found
  * @return {object} 404 - No units found
  */
 /**
+ * GET /api/units/search?code
+ * @summary Returns the unit containing the given query text in the unit code
+ * @param {string} code.query.required - String to search for
+ * @return {array<Unit>} 200 - Matching units found
+ * @return {object} 404 - No units found
+ */
+/**
  * GET /api/units/search?title
- * @summary Returns the unit containing the given query text
+ * @summary Returns the unit containing the given query text in the unit title
  * @param {string} title.query.required - String to search for
  * @return {array<Unit>} 200 - Matching units found
  * @return {object} 404 - No units found
  */
 unitsRouter.get('/search?', async (req, res) => {
-  const query = req.query.code || req.query.title || '';
+  const query = req.query.any || req.query.code || req.query.title || '';
 
   if (typeof query !== 'string') {
     return res.status(404).send();
@@ -130,10 +137,16 @@ unitsRouter.get('/search?', async (req, res) => {
     return res.status(404).send();
   }
 
+  if (req.query.any !== undefined) {
+    const units = await searchUnits(query, '*');
+    return res.send(units);
+  }
+
   if (req.query.code !== undefined) {
     const units = await searchUnits(query, 'code');
     return res.send(units);
   }
+
   const units = await searchUnits(query, 'title');
   return res.send(units);
 });
@@ -357,7 +370,7 @@ unitsRouter.delete(
       }
 
       // finding review in user's record
-      const reviewUser = user.reviews.find((x : any) => x.unitId === unitId);
+      const reviewUser = user.reviews.find((x: any) => x.unitId === unitId);
 
       // finding review in unit's record. As the provided reviewId
       // in the route may be the reviewId
@@ -371,9 +384,9 @@ unitsRouter.delete(
         reviewUnit = reviews.find((x) => x._id.equals(reviewId));
       } else if (reviewUser) {
         reviewUnit = reviews.find((x) => x.unitId === reviewUser.unitId
-        && x.author === reviewUser.author
-        && x.content === reviewUser.content
-        && x.rating === reviewUser.rating);
+          && x.author === reviewUser.author
+          && x.content === reviewUser.content
+          && x.rating === reviewUser.rating);
       } else {
         reviewUnit = null;
       }
