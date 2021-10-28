@@ -45,7 +45,7 @@ const NavBar = ({user, setUser, units}) => {
             name="login"
           />)}
           <Menu.Item>
-            <UnitSearch units={units}/>
+            <UnitSearch/>
           </Menu.Item>
         </Menu.Menu>
       </Menu>

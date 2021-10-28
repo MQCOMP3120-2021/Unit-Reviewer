@@ -117,7 +117,7 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
     useEffect(() => {
         setLoad(true)
         retrieveUnit()
-    }, [])
+    }, [id])
 
     return (load ? (<Dimmer inverted active={load}><Loader active={load} /></Dimmer>) : (!unit ? (<Error/>) : (
         <>
