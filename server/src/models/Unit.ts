@@ -92,7 +92,7 @@ export const deleteReview = async (
 export const searchUnits = async (query: string, path: string) => Unit.aggregate().search({
   index: UNIT_SEARCH_INDEX,
   wildcard: {
-    path,
+    path: path === '*' ? { wildcard: '*' } : path,
     query: `*${query}*`,
     allowAnalyzedField: true,
   },
