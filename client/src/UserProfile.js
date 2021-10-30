@@ -4,10 +4,10 @@ import { useParams, useHistory } from "react-router-dom";
 import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message, Accordion } from 'semantic-ui-react'
 import authService from './services/auth'
 import unitsService from './services/units'
-import { ColorPicker, useColor } from "react-color-palette";
+import { ColorPicker } from "react-color-palette";
 import "react-color-palette/lib/css/styles.css";
 
-const Profile = ({ reviewDelete, units, user, getUser }) => {
+const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
     const history = useHistory()
     const author = useParams().author
 
@@ -15,7 +15,6 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
     const [load, setLoad] = useState(false)
     const [serverIssue, setServerIssue] = useState("")
     const [activeIndex, setActiveIndex] = useState(-1)
-    const [color, setColor] = useColor("hex", getComputedStyle(document.querySelector(':root')).getPropertyValue('--color-picked'));
     const changeAdmin = () => {
         setLoad(true)
         let usrname = user.data.username
