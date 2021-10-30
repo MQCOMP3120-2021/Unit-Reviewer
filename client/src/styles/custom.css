@@ -1,3 +1,14 @@
+:root {
+    --color-picked: #9440b2;
+}
+
+body {
+    background-color: #f3f3f3;
+}
+
+.ui.container {
+    background-color: white;
+}
 .ui.menu.menCol {
     background-color: #eaeaea;
 }
@@ -8,4 +19,45 @@
 
 .ui.header>.image:not(.icon), .ui.header>img {
     margin-top: -0.857143em;
+}
+
+.ui.card>.content>.header, .ui.cards>.card>.content>.header, .ui.header {
+    color: var(--color-picked);
+}
+
+.ui.menu, .ui.green.button, .ui.green.buttons, .button , .ui.teal.button, .ui.teal.buttons {
+    background-color: var(--color-picked);
+}
+
+.ui.menu .item {
+    color:white; background-color:var(--color-picked)
+}
+
+.ui.link.menu .item:hover, .ui.menu .dropdown.item:hover, .ui.menu .link.item:hover, .ui.menu a.item:hover,
+.ui.menu .active.item:hover, .ui.vertical.menu .active.item:hover {
+    color:#fce423;
+}
+.ui.menu .active.item{
+    color:#fce423;
+}
+
+.ui.pagination.menu .item  {
+    background-color: white;
+    color: #666666;
+}
+
+.ui.pagination.menu .active.item {
+    color: var(--color-picked);
+}
+
+.ui.mini.menu {
+    background: white;
+}
+
+.ui.menu .item>img:not(.ui) {
+    width: 8.5em;
+}
+
+.ui.segment.custom-padding-class {
+    padding: 2em 2em;
 }

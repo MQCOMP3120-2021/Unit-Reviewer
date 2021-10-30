@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router-dom";
-import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message } from 'semantic-ui-react'
+import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message, Accordion } from 'semantic-ui-react'
 import authService from './services/auth'
 import unitsService from './services/units'
+import { ColorPicker, useColor } from "react-color-palette";
+import "react-color-palette/lib/css/styles.css";
 
 const Profile = ({ reviewDelete, units, user, getUser }) => {
     const history = useHistory()
@@ -12,6 +14,8 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
     const [open, setOpen] = useState(false)
     const [load, setLoad] = useState(false)
     const [serverIssue, setServerIssue] = useState("")
+    const [activeIndex, setActiveIndex] = useState(-1)
+    const [color, setColor] = useColor("hex", getComputedStyle(document.querySelector(':root')).getPropertyValue('--color-picked'));
     const changeAdmin = () => {
         setLoad(true)
         let usrname = user.data.username
@@ -43,7 +47,9 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
         }
     }
 
-    console.log("user info: ", user)
+    useEffect(() => {
+        document.body.style.setProperty('--color-picked', color.hex);
+    }, [color])
 
     return (
         <>
@@ -62,6 +68,19 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
                 </Grid.Row>
 
             </Header>
+
+            <Accordion fluid styled>
+                <Accordion.Title active={activeIndex === 0} onClick={e => setActiveIndex(activeIndex === 0 ? -1 : 0)}>
+                    <Header as='h3'> <Icon name='dropdown' />Change Theme</Header>
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 0}>
+                <Grid.Row textAlign='center'>
+                    <ColorPicker width={456} height={228}
+                        color={color}
+                        onChange={setColor} hideHSV dark />
+                        </Grid.Row>
+                </Accordion.Content>
+            </Accordion>
 
             {user && user.data.reviews && user.data.reviews.length > 0 ? <Segment.Group>
                 <Segment>
@@ -86,7 +105,7 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
                 </Segment.Group>
             </Segment.Group> :
                 <Segment>{user && user.data.username === author ? <Header as='h3' icon textAlign='center'>User's reviews will show up here once at least one is submitted</Header>
-            : <Header as='h3' icon textAlign='center'>You do not have permission to see other reviews from user</Header>}</Segment>
+                    : <Header as='h3' icon textAlign='center'>You do not have permission to see other reviews from user</Header>}</Segment>
             }
             <Modal
 
