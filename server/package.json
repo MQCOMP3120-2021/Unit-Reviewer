@@ -6,8 +6,9 @@
   "author": "Group AE",
   "license": "MIT",
   "scripts": {
-    "start": "yarn run build && node ./bin/index.js",
+    "start": "yarn run build-all && node ./bin/src/index.js",
     "build": "tsc",
+    "build-all": "tsc && cd ../client && yarn build && cp -r ./build ../server/public",
     "lint": "eslint --no-error-on-unmatched-pattern src/**/*.{ts,js} *.{ts,js}",
     "dev": "nodemon --files src/index.ts",
     "test": "NODE_ENV=test jest --config test/jest.config.js --testTimeout=10000 --forceExit test/"
