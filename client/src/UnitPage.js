@@ -305,7 +305,7 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
             <Segment.Group>
                 <Segment>
                     <Form size='large'>
-                        {!user ? <Header as='h2' textAlign="center">Login or create an account to add a review</Header> :
+                        {!user ? <Header as='h3' textAlign="center">Login or create an account to add a review</Header> :
                             unit.reviews.find(rev => rev.author === user.data.username) ?
                                 (<Header as='h3'>You have submitted a review (see below)</Header>)
                                 : (<><Header as='h3'>Add Review</Header>
@@ -351,7 +351,7 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
                                     </Button>}
                         </Segment>))
                         :
-                        <Header as="h1" align="center">No Reviews Found</Header>
+                        <Header as="h3" align="center">No Reviews Found</Header>
                     }
 
                 </Segment.Group>
