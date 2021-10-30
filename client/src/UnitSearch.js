@@ -2,14 +2,15 @@ import {Search} from 'semantic-ui-react'
 import _ from 'lodash'
 import React from 'react'
 import { BrowserRouter as Router, useHistory} from "react-router-dom";
-import { useRef, useCallback, useEffect, useReducer } from "react"; 
+import { useRef, useCallback, useEffect, useReducer, useState } from "react";
+import unitsService from './services/units'
 
 const initialState = {
     loading: false,
     results: [],
     value: '',
 }
-  
+
 function reducer(state, action) {
     switch (action.type) {
         case 'CLEAN_QUERY':
@@ -26,7 +27,7 @@ function reducer(state, action) {
     }
 }
 
-function UnitSearch({units}) {
+function UnitSearch() {
     const [state, dispatch] = useReducer(reducer, initialState)
     const { loading, results, value } = state
 
@@ -36,23 +37,27 @@ function UnitSearch({units}) {
     
     const handleSearchChange = useCallback((e, data) => {
         clearTimeout(timeoutRef.current)
-        dispatch({ type: 'START_SEARCH', query: data.value })
+        dispatch({ 
+            type: 'START_SEARCH', 
+            query: data.value 
+        })
 
-        timeoutRef.current = setTimeout(() => {
         if (data.value.length === 0) {
             dispatch({ type: 'CLEAN_QUERY' })
             return
         }
 
-        const re = new RegExp(_.escapeRegExp(data.value), 'i')
-        const isMatch = (result) => (re.test(result.code) || re.test(result.title) || re.test(result.level))
-
-        dispatch({
-            type: 'FINISH_SEARCH',
-            results: _.filter(units, isMatch),
-        })
-        }, 300)
-    }, [units])
+        timeoutRef.current = setTimeout(() => {
+            unitsService.searchUnits(data.value)
+                .then(objects => {
+                    let data = objects.data
+                    dispatch({
+                        type: 'FINISH_SEARCH',
+                        results: data,
+                    })
+                })
+        }, 500)
+    }, [results])
 
     useEffect(() => {
         return () => {

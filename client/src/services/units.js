@@ -36,5 +36,10 @@ const deleteReview = (revId,unitId, user) => {
     .then(response => response)
 }
 
+const searchUnits = (query) => {
+    return axios.get(baseURL+`search?any=${query}`)
+    .then(response => response)
+}
 
-export default {getAllUnits, getUnit, createUnit, deleteUnit, getNumUnits, submitReview, deleteReview} 
+
+export default {getAllUnits, getUnit, createUnit, deleteUnit, getNumUnits, submitReview, deleteReview, searchUnits} 

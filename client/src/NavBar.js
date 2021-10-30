@@ -5,6 +5,7 @@ import { Menu } from 'semantic-ui-react'
 import { NavLink, withRouter, useHistory } from 'react-router-dom'
 import UnitSearch from './UnitSearch'
 import authService from './services/auth'
+import logo from './img/urLogo.png'
 
 const NavBar = ({user, setUser, units}) => {
   const history = useHistory()
@@ -12,8 +13,9 @@ const NavBar = ({user, setUser, units}) => {
   return (
     <>
       <Menu stackable size="massive">
-        <Menu.Item width="100">
-          <img src='https://via.placeholder.com/150' />
+        <Menu.Item as={NavLink} exact to="/"
+          name="home">
+          <img src={logo} />
         </Menu.Item>
         <Menu.Item
           as={NavLink} exact to="/"
@@ -45,7 +47,7 @@ const NavBar = ({user, setUser, units}) => {
             name="login"
           />)}
           <Menu.Item>
-            <UnitSearch units={units}/>
+            <UnitSearch/>
           </Menu.Item>
         </Menu.Menu>
       </Menu>
