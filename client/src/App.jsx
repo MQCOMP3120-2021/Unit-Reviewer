@@ -45,8 +45,9 @@ const App = () => {
       .then((data) => {
         setUnitsLength(data.data.numUnits);
       })
-      .catch(() => {
-        alert('There was an error!');
+      .catch((e) => {
+        console.log(e);
+        alert('1 There was an error!');
       });
   };
 
@@ -82,8 +83,9 @@ const App = () => {
           setUnits(units);
           console.log(units);
         })
-        .catch(() => {
-          alert('There was an error!');
+        .catch((e) => {
+          console.log(e);
+          alert('2 There was an error!');
         });
     }
     return [units, loaded];
@@ -96,8 +98,9 @@ const App = () => {
         console.log(data);
         setUser(data);
       })
-      .catch(() => {
-        alert('There was an error!');
+      .catch((e) => {
+        console.log(e);
+        alert('3 There was an error!');
       });
   };
 
