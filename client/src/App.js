@@ -11,6 +11,7 @@ import RegisterForm from "./userAuth/RegisterForm"
 import NavBar from "./NavBar"
 import About from "./About"
 import Profile from "./UserProfile"
+import { useColor } from "react-color-palette";
 
 import './styles/custom.css'
 import UnitPage from './UnitPage'
@@ -21,6 +22,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [unitsLength, setUnitsLength] = useState(-1)
   const [loaded, setLoaded] = useState([])
+  const [color, setColor] = useColor("hex", getComputedStyle(document.querySelector(':root')).getPropertyValue('--color-picked'));
 
     const getUnitNums = () => {
     unitsService.getNumUnits()
@@ -115,7 +117,7 @@ const App = () => {
         <Route exact path="/login" render={() => <LoginForm getUser={getUser}/>}/>
         <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />}/>
         <Route exact path="/unit/:id" render={() => <UnitPage getUser={getUser} reviewDelete={reviewDelete} user={user}/>}/>
-        <Route exact path="/user/:author" render={() => <Profile reviewDelete={reviewDelete} getUser={getUser} units={units} user={user}/>}/>
+        <Route exact path="/user/:author" render={() => <Profile reviewDelete={reviewDelete} getUser={getUser} units={units} user={user} color={color} setColor={setColor}/>}/>
         <Route exact path="/" render={() => <HomePage units={units} getUnits={getUnits} unitsLength={unitsLength} />}/>
       </Container>
     </Router>

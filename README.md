@@ -8,6 +8,9 @@
 <a href="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/server.yaml">
   <img src="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/server.yaml/badge.svg" alt="Workflow status badge" height="20">
 </a>
+<a href="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/client.yaml">
+  <img src="https://github.com/MQCOMP3120-2021/group-web-project-group-ae/actions/workflows/client.yaml/badge.svg" alt="Workflow status badge" height="20">
+</a>
 </div>
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
@@ -28,6 +31,12 @@
     <a href="#application-structure">Application Structure</a>
     </li>
     <li>
+    <a href="#main-roles-and-communication-workflow">Main Roles and Communication Workflow</a>
+    </li>
+    <li>
+    <a href="#next-steps">Next Steps</a>
+    </li>
+    <li>
     <a href="#acknowledgements">Acknowledgements</a>
     </li>
   </ol>
@@ -40,9 +49,23 @@ Admin Credentials:
 admin:admin
 `
 
-The front end web application is written using React and supports the following functionality.
+Our group has created a unit review website. The website displays unit information similar
+to Macquarie University’s unit guide (e.g., learning outcomes, description,assessment breakdowns), 
+as well as allow users to rate and comment on units.
 
-* 
+This allows future students to see previous student’s opinions on certain units over time,
+rather than relying on word-of-mouth. Future students can now make informed decisions on what
+units to take. Obviously, the target audience would obviously be students as well as upcoming students.
+
+The front end web application is written using React and supports the following functionality (i.e., MVP milestones Achieved):
+
+* Saving and deletion of users, units and reviews in a MongoDB database
+* Searching of units and reviews 
+* Security measures implemented such as hashing of passwords and token authentication when making API calls (sent via cookie)
+* Granting of special privileges for admin users (i.e., Adding and deletion of units to the system)
+* Frontend and backend of website tested
+* Deployed to Heroku
+* Allow users to customise website theme via colour picker
 
 ## Installation
 1. Clone the repo
@@ -181,6 +204,24 @@ group-web-project-group-ae:.
                 auth.ts
                 units.ts
 ```     
+
+## Main Roles and Communication Workflow
+
+Below are the roles of each team member:
+
+* Jordan Bertasso - Security Lead and Backend Functionality
+* Joshua Dodanduwa - Frontend and UX/UI Lead
+* Cathy Nguyen - Frontend Design and Testing
+* Liam Strang - Frontend Design and Backend Functionality
+
+We communicated on a regular basis via discord chat. Each member would complete tasks on their own branch,
+then create pull requests for other memebers to approve it. This kept everything organised and created a 
+smooth workflow.
+
+## Next Steps
+
+The next steps we would take is see how we can officially launch it on a faster service (e.g., AWS). We may possibly
+review the code one more time before launching, as well as add a tad more frontend design elements.
 
 ## Acknowledgements
 * [Robohash](https://robohash.org/)

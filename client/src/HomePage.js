@@ -56,7 +56,7 @@ const HomePage = ({ units,unitsLength, getUnits }) => {
                         <Card.Content extra>
                             <Rating icon='star'
                                 defaultRating={item.reviews.length > 0 && item.reviews.map(rev => rev.rating).reduce((a, b) => (a + b)) / item.reviews.length}
-                                disabled maxRating={5} /> ({item.reviews.length} Ratings)
+                                disabled maxRating={5} /> ({item.reviews.length === 1? `${item.reviews.length} Rating`: `${item.reviews.length} Ratings`})
                         </Card.Content>
                     </Card></Link>
                 )))}
