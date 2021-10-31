@@ -41,7 +41,7 @@ docker build -t unit-reviewer .
 
 **Run:**
 ```bash
-docker run -e "MONGO_URI=<MONGO_CONNECTION_URI>" -p 5001:5001 unit-reviewer
+docker run -it -e "MONGO_URI=<MONGO_CONNECTION_URI>" -p 5001:5001 unit-reviewer
 ```
 
 Then you can visit the application in your browser at http://127.0.0.1:5001.
