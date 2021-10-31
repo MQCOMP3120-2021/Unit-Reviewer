@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Image, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message, Accordion, Form } from 'semantic-ui-react'
+import { Image, Header, Grid, Segment, Rating, Button, Loader, Dimmer, Icon, Message, Accordion } from 'semantic-ui-react'
 import authService from './services/auth'
 import { ColorPicker } from "react-color-palette";
+import AdminModal from './AdminModal';
 import "react-color-palette/lib/css/styles.css";
 
 const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
     const author = useParams().author
 
-    const [open, setOpen] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
     const [load, setLoad] = useState(false)
     const [serverIssue, setServerIssue] = useState("")
     const [activeIndex, setActiveIndex] = useState(-1)
@@ -41,7 +42,7 @@ const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
                 })
         }
         setLoad(false)
-        setOpen(false)
+        setModalOpen(false)
     }
 
     useEffect(() => {
@@ -66,7 +67,7 @@ const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
                         size="small"
                         onClick={(e) => {
                             setMakeAdmin(true);
-                            setOpen(true);
+                    setModalOpen(true);
                         }}
                         >
                         Add administrator privileges
@@ -75,7 +76,7 @@ const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
                         size="small"
                         onClick={(e) => {
                             setMakeAdmin(false);
-                            setOpen(true);
+                    setModalOpen(true);
                         }}
                         >
                         Revoke administrator privileges
@@ -83,7 +84,6 @@ const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
                     </>
                     )}
                 </Grid.Row>
-
             </Header>
 
             <Accordion fluid styled>
@@ -124,39 +124,16 @@ const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
                 <Segment>{user && user.data.username === author ? <Header as='h3' icon textAlign='center'>User's reviews will show up here once at least one is submitted</Header>
                     : <Header as='h3' icon textAlign='center'>You do not have permission to see other reviews from user</Header>}</Segment>
             }
-            <Modal
-
-                onClose={() => setOpen(false)}
-                onOpen={() => setOpen(true)}
-                open={open}
-                size='small'
-                centered={false}
-            >
-                <Header>
-                    Are you sure?
-                </Header>
-                <Modal.Content>
-                    <p>
-                        If you are not a lecturer and/or tutor,
-                        making changes to this will have serious consequences.
-                    </p>
-                    <Form>
-                        <Form.Field>
-                            <label>Username</label>
-                            <input placeholder='Username' onChange={(e) => {
-                                setFormUsername(e.target.value)}}/>
-                        </Form.Field>
-                    </Form>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button color='red' onClick={(e) => setOpen(false)}>Cancel
-                    </Button>
-                    <Button color='green' onClick={(e) => changeAdmin(formUsername)}>{makeAdmin ? 'Make Admin' : 'Revoke Admin'}
-                        <Dimmer active={load} inverted><Loader active={load} /></Dimmer>
-                    </Button>
-                </Modal.Actions>
-            </Modal>
-
+            {modalOpen && (
+            <AdminModal
+                setOpen={setModalOpen}
+                makeAdmin={makeAdmin}
+                username={formUsername}
+                setUsername={setFormUsername}
+                changeAdmin={changeAdmin}
+                load={load}
+            />
+            )}
         </>
     )
 
