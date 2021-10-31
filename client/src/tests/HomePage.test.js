@@ -21,7 +21,7 @@ describe('Homepage Display', () => {
     const getUnits = async () => [units, [1]];
     const component = render(
       <Router>
-        <HomePage units={units} unitsLength={5} getUnits={getUnits} />
+        <HomePage appLoaded={[1]} unitsLength={5} getUnits={getUnits} />
       </Router>,
     );
 
@@ -35,7 +35,7 @@ describe('Homepage Display', () => {
     const getUnits = async () => [units, [1]];
     const component = render(
       <Router>
-        <HomePage units={units} unitsLength={5} getUnits={getUnits} />
+        <HomePage appLoaded={[1]} unitsLength={5} getUnits={getUnits} />
       </Router>,
     );
 
