@@ -48,7 +48,7 @@ const AddUnit = ({ user }) => {
     offerings: [],
     activities: { scheduled: [], nonScheduled: [] },
     assessments: [],
-    credits: -1,
+    credits: 10,
     department: '',
     faculty: '',
     group: '',
