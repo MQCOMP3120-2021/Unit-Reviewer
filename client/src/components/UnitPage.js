@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
-import { Header, Icon, Image, Divider, Grid, Segment, List, Table, Label, Accordion, Rating, Form, Button, Input, Message, Loader, Search, Dimmer } from 'semantic-ui-react'
-import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
-import unitsService from './services/units'
+import { Header, Icon, Image,  Grid, Segment, List, Table, Accordion, Rating, Form, Button, Message, Loader, Search, Dimmer } from 'semantic-ui-react'
+import { BrowserRouter as NavLink, Link } from "react-router-dom";
+import * as unitsService from '../services/units'
 import Error from './Error'
 import renderHTML from 'react-render-html';
 

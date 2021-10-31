@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import { createMedia } from '@artsy/fresnel'
-import PropTypes from 'prop-types'
+import React  from 'react'
 import { Menu } from 'semantic-ui-react'
-import { NavLink, withRouter, useHistory } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import UnitSearch from './UnitSearch'
-import authService from './services/auth'
-import logo from './img/urLogo.png'
+import * as authService from '../services/auth'
+import logo from '../img/urLogo.png'
 
 const NavBar = ({user, setUser, units}) => {
   const history = useHistory()
@@ -15,7 +13,7 @@ const NavBar = ({user, setUser, units}) => {
       <Menu stackable size="massive">
         <Menu.Item as={NavLink} exact to="/"
           name="home">
-          <img src={logo} />
+          <img alt="logo" src={logo} />
         </Menu.Item>
         <Menu.Item
           as={NavLink} exact to="/"

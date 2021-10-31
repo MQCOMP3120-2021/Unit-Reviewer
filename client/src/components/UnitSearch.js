@@ -1,9 +1,8 @@
 import {Search} from 'semantic-ui-react'
-import _ from 'lodash'
 import React from 'react'
-import { BrowserRouter as Router, useHistory} from "react-router-dom";
-import { useRef, useCallback, useEffect, useReducer, useState } from "react";
-import unitsService from './services/units'
+import { useHistory} from "react-router-dom";
+import { useRef, useCallback, useEffect, useReducer } from "react";
+import * as unitsService from '../services/units'
 
 const initialState = {
     loading: false,

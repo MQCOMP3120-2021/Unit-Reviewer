@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Form, Grid, Header, Image, Message, Segment, Loader } from 'semantic-ui-react'
-import authService from '../services/auth'
+import { Button, Form, Grid, Message, Segment, Loader } from 'semantic-ui-react'
+import * as authService from '../services/auth'
 import { Link, useHistory } from 'react-router-dom'
 
   const LoginForm = ({ getUser }) => {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Image, Header, Grid, Segment, Rating, Button, Loader, Dimmer, Icon, Message, Accordion } from 'semantic-ui-react'
-import authService from './services/auth'
+import * as authService from '../../services/auth'
 import { ColorPicker } from "react-color-palette";
 import AdminModal from './AdminModal';
 import "react-color-palette/lib/css/styles.css";

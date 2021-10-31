@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Grid, Image, Card, Icon, Rating, Pagination } from 'semantic-ui-react'
+import { Grid, Card, Rating, Pagination } from 'semantic-ui-react'
 import Loading from './Loading'
 
 const HomePage = ({ units,unitsLength, getUnits }) => {

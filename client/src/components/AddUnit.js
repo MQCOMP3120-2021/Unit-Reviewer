@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Grid, Header, Image, Form, Segment, Button, Message, Dropdown, Modal, List, Loader, Dimmer } from "semantic-ui-react";
-import logo from './img/logo.png'
-import unitsService from '../src/services/units'
+import { Grid, Header, Form, Segment, Button, Message, Dropdown, Modal, List, Loader, Dimmer } from "semantic-ui-react";
+import * as unitsService from '../services/units'
 import { useHistory } from "react-router-dom";
 
 const AddUnit = ({ user }) => {
@@ -46,7 +45,7 @@ const AddUnit = ({ user }) => {
     ]
   }
   const addOffering = () => {
-    if (offering.attendance !== "" && offering.location !== "", offering.period !== "") {
+    if (offering.attendance !== "" && offering.location !== "" && offering.period !== "") {
       const newOffs = newUnit.offerings
       newOffs.push(offering)
       setNewUnit({ ...newUnit, offerings: newOffs })
@@ -228,7 +227,7 @@ const AddUnit = ({ user }) => {
     console.log(newUnit)
     setOpen(true)
 
-    if (!user || user && !user.data.admin) {
+    if (!user || !user.data.admin) {
       let frm = formErrors
       frm.push("user is not signed in or does not have permission")
       setFormErrors(frm)

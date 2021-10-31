@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import 'semantic-ui-css/semantic.min.css'
-import { Container, Grid } from "semantic-ui-react"
+import { Container } from "semantic-ui-react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
-import unitsService from './services/units'
-import authService from './services/auth'
-import HomePage from './HomePage'
-import AddUnit from './AddUnit'
+import * as unitsService from './services/units'
+import * as authService from './services/auth'
+import HomePage from './components/HomePage'
+import AddUnit from './components/AddUnit'
 import LoginForm from './userAuth/LoginForm'
 import RegisterForm from "./userAuth/RegisterForm"
-import NavBar from "./NavBar"
-import About from "./About"
-import Profile from "./UserProfile"
-import { useColor } from "react-color-palette";
+import NavBar from "./components/NavBar"
+import About from "./components/About"
+import Profile from "./components/profile/UserProfile"
+import { toColor, useColor } from "react-color-palette";
 
 import './styles/custom.css'
-import UnitPage from './UnitPage'
+import UnitPage from './components/UnitPage'
+
 
 const App = () => {
 
@@ -22,9 +23,20 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [unitsLength, setUnitsLength] = useState(-1)
   const [loaded, setLoaded] = useState([])
-  const [color, setColor] = useColor("hex", getComputedStyle(document.querySelector(':root')).getPropertyValue('--color-picked'));
+  const [color, _setColor] = useColor("hex", localStorage.getItem('color') || getComputedStyle(document.querySelector(':root')).getPropertyValue('--color-picked'));
 
-    const getUnitNums = () => {
+  const setColor = (_color) => {
+    if (typeof _color === 'string') {
+      localStorage.setItem('color', _color);
+      _setColor(toColor("hex", _color));
+    } else {
+      localStorage.setItem('color', _color.hex);
+      _setColor(_color);
+    }
+  }
+
+
+  const getUnitNums = () => {
     unitsService.getNumUnits()
     .then(data => {
         setUnitsLength(data.data.numUnits)
@@ -45,7 +57,7 @@ const App = () => {
         }
         console.log("actual loaded: ", loaded)
         if(!count) count = 0
-        if(count != 0) count = count - 1 
+        if(count !== 0) count = count - 1 
         
         for(let i = 1; i < 4; i++) {
           console.log("start Count:", count+i)
@@ -105,8 +117,8 @@ const App = () => {
 
     useEffect(() => {
       getUser()
-      //getUnitNums()
-    }, [])
+      document.body.style.setProperty('--color-picked', color.hex);
+    }, [color])
 
   return (
     <Router>

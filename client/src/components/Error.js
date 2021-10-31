@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, NavLink} from "react-router-dom";
+import { BrowserRouter as NavLink} from "react-router-dom";
 import {Header, Button} from "semantic-ui-react";
 
 const Error = () => {
