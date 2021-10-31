@@ -2,8 +2,6 @@
 
 ## [Live Deployment](https://unit-reviewer.herokuapp.com/)
 
----
-
 ## Usage
 ### Development
 
