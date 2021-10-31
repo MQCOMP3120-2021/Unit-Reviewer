@@ -1,39 +1,32 @@
-import axios from 'axios'
-const baseURL = "/api/auth/"
+import axios from 'axios';
 
-export const register = ({username, password}) => {
-    return axios.post(baseURL+"register", {username, password})
-                .then(response => response)
-}
+const baseURL = '/api/auth/';
 
-export const login = ({username, password}) => {
-    return axios.post(baseURL+"login", {username, password})
-                .then(response => response)
-}
+export const register = ({ username, password }) => axios.post(`${baseURL}register`, { username, password })
+  .then((response) => response);
 
-export const getUser = () => {
-  return axios
-    .get(baseURL + 'me')
-    .then((response) => response)
-    .catch((e) => console.log(e));
-};
+export const login = ({ username, password }) => axios.post(`${baseURL}login`, { username, password })
+  .then((response) => response);
+
+export const getUser = () => axios
+  .get(`${baseURL}me`)
+  .then((response) => response)
+  .catch((e) => console.log(e));
 
 export const makeAdmin = (username) => {
-  console.log(username)
+  console.log(username);
   return axios
-    .post(baseURL + 'makeAdmin', {username})
-    .then(response => response)
+    .post(`${baseURL}makeAdmin`, { username })
+    .then((response) => response);
 };
 
 export const revokeAdmin = (username) => {
-  console.log(username)
+  console.log(username);
   return axios
-    .post(baseURL + 'revokeAdmin', {username})
-    .then(response => response)
+    .post(`${baseURL}revokeAdmin`, { username })
+    .then((response) => response);
 };
 
-export const logout = () => {
-  return axios.post(baseURL+"logout")
-              .then(response => "done")
-              .catch((e) => console.log(e));
-}
+export const logout = () => axios.post(`${baseURL}logout`)
+  .then(() => 'done')
+  .catch((e) => console.log(e));
