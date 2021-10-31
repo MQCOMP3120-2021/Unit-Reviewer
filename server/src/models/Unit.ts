@@ -89,21 +89,14 @@ export const deleteReview = async (
   $pull: { reviews: { _id: reviewId } },
 });
 
-export const searchUnits = async (query: string, path: string) => Unit.aggregate().search({
-  index: UNIT_SEARCH_INDEX,
-  wildcard: {
-    path: path === '*' ? { wildcard: '*' } : path,
-    query: `*${query}*`,
-    allowAnalyzedField: true,
-  },
-  // text: {
-  //   query,
-  //   path,
-  //   fuzzy: {},
-  //   // {
-  //   //   wildcard: '*',
-  //   // },
-  // },
-});
+export const searchUnits = async (query: string, path: string | string[]) => Unit
+  .aggregate().search({
+    index: UNIT_SEARCH_INDEX,
+    wildcard: {
+      path: path === '*' ? { wildcard: '*' } : path,
+      query: `*${query}*`,
+      allowAnalyzedField: true,
+    },
+  });
 
 export default Unit;
