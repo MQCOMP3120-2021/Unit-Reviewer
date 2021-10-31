@@ -47,7 +47,6 @@ const App = () => {
       })
       .catch((e) => {
         console.log(e);
-        alert('1 There was an error!');
       });
   };
 
@@ -85,7 +84,6 @@ const App = () => {
         })
         .catch((e) => {
           console.log(e);
-          alert('2 There was an error!');
         });
     }
     return [units, loaded];
@@ -100,7 +98,6 @@ const App = () => {
       })
       .catch((e) => {
         console.log(e);
-        alert('3 There was an error!');
       });
   };
 

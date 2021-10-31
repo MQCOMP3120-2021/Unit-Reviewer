@@ -136,7 +136,7 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
           setLoad(false);
         });
     } else {
-      alert('ERROR: user not signed in.');
+      alert('ERROR: User not signed in.');
     }
   };
 

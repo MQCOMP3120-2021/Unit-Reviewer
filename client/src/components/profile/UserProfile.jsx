@@ -42,7 +42,6 @@ const Profile = ({
         })
         .catch((error) => {
           console.log(error.response.data.error);
-          alert(`Error! ${error.response.data.error}`);
         });
     } else {
       authService
@@ -53,7 +52,6 @@ const Profile = ({
         })
         .catch((error) => {
           console.log(error.response.data.error);
-          alert(`Error! ${error.response.data.error}`);
         });
     }
     setLoad(false);
