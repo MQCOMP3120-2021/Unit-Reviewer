@@ -138,7 +138,7 @@ unitsRouter.get('/search?', async (req, res) => {
   }
 
   if (req.query.any !== undefined) {
-    const units = await searchUnits(query, '*');
+    const units = await searchUnits(query, ['code', 'title']);
     return res.send(units);
   }
 
