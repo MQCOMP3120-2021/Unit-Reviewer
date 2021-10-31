@@ -12,6 +12,7 @@ import {
   Icon,
   Message,
   Accordion,
+  Search,
 } from 'semantic-ui-react';
 import { ColorPicker } from 'react-color-palette';
 import * as authService from '../../services/auth';
@@ -30,6 +31,7 @@ const Profile = ({
 
   const [formUsername, setFormUsername] = useState('');
   const [makeAdmin, setMakeAdmin] = useState(false);
+  const [reviews, setReviews] = useState([]);
 
   const changeAdmin = (usrname) => {
     setLoad(true);
@@ -58,9 +60,33 @@ const Profile = ({
     setModalOpen(false);
   };
 
+  const searchReview = (qry) => {
+    console.log(qry);
+    if (qry !== '') {
+      const revSearch = user.data.reviews.filter(
+        (rev) => rev.author.toLowerCase().search(qry.toLowerCase()) !== -1
+          || rev.content.toLowerCase().search(qry.toLowerCase()) !== -1
+          || rev.rating.toString().toLowerCase().search(qry.toLowerCase()) !== -1,
+      );
+      console.log(revSearch);
+      setReviews(revSearch);
+    } else {
+      setReviews(user ? user.data.reviews : []);
+    }
+  };
+
   useEffect(() => {
     document.body.style.setProperty('--color-picked', color.hex);
   }, [color]);
+
+  useEffect(() => {
+    if (user && user.data.username === author) {
+      setReviews(user.data.reviews);
+    } else if (!user) {
+      getUser();
+    }
+    console.log('change');
+  }, [user]);
 
   return (
     <>
@@ -134,13 +160,31 @@ const Profile = ({
         </Accordion.Content>
       </Accordion>
 
-      {user && user.data.reviews && user.data.reviews.length > 0 ? (
+      {user && user.data.username === author ? (
         <Segment.Group>
           <Segment>
-            <Grid columns={3} stackable />
+            <Grid columns={3} stackable>
+              <Grid.Row verticalAlign="middle">
+                <Grid.Column>
+                  <Header as="h3">
+                    Reviews (
+                    {reviews.length}
+                    )
+                  </Header>
+                </Grid.Column>
+                <Grid.Column>
+                  <Search
+                    onSearchChange={(e, data) => searchReview(data.value)}
+                    input={{ fluid: true }}
+                    showNoResults={false}
+                    fluid
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Segment>
           <Segment.Group>
-            {user.data.reviews.map((rev) => (
+            {reviews.map((rev) => (
               <Segment key={rev._id}>
                 <Grid stackable container columns={2}>
                   <Grid.Column width={12}>

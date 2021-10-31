@@ -5,24 +5,14 @@ const About = () => (
   <Segment className="custom-padding-class">
     <Header as="h1">About MQ&apos;s Unit Review</Header>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mollis
-      vitae massa at pretium. Ut justo risus, lacinia ut volutpat eu, tempus
-      at ante. Donec ac eleifend turpis. Suspendisse feugiat bibendum diam.
-      Nulla elit est, pulvinar in scelerisque sit amet, luctus sed enim.
-      Curabitur malesuada sapien et gravida tincidunt. Donec non faucibus
-      ipsum, eu commodo tellus. Duis dapibus est vitae euismod tristique.
-      Pellentesque sagittis, felis vel aliquam cursus, odio nulla bibendum
-      velit, a laoreet dolor lectus facilisis tortor. Maecenas porttitor sed
-      neque finibus scelerisque. Aenean mauris nisl, pretium nec tortor eu,
-      accumsan rutrum magna. Quisque lobortis lacus erat, nec semper lacus
-      dapibus vel. Praesent varius erat sed tempor sodales. Vestibulum luctus
-      eleifend vulputate. Nulla egestas eros at mi volutpat, porttitor
-      vestibulum urna venenatis. Cras ac magna mattis, congue orci eu,
-      dignissim arcu. Nulla hendrerit orci ut urna ultricies, sit amet dictum
-      purus fermentum. Aliquam sapien ligula, porta eget iaculis sed,
-      facilisis in nisi. Duis ligula tortor, pulvinar ut tempus sit amet,
-      fringilla sit amet nulla. Ut nec sapien in urna rhoncus maximus ac
-      vehicula ante. Vivamus ultricies finibus finibus.
+      This is a unit review website. The website displays unit
+      information similar to Macquarie University’s unit guide
+      (e.g., learning outcomes, description,assessment breakdowns),
+      as well as allow users to rate and comment on units. It allows
+      future students to see previous student’s opinions on certain units
+      over time, rather than relying on word-of-mouth. Future students can
+      now make informed decisions on what units to take. Obviously, the
+      target audience would obviously is students as well as upcoming students.
     </p>
   </Segment>
 );

@@ -5,30 +5,30 @@ import {
 } from 'semantic-ui-react';
 import Loading from './Loading';
 
-const HomePage = ({ unitsLength, getUnits }) => {
-  const [activePage, setActivePage] = useState(1);
+const HomePage = ({ appLoaded, unitsLength, getUnits }) => {
+  const [actPage, setActPage] = useState(1);
   const [homeUnits, setHomeUnits] = useState([]);
-  const [loaded, setLoaded] = useState([]);
+  const [loaded, setLoaded] = useState(appLoaded);
   const [loading, setLoading] = useState();
   console.log(Math.ceil(unitsLength / 10));
 
   const getHomeUnits = async () => {
     console.log('hi');
-    console.log('active Page: ', activePage);
+    console.log('active Page: ', actPage);
     let info = [];
     if (loaded.length < 1) {
       console.log('new load');
       setLoading(true);
-      info = await getUnits(activePage, true);
+      info = await getUnits(actPage, true);
     } else {
       setLoading(true);
-      info = await getUnits(activePage);
+      info = await getUnits(actPage);
     }
     // console.log("info: ",info)
     const allUnits = info[0];
     const pages = info[1];
-    console.log('loaded: ', pages);
-    console.log('allUnits: ', allUnits);
+    // console.log('loaded: ', pages);
+    // console.log('allUnits: ', allUnits);
     // console.log("allUnits last: ",allUnits[allUnits.length-1])
     setLoaded(pages);
     setHomeUnits(allUnits);
@@ -36,9 +36,10 @@ const HomePage = ({ unitsLength, getUnits }) => {
   };
 
   useEffect(() => {
+    console.log('active page is: ', actPage);
     setHomeUnits([]);
     getHomeUnits();
-  }, [activePage]);
+  }, [actPage]);
 
   return (
     <>
@@ -55,7 +56,7 @@ const HomePage = ({ unitsLength, getUnits }) => {
           ) : (
             homeUnits
               .filter((elem, idx) => {
-                const c = loaded.indexOf(activePage) * 10;
+                const c = loaded.indexOf(actPage) * 10;
                 return idx >= c && idx < c + 10;
               })
               .map((item) => (
@@ -91,9 +92,11 @@ const HomePage = ({ unitsLength, getUnits }) => {
         </Grid.Row>
         <Grid.Row>
           <Pagination
-            onPageChange={(e, { newActivePage }) => setActivePage(newActivePage)}
+            onPageChange={(e, { activePage }) => {
+              setActPage(activePage);
+            }}
             size="mini"
-            activePage={activePage}
+            activePage={actPage}
             totalPages={Math.ceil(unitsLength / 10)}
           />
         </Grid.Row>

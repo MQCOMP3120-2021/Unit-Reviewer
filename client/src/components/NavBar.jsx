@@ -25,6 +25,11 @@ const NavBar = ({ user, setUser }) => {
           to="/"
           name="home"
         />
+        <Menu.Item
+          as={NavLink}
+          to="/about"
+          name="about"
+        />
         {user && user.data.admin && (
         <Menu.Item
           as={NavLink}
@@ -32,11 +37,6 @@ const NavBar = ({ user, setUser }) => {
           name="add unit"
         />
         )}
-        <Menu.Item
-          as={NavLink}
-          to="/about"
-          name="about"
-        />
         <Menu.Menu position="right">
           {user ? (
             <>
