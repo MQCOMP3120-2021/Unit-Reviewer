@@ -1,49 +1,47 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
-import { useParams, useHistory } from "react-router-dom";
-import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message, Accordion } from 'semantic-ui-react'
+import { BrowserRouter as NavLink, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Image, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message, Accordion, Form } from 'semantic-ui-react'
 import authService from './services/auth'
-import unitsService from './services/units'
 import { ColorPicker } from "react-color-palette";
 import "react-color-palette/lib/css/styles.css";
 
 const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
-    const history = useHistory()
     const author = useParams().author
 
     const [open, setOpen] = useState(false)
     const [load, setLoad] = useState(false)
     const [serverIssue, setServerIssue] = useState("")
     const [activeIndex, setActiveIndex] = useState(-1)
-    const changeAdmin = () => {
+
+    const [formUsername, setFormUsername] = useState("")
+    const [makeAdmin, setMakeAdmin] = useState(false)
+
+    const changeAdmin = (usrname) => {
         setLoad(true)
-        let usrname = user.data.username
-        let adminStat = user.data.admin
-        if (adminStat) {
+        if (!makeAdmin) {
             authService.revokeAdmin(usrname)
                 .then(data => {
                     console.log("Success: ", data)
                     getUser()
-                    history.push("/")
                 })
                 .catch((error) => {
                     console.log(error.response.data.error)
                     alert("Error! " + error.response.data.error)
-                    setLoad(false)
                 })
         } else {
             authService.makeAdmin(usrname)
                 .then(data => {
                     console.log("Success: ", data)
                     getUser()
-                    history.push("/")
                 })
                 .catch((error) => {
                     console.log(error.response.data.error)
                     alert("Error! " + error.response.data.error)
-                    setLoad(false)
                 })
         }
+        setLoad(false)
+        setOpen(false)
     }
 
     useEffect(() => {
@@ -62,8 +60,28 @@ const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
                 <Header as="h2">{author.charAt(0).toUpperCase() + author.slice(1)}</Header>
                 {/*<Label padded size="medium">{reviews.length} Reviews</Label>*/}
                 <Grid.Row textAlign="center">
-                    {user && user.data.username === author && (user.data.admin ? <Button size="small" onClick={e => setOpen(true)}>Revoke administrator privileges</Button> :
-                        <Button size="small" onClick={e => setOpen(true)}>Add administrator privileges</Button>)}
+                    {user && user.data.username === author && user.data.admin && (
+                    <>
+                        <Button
+                        size="small"
+                        onClick={(e) => {
+                            setMakeAdmin(true);
+                            setOpen(true);
+                        }}
+                        >
+                        Add administrator privileges
+                        </Button>
+                        <Button
+                        size="small"
+                        onClick={(e) => {
+                            setMakeAdmin(false);
+                            setOpen(true);
+                        }}
+                        >
+                        Revoke administrator privileges
+                        </Button>
+                    </>
+                    )}
                 </Grid.Row>
 
             </Header>
@@ -122,11 +140,18 @@ const Profile = ({ reviewDelete, units, user, getUser, color, setColor }) => {
                         If you are not a lecturer and/or tutor,
                         making changes to this will have serious consequences.
                     </p>
+                    <Form>
+                        <Form.Field>
+                            <label>Username</label>
+                            <input placeholder='Username' onChange={(e) => {
+                                setFormUsername(e.target.value)}}/>
+                        </Form.Field>
+                    </Form>
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button color='red' onClick={(e) => setOpen(false)}>No
+                    <Button color='red' onClick={(e) => setOpen(false)}>Cancel
                     </Button>
-                    <Button color='green' onClick={(e) => changeAdmin()}>Yes
+                    <Button color='green' onClick={(e) => changeAdmin(formUsername)}>{makeAdmin ? 'Make Admin' : 'Revoke Admin'}
                         <Dimmer active={load} inverted><Loader active={load} /></Dimmer>
                     </Button>
                 </Modal.Actions>
