@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router-dom";
-import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message, Accordion } from 'semantic-ui-react'
+import { Image, Label, Header, Grid, Segment, Rating, Button, Modal, Loader, Dimmer, Icon, Message, Accordion, Item } from 'semantic-ui-react'
 import authService from './services/auth'
 import unitsService from './services/units'
 import { ColorPicker, useColor } from "react-color-palette";
@@ -91,9 +91,11 @@ const Profile = ({ reviewDelete, units, user, getUser }) => {
                     {user.data.reviews.map(rev => (<Segment key={rev._id}>
                         <Grid stackable container columns={2}>
                             <Grid.Column width={12}>
-                                <Header as='h5'><Link to={`/unit/${rev.unitId}`} as={NavLink}>Unit <Icon name='arrow circle right'></Icon></Link></Header>
+                                <Header as='h5'><Link to={`/unit/${rev.unitId}`} as={NavLink}>Unit<Icon name='arrow circle right'></Icon></Link></Header>
                                 <Rating icon='star' defaultRating={rev.rating} disabled maxRating={5} />
+                                <p>{rev.semester}</p>
                                 <p>{rev.content}</p>
+                                <p>{rev.year}</p>
                             </Grid.Column>
                             <Grid.Column width={4} verticalAlign='middle'>
                                 {user && rev.author === user.data.username && <Button fluid color='red' onClick={e => reviewDelete(rev._id, rev.unitId, setServerIssue, setLoad)}>
