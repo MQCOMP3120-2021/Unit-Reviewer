@@ -119,13 +119,10 @@ const App = () => {
       .deleteReview(revId, unitId, user)
       .then((data) => {
         console.log(data.status);
-        if (window.location.pathname !== `/user/${user.data.username}`) {
+        if (window.location.pathname.indexOf('user') === -1) {
           retrieveUnit();
-          getUser();
-        } else {
-          getUser();
+          setLoad(false);
         }
-        setLoad(false);
       })
       .catch((error) => {
         console.log(error.response.data.error);

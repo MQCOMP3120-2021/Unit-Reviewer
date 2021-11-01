@@ -13,6 +13,11 @@ export const getUser = () => axios
   .then((response) => response)
   .catch((e) => console.log(e));
 
+export const getUserReviews = (username) => axios
+  .get(`${baseURL}${username}`)
+  .then((response) => response)
+  .catch((e) => console.log(e));
+
 export const makeAdmin = (username) => {
   console.log(username);
   return axios
