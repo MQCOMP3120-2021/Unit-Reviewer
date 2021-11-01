@@ -25,16 +25,51 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
   const { id } = useParams();
   const [unit, setUnit] = useState(null);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [newReview, setNewReview] = useState({ content: '', rating: 0 });
+  const [newReview, setNewReview] = useState({
+    content: '', rating: 0, year: '', sess: '',
+  });
 
   const [errors, setErrors] = useState({
     content: { error: false, message: '' },
     rating: { error: false, message: '' },
+    year: { error: false, message: '' },
+    sess: { error: false, message: '' },
   });
   const [serverIssue, setServerIssue] = useState('');
   const [load, setLoad] = useState(false);
 
   const [reviews, setReviews] = useState(unit ? unit.reviews : []);
+
+  const yearOptions = [
+    { key: 'zero', text: '2000', value: '2000' },
+    { key: 'one', text: '2001', value: '2001' },
+    { key: 'two', text: '2002', value: '2002' },
+    { key: 'three', text: '2003', value: '2003' },
+    { key: 'four', text: '2004', value: '2004' },
+    { key: 'five', text: '2005', value: '2005' },
+    { key: 'six', text: '2006', value: '2006' },
+    { key: 'seven', text: '2007', value: '2007' },
+    { key: 'eight', text: '2008', value: '2008' },
+    { key: 'nine', text: '2009', value: '2009' },
+    { key: 'ten', text: '2010', value: '2010' },
+    { key: 'eleven', text: '2011', value: '2011' },
+    { key: 'twelve', text: '2012', value: '2012' },
+    { key: 'thirteen', text: '2013', value: '2013' },
+    { key: 'fourteen', text: '2014', value: '2014' },
+    { key: 'fifteen', text: '2015', value: '2015' },
+    { key: 'sixteen', text: '2016', value: '2016' },
+    { key: 'seventeen', text: '2017', value: '2017' },
+    { key: 'eighteen', text: '2018', value: '2018' },
+    { key: 'nineteen', text: '2019', value: '2019' },
+    { key: 'twenty', text: '2020', value: '2020' },
+    { key: 'twentyone', text: '2021', value: '2021' },
+  ];
+
+  const sessOptions = [
+    { key: 'S1', text: 'Session 1', value: 'Session 1' },
+    { key: 'S2', text: 'Session 2', value: 'Session 2' },
+    { key: 'S3', text: 'Session 3', value: 'Session 3' },
+  ];
 
   const retrieveUnit = () => {
     unitsService
@@ -96,6 +131,8 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
       const err = {
         content: { error: false, message: '' },
         rating: { error: false, message: '' },
+        year: { error: false, message: '' },
+        sess: { error: false, message: '' },
       };
       let issue = false;
       if (newReview.content === '') {
@@ -112,6 +149,20 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
         };
         issue = true;
       }
+      if (newReview.year === '') {
+        err.year = {
+          error: true,
+          message: 'please fill in year you took the unit using the dropdown',
+        };
+        issue = true;
+      }
+      if (newReview.sess === '') {
+        err.sess = {
+          error: true,
+          message: 'please fill in session you took the unit using the dropdown',
+        };
+        issue = true;
+      }
       setErrors(err);
       if (issue) {
         return;
@@ -124,6 +175,7 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
           author: user.data.username,
           user,
           unitId: unit._id,
+          content: `Year taken - ${newReview.year}\nSession - ${newReview.sess}\n${newReview.content}`,
         })
         .then((data) => {
           console.log(data);
@@ -174,6 +226,18 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
           {' '}
           {unit.title}
         </Header.Content>
+        <Rating
+          icon="star"
+          size="tiny"
+          defaultRating={
+            reviews.length > 0
+            && reviews
+              .map((rev) => rev.rating)
+              .reduce((a, b) => a + b) / reviews.length
+          }
+          disabled
+          maxRating={5}
+        />
       </Header>
       <Segment>
         <Grid columns={2} relaxed="very">
@@ -479,8 +543,42 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
               ) : (
                 <>
                   <Header as="h3">Add Review</Header>
-                  <Form.Field>
-                    Rate Unit:
+                  <Form.Field
+                    required
+                  >
+                    <label>Year</label>
+                    <Form.Select
+                      options={yearOptions}
+                      placeholder="Level"
+                      value={newReview.year}
+                      onChange={(e, { value }) => setNewReview({ ...newReview, year: value })}
+                      search
+                    />
+                    {errors.year.error && (
+                    <Message size="mini" negative>
+                      <Message.Header>{errors.year.message}</Message.Header>
+                    </Message>
+                    )}
+                  </Form.Field>
+                  <Form.Field
+                    required
+                  >
+                    <label>Session</label>
+                    <Form.Select
+                      options={sessOptions}
+                      placeholder="Level"
+                      value={newReview.sess}
+                      onChange={(e, { value }) => setNewReview({ ...newReview, sess: value })}
+                      search
+                    />
+                    {errors.sess.error && (
+                    <Message size="mini" negative>
+                      <Message.Header>{errors.sess.message}</Message.Header>
+                    </Message>
+                    )}
+                  </Form.Field>
+                  <Form.Field required>
+                    <label>Rate Unit:</label>
                     <Rating
                       icon="star"
                       defaultRating={newReview.rating}
@@ -494,6 +592,8 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
                     )}
                   </Form.Field>
                   <Form.TextArea
+                    label="Comment"
+                    required
                     error={errors.content.error && errors.content.message}
                     rows={5}
                     fluid
@@ -559,7 +659,9 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
                   disabled
                   maxRating={5}
                 />
-                <p>{rev.content}</p>
+                <br />
+                <br />
+                <p>{renderHTML(rev.content.replace(/\n/g, '<br /><br />'))}</p>
                 {user && rev.author === user.data.username && (
                   <Button
                     onClick={() => reviewDelete(

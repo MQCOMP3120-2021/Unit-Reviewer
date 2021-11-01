@@ -14,6 +14,7 @@ import {
   Accordion,
   Search,
 } from 'semantic-ui-react';
+import renderHTML from 'react-render-html';
 import { ColorPicker } from 'react-color-palette';
 import * as authService from '../../services/auth';
 import AdminModal from './AdminModal';
@@ -200,7 +201,7 @@ const Profile = ({
                       disabled
                       maxRating={5}
                     />
-                    <p>{rev.content}</p>
+                    <p>{renderHTML(rev.content.replace(/\n/g, '<br /><br />'))}</p>
                   </Grid.Column>
                   <Grid.Column width={4} verticalAlign="middle">
                     {user && rev.author === user.data.username && (
