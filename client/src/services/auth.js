@@ -1,41 +1,37 @@
-import axios from 'axios'
-const baseURL = "/api/auth/"
+import axios from 'axios';
 
-const register = ({username, password}) => {
-    return axios.post(baseURL+"register", {username, password})
-                .then(response => response)
-}
+const baseURL = '/api/auth/';
 
-const login = ({username, password}) => {
-    return axios.post(baseURL+"login", {username, password})
-                .then(response => response)
-}
+export const register = ({ username, password }) => axios.post(`${baseURL}register`, { username, password })
+  .then((response) => response);
 
-const getUser = () => {
+export const login = ({ username, password }) => axios.post(`${baseURL}login`, { username, password })
+  .then((response) => response);
+
+export const getUser = () => axios
+  .get(`${baseURL}me`)
+  .then((response) => response)
+  .catch((e) => console.log(e));
+
+export const getUserReviews = (username) => axios
+  .get(`${baseURL}${username}`)
+  .then((response) => response)
+  .catch((e) => console.log(e));
+
+export const makeAdmin = (username) => {
+  console.log(username);
   return axios
-    .get(baseURL + 'me')
-    .then((response) => response)
-    .catch((e) => console.log(e));
+    .post(`${baseURL}makeAdmin`, { username })
+    .then((response) => response);
 };
 
-const makeAdmin = (username) => {
-  console.log(username)
+export const revokeAdmin = (username) => {
+  console.log(username);
   return axios
-    .post(baseURL + 'makeAdmin', {username})
-    .then(response => response)
+    .post(`${baseURL}revokeAdmin`, { username })
+    .then((response) => response);
 };
 
-const revokeAdmin = (username) => {
-  console.log(username)
-  return axios
-    .post(baseURL + 'revokeAdmin', {username})
-    .then(response => response)
-};
-
-const logout = () => {
-  return axios.post(baseURL+"logout")
-              .then(response => "done")
-              .catch((e) => console.log(e));
-}
-
-export default {register, login, getUser, logout, makeAdmin, revokeAdmin} 
+export const logout = () => axios.post(`${baseURL}logout`)
+  .then(() => 'done')
+  .catch((e) => console.log(e));
