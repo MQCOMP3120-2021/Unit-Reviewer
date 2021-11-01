@@ -4,7 +4,7 @@ import { sign } from 'jsonwebtoken';
 
 import { JWT_COOKIE_NAME, JWT_SECRET } from '../config';
 import { IUser } from '../interfaces';
-import {
+import User, {
   addUser, checkAdmin, checkReviews, passwordValid, setAdmin, userExists,
 } from '../models/User';
 
@@ -12,6 +12,7 @@ const authRouter = express.Router();
 
 const CANNOT_ADD_USER_ERROR = 'Unable to add user';
 const USER_EXISTS_ERROR = 'User already exists';
+const USER_NOT_FOUND_ERROR = 'User not found';
 const BAD_LOGIN_ERROR = 'Incorrect username or password';
 const EMPTY_USERNAME_OR_PASSWORD_ERROR = 'Username or password cannot be empty';
 
@@ -67,6 +68,28 @@ authRouter.get(
       admin: user.admin,
       reviews: user.reviews,
     });
+  },
+);
+
+/**
+ * GET /api/auth/:username
+ * @summary Returns a specific user's reviews
+ * @return {User} 200 - Success response
+ * @return {object} 400 - Bad request
+ */
+authRouter.get(
+  '/:username',
+  async (req, res) => {
+    const { username } = req.params;
+    try {
+      const user = await User.findOne({ username });
+      if (user) {
+        return res.json(user.reviews);
+      }
+      return res.status(404).send({ error: USER_NOT_FOUND_ERROR });
+    } catch (error) {
+      return res.status(404).send({ error: USER_NOT_FOUND_ERROR });
+    }
   },
 );
 

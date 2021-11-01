@@ -523,7 +523,7 @@ const UnitPage = ({ getUser, reviewDelete, user }) => {
               <Grid.Column>
                 <Header as="h3">
                   Reviews (
-                  {unit.reviews.length}
+                  {reviews.length}
                   )
                 </Header>
               </Grid.Column>

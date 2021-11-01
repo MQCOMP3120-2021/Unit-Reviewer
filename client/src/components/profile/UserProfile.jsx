@@ -12,6 +12,7 @@ import {
   Icon,
   Message,
   Accordion,
+  Search,
 } from 'semantic-ui-react';
 import { ColorPicker } from 'react-color-palette';
 import * as authService from '../../services/auth';
@@ -30,6 +31,8 @@ const Profile = ({
 
   const [formUsername, setFormUsername] = useState('');
   const [makeAdmin, setMakeAdmin] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [ogRevs, setOgRevs] = useState([]);
 
   const changeAdmin = (usrname) => {
     setLoad(true);
@@ -58,9 +61,55 @@ const Profile = ({
     setModalOpen(false);
   };
 
+  const searchReview = (qry) => {
+    console.log(qry);
+    if (qry !== '') {
+      const revSearch = reviews.filter(
+        (rev) => rev.author.toLowerCase().search(qry.toLowerCase()) !== -1
+          || rev.content.toLowerCase().search(qry.toLowerCase()) !== -1
+          || rev.rating.toString().toLowerCase().search(qry.toLowerCase()) !== -1,
+      );
+      console.log(revSearch);
+      setReviews(revSearch);
+    } else {
+      setReviews(ogRevs);
+    }
+  };
+
+  const getUserRevs = () => {
+    setLoad(true);
+    console.log('author is: ', author);
+    authService
+      .getUserReviews(author)
+      .then((response) => {
+        console.log(response.data);
+        setOgRevs(response.data);
+        setReviews(response.data);
+        setLoad(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoad(false);
+      });
+  };
+
+  const deleteRev = async (revId, unitId) => {
+    await reviewDelete(
+      revId,
+      unitId,
+      setServerIssue,
+      setLoad,
+    );
+    getUserRevs();
+  };
+
   useEffect(() => {
     document.body.style.setProperty('--color-picked', color.hex);
   }, [color]);
+
+  useEffect(() => {
+    getUserRevs();
+  }, []);
 
   return (
     <>
@@ -133,67 +182,74 @@ const Profile = ({
           </Grid.Row>
         </Accordion.Content>
       </Accordion>
-
-      {user && user.data.reviews && user.data.reviews.length > 0 ? (
-        <Segment.Group>
-          <Segment>
-            <Grid columns={3} stackable />
-          </Segment>
-          <Segment.Group>
-            {user.data.reviews.map((rev) => (
-              <Segment key={rev._id}>
-                <Grid stackable container columns={2}>
-                  <Grid.Column width={12}>
-                    <Header as="h5">
-                      <Link to={`/unit/${rev.unitId}`} as={NavLink}>
-                        Unit
-                        <Icon name="arrow circle right" />
-                      </Link>
-                    </Header>
-                    <Rating
-                      icon="star"
-                      defaultRating={rev.rating}
-                      disabled
-                      maxRating={5}
-                    />
-                    <p>{rev.content}</p>
-                  </Grid.Column>
-                  <Grid.Column width={4} verticalAlign="middle">
-                    {user && rev.author === user.data.username && (
-                      <Button
-                        fluid
-                        color="red"
-                        onClick={() => reviewDelete(
-                          rev._id,
-                          rev.unitId,
-                          setServerIssue,
-                          setLoad,
-                        )}
-                      >
-                        <Icon name="trash alternate" />
-                        {' '}
-                        Delete
-                      </Button>
-                    )}
-                  </Grid.Column>
-                </Grid>
-              </Segment>
-            ))}
-          </Segment.Group>
-        </Segment.Group>
-      ) : (
+      <Segment.Group>
         <Segment>
-          {user && user.data.username === author ? (
-            <Header as="h3" icon textAlign="center">
-              User&apos;s reviews will show up here once at least one is submitted
-            </Header>
-          ) : (
-            <Header as="h3" icon textAlign="center">
-              You do not have permission to see other reviews from user
-            </Header>
-          )}
+          <Grid columns={3} stackable>
+            <Grid.Row verticalAlign="middle">
+              <Grid.Column>
+                <Header as="h3">
+                  Reviews (
+                  {reviews.length}
+                  )
+                </Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Search
+                  onSearchChange={(e, data) => searchReview(data.value)}
+                  input={{ fluid: true }}
+                  showNoResults={false}
+                  fluid
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Segment>
-      )}
+        <Segment.Group>
+          {reviews.length > 0 ? reviews.map((rev) => (
+            <Segment key={rev._id}>
+              <Grid stackable container columns={2}>
+                <Grid.Column width={12}>
+                  <Header as="h5">
+                    <Link to={`/unit/${rev.unitId}`} as={NavLink}>
+                      Unit
+                      <Icon name="arrow circle right" />
+                    </Link>
+                  </Header>
+                  <Rating
+                    icon="star"
+                    defaultRating={rev.rating}
+                    disabled
+                    maxRating={5}
+                  />
+                  <p>{rev.content}</p>
+                </Grid.Column>
+                <Grid.Column width={4} verticalAlign="middle">
+                  {user && rev.author === user.data.username && (
+                    <Button
+                      fluid
+                      color="red"
+                      onClick={() => deleteRev(
+                        rev._id,
+                        rev.unitId,
+                      )}
+                    >
+                      <Icon name="trash alternate" />
+                      {' '}
+                      Delete
+                    </Button>
+                  )}
+                </Grid.Column>
+              </Grid>
+            </Segment>
+          )) : (
+            <Segment>
+              <Header as="h3" icon textAlign="center">
+                User&apos;s reviews will show up here once at least one is submitted
+              </Header>
+            </Segment>
+          )}
+        </Segment.Group>
+      </Segment.Group>
       {modalOpen && (
         <AdminModal
           setOpen={setModalOpen}

@@ -52,12 +52,12 @@ const App = () => {
 
   const getUnits = async (count, clearData) => {
     if (clearData) {
-      console.log('it is working!');
+      // console.log('it is working!');
       setLoaded([]);
       setUnits([]);
       await getUnitNums([]);
     }
-    console.log('actual loaded: ', loaded);
+    // console.log('actual loaded: ', loaded);
     // eslint-disable-next-line no-param-reassign
     if (!count) count = 0;
     // eslint-disable-next-line no-param-reassign
@@ -65,7 +65,7 @@ const App = () => {
 
     // eslint-disable-next-line no-plusplus
     for (let i = 1; i < 4; i++) {
-      console.log('start Count:', count + i);
+      // console.log('start Count:', count + i);
       if (
         loaded.includes(count + i)
         || (unitsLength !== -1 && Math.ceil(unitsLength / 10) < count + i)
@@ -110,8 +110,8 @@ const App = () => {
   ) => {
     setServerIssue('');
     setLoad(true);
-    console.log(revId);
-    console.log(unitId);
+    // console.log(revId);
+    // console.log(unitId);
     if (!user) {
       return setServerIssue('User not signed in');
     }
@@ -119,13 +119,10 @@ const App = () => {
       .deleteReview(revId, unitId, user)
       .then((data) => {
         console.log(data.status);
-        if (window.location.pathname !== `/user/${user.data.username}`) {
+        if (window.location.pathname.indexOf('user') === -1) {
           retrieveUnit();
-          getUser();
-        } else {
-          getUser();
+          setLoad(false);
         }
-        setLoad(false);
       })
       .catch((error) => {
         console.log(error.response.data.error);
@@ -149,7 +146,7 @@ const App = () => {
         <Route exact path="/register" render={() => <RegisterForm getUser={getUser} />} />
         <Route exact path="/unit/:id" render={() => <UnitPage getUser={getUser} reviewDelete={reviewDelete} user={user} />} />
         <Route exact path="/user/:author" render={() => <Profile reviewDelete={reviewDelete} getUser={getUser} units={units} user={user} color={color} setColor={setColor} />} />
-        <Route exact path="/" render={() => <HomePage units={units} getUnits={getUnits} unitsLength={unitsLength} />} />
+        <Route exact path="/" render={() => <HomePage appLoaded={loaded} units={units} getUnits={getUnits} unitsLength={unitsLength} />} />
       </Container>
     </Router>
   );
