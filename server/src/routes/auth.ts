@@ -82,9 +82,8 @@ authRouter.get(
   async (req, res) => {
     const { username } = req.params;
     try {
-      const user = await User.findOne({ username: username });
+      const user = await User.findOne({ username });
       if (user) {
-        console.log(user.reviews)
         return res.json(user.reviews);
       }
       return res.status(404).send({ error: USER_NOT_FOUND_ERROR });
