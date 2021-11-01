@@ -22,5 +22,6 @@ module.exports = {
     'react/prop-types': 'off',
     'no-underscore-dangle': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
+    "linebreak-style": 0,
   },
 };
