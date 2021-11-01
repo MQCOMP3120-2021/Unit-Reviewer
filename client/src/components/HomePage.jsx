@@ -13,7 +13,6 @@ const HomePage = ({ unitsLength, getUnits }) => {
   console.log(Math.ceil(unitsLength / 10));
 
   const getHomeUnits = async () => {
-    console.log('hi');
     console.log('active Page: ', activePage);
     let info = [];
     if (loaded.length < 1) {
