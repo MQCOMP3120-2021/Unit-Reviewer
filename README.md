@@ -108,14 +108,12 @@ API docs are available at /api-docs or https://unit-reviewer.herokuapp.com/api-d
 * `GET /api/units/search` - Returns units that match the given query text in any text field with the following parameters: `code`, `title`, `any`
 * `GET /api/units/numUnits` - Returns the number of units in the database
 * `GET /api/units/{id}` - Returns the unit with the given ID
-<br/>
 * `POST /api/auth/register` - Registers the given user
 * `POST /api/auth/login` - Authenticates the given user
 * `POST /api/auth/makeAdmin` - Makes the given user admin
 * `POST /api/auth/revokeAdmin` - Revokes admin privileges from the given user
 * `POST /api/units` - Adds the given unit to the database
 * `POST /api/units/review` - Adds a review to the given unit
-<br/>
 * `DELETE /api/units/{unitID}` - Deletes the given unit from the database
 * `DELETE /api/units/review/{unitID}/{reviewID}` - Deletes a review from the given unit
 
