@@ -63,7 +63,7 @@ function UnitSearch() {
     clearTimeout(timeoutRef.current);
   }, []);
 
-  const resultRenderer = ({code, title}) => (
+  const resultRenderer = ({ code, title }) => (
     <div>
       {code}
       {'-'}
