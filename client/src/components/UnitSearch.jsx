@@ -50,7 +50,7 @@ function UnitSearch() {
     timeoutRef.current = setTimeout(() => {
       unitsService.searchUnits(data.value)
         .then((objects) => {
-          const { newData } = objects;
+          const newData = objects.data;
           dispatch({
             type: 'FINISH_SEARCH',
             results: newData,
@@ -66,8 +66,7 @@ function UnitSearch() {
   const resultRenderer = (newResults) => (
     <div>
       {newResults.code}
-      {' '}
-      -
+      {' - '}
       {newResults.title}
     </div>
   );
