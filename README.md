@@ -74,25 +74,28 @@ The front end web application is written using React and supports the following 
    ```
 2. Install node packages with Yarn
    ```sh
-   cd client;yarn;cd ..;cd server;yarn
+   cd client
+   yarn
+   cd ..
+   cd server
+   yarn
    ```
 3. Run the server
    ```sh
-   cd server;yarn dev
+   cd server
+   yarn dev
    ```
 4. Run the React App
     ```sh
-    cd client;yarn start
+    cd client
+    yarn start
     ```
 
 ## Deployment
 
 The official heroku url for the project is https://unit-reviewer.herokuapp.com/
 
-1. Build the application
-   ```sh
-   yarn build
-   ```
+[View Deployment Docs](https://github.com/MQCOMP3120-2021/group-web-project-group-ae/blob/main/DEPLOYMENT.md)
 
 ## API Calls
 
@@ -102,17 +105,17 @@ API docs are available at /api-docs or https://unit-reviewer.herokuapp.com/api-d
 
 * `GET /api/auth/me` - Returns the current users details
 * `GET /api/units` - Returns 10 units at a time offset from the `start` query parameter
-* `GET /api/units/search` - Returns units that match the given query text in any text field
+* `GET /api/units/search` - Returns units that match the given query text in any text field with the following parameters: `code`, `title`, `any`
 * `GET /api/units/numUnits` - Returns the number of units in the database
 * `GET /api/units/{id}` - Returns the unit with the given ID
-
+<br/>
 * `POST /api/auth/register` - Registers the given user
 * `POST /api/auth/login` - Authenticates the given user
 * `POST /api/auth/makeAdmin` - Makes the given user admin
 * `POST /api/auth/revokeAdmin` - Revokes admin privileges from the given user
 * `POST /api/units` - Adds the given unit to the database
 * `POST /api/units/review` - Adds a review to the given unit
-
+<br/>
 * `DELETE /api/units/{unitID}` - Deletes the given unit from the database
 * `DELETE /api/units/review/{unitID}/{reviewID}` - Deletes a review from the given unit
 
@@ -123,36 +126,47 @@ group-web-project-group-ae:.
 │   .dockerignore
 │   .gitignore
 │   app.json
-│   buildDB.py
+│   DEPLOYMENT.md
 │   Dockerfile
+│   GroupAEProjectProposal.pdf
 │   heroku.yml
 │   README.md
-│   units.json
 │   
+├───.github
+│   └───workflows
+│           client.yaml
+│           server.yaml
+│           
 ├───client
-│   │   GroupAEProjectProposal.pdf
+│   │   .eslintrc.js
 │   │   package-lock.json
 │   │   package.json
-│   │   README.md
 │   │   yarn.lock
 │   │              
 │   ├───public
 │   │       index.html
 │   │       
 │   └───src
-│       │   About.js
-│       │   AddUnit.js
-│       │   App.js
-│       │   Error.js
-│       │   HomePage.js
-│       │   index.js
-│       │   NavBar.js
-│       │   UnitPage.js
-│       │   UnitSearch.js
-│       │   UserProfile.js
+│       │   App.jsx
+│       │   index.jsx
 │       │   
+│       ├───components
+│       │   │   About.jsx
+│       │   │   AddUnit.jsx
+│       │   │   Error.jsx
+│       │   │   HomePage.jsx
+│       │   │   Loading.jsx
+│       │   │   NavBar.jsx
+│       │   │   UnitPage.jsx
+│       │   │   UnitSearch.jsx
+│       │   │   
+│       │   └───profile
+│       │           AdminModal.jsx
+│       │           UserProfile.jsx
+│       │           
 │       ├───img
 │       │       logo.png
+│       │       urLogo.png
 │       │       
 │       ├───services
 │       │       auth.js
@@ -163,6 +177,7 @@ group-web-project-group-ae:.
 │       │       
 │       ├───tests
 │       │   │   HomePage.test.js
+│       │   │   Login.test.js
 │       │   │   Register.test.js
 │       │   │   
 │       │   ├───samples
@@ -172,37 +187,46 @@ group-web-project-group-ae:.
 │       │           HomePage.test.js.snap
 │       │           
 │       └───userAuth
-│               LoginForm.js
-│               RegisterForm.js
+│               LoginForm.jsx
+│               RegisterForm.jsx
 │               
+├───scripts
+│       buildDB.py
+│       units.json
+│       
 └───server
     │   .env
     │   .eslintrc.js
-    │   package-lock.json
     │   package.json
     │   README.md
     │   tsconfig.json
     │   yarn.lock
-    │             
-    └───src
-        │   config.ts
-        │   db.ts
-        │   express.d.ts
-        │   index.ts
-        │   interfaces.ts
-        │   
-        ├───models
-        │       Activities.ts
-        │       Activity.ts
-        │       Assessment.ts
-        │       Offering.ts
-        │       Review.ts
-        │       Unit.ts
-        │       User.ts
-        │       
-        └───routes
-                auth.ts
-                units.ts
+    │              
+    ├───src
+    │   │   config.ts
+    │   │   db.ts
+    │   │   express.d.ts
+    │   │   index.ts
+    │   │   interfaces.ts
+    │   │   
+    │   ├───models
+    │   │       Activities.ts
+    │   │       Activity.ts
+    │   │       Assessment.ts
+    │   │       Offering.ts
+    │   │       Review.ts
+    │   │       Unit.ts
+    │   │       User.ts
+    │   │       
+    │   └───routes
+    │           auth.ts
+    │           units.ts
+    │           
+    └───test
+            auth.test.ts
+            index.ts
+            jest.config.js
+            units.test.ts
 ```     
 
 ## Main Roles and Communication Workflow
