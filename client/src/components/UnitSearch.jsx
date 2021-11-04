@@ -63,12 +63,11 @@ function UnitSearch() {
     clearTimeout(timeoutRef.current);
   }, []);
 
-  const resultRenderer = (newResults) => (
+  const resultRenderer = ({code, title}) => (
     <div>
-      {newResults.code}
-      {' '}
-      -
-      {newResults.title}
+      {code}
+      {'-'}
+      {title}
     </div>
   );
 
