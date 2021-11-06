@@ -351,7 +351,7 @@ const AddUnit = ({ user }) => {
       if (sum !== 100) {
         const frm = formErrors;
         frm.push(
-          `Assessment weigthings do not add up to 100%, the current total is ${sum}%`,
+          `Assessment weightings do not add up to 100%, the current total is ${sum}%`,
         );
         setFormErrors(frm);
       }
