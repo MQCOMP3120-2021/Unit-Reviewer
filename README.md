@@ -67,7 +67,7 @@ The front end web application is written using React and supports the following 
 * Deployed to Heroku
 * Allow users to customise website theme via colour picker
 
-Video Demo: https://youtu.be/riAowOzlQ00
+Video Demo: https://youtu.be/mWJ_I5p78W8
 
 ## Installation
 1. Clone the repo
@@ -97,7 +97,7 @@ Video Demo: https://youtu.be/riAowOzlQ00
 
 The official heroku url for the project is https://unit-reviewer.herokuapp.com/
 
-Video Demo: https://youtu.be/riAowOzlQ00
+Video Demo: https://youtu.be/mWJ_I5p78W8
 
 [View Deployment Docs](https://github.com/MQCOMP3120-2021/group-web-project-group-ae/blob/main/DEPLOYMENT.md)
 
